@@ -19,18 +19,17 @@ function createTodo(userId, name, todo, date) {
   };
   return newTodo;
 }
-export async function storeTodo(userId, name, todo, date) {
+export async function storeTodo(todoObj) {
   await client.connect();
-  const newTodo = createTodo(userId, name, todo, date);
+  const newTodo = createTodo(
+    todoObj.userId,
+    todoObj.name,
+    todoObj.todo,
+    todoObj.date
+  );
   const db = client.db(dbName);
-  const userID = userId.toString();
-  const collection = db.collection(userID);
+  const collection = db.collection("users");
   const insertResult = await collection.insertOne(newTodo);
   console.log("Inserted documents =>", insertResult);
   return "done.";
 }
-
-storeTodo(3, "Adam", "Kill me", "2023-05-15")
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());

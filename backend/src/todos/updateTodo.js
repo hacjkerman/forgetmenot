@@ -11,17 +11,15 @@ const dbName = "mydb";
 //   console.log("aevaervrever");
 // }
 
-export async function removeTodo(userId, todo) {
+export async function updateTodo(user, todo, newTodo) {
   await client.connect();
   const db = client.db(dbName);
   const userID = userId.toString();
   const collection = db.collection(userID);
-  const insertResult = await collection.deleteOne({ todo: todo });
-  console.log("Removed documents =>", insertResult);
+  const insertResult = await collection.updateOne(
+    { todo: todo },
+    { $set: { todo: newTodo } }
+  );
+  console.log("All Todos documents =>", insertResult);
   return "done.";
 }
-
-removeTodo(3, "Suck me off")
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());

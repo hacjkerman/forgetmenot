@@ -1,22 +1,24 @@
 import express from "express";
 import "dotenv/config";
-import cors from "cors";
-import { storeTodo } from "./storeTodo";
-import { findTodo } from "./findTodo";
-import { findAllTodos } from "./getAllTodos";
-import { removeTodo } from "./removeTodo";
+import { storeTodo } from "./storeTodo.js";
+import { findTodo } from "./findTodo.js";
+import { findAllTodos } from "./getAllTodos.js";
+import { removeTodo } from "./removeTodo.js";
+import bodyParser from "body-parser";
 const app = express();
-app.use(cors());
+app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
   res.json("Hello");
 });
 
-app.post("/storeTodo", (req, res) => {
+app.post("/storeTodo", async (req, res) => {
   const { name, todo, dueDate } = req.body;
   if (!name || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const newTodo = { id: { userId } };
+  await storeTodo({ userId: 0, name, todo, dueDate });
+  res.json("Successful");
 });
 app.get("/findTodo", (req, res) => {});
 app.get("/getAllTodos", (req, res) => {});

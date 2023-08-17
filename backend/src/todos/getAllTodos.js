@@ -11,17 +11,14 @@ const dbName = "mydb";
 //   console.log("aevaervrever");
 // }
 
-export async function findTodo(user, todo) {
+export async function findAllTodos(userId) {
   await client.connect();
   const db = client.db(dbName);
-  const userID = user.userId.toString();
+  const userID = userId.toString();
   const collection = db.collection(userID);
-  const insertResult = await collection.find({ todo: todo });
+  const insertResult = await collection.find({}).toArray();
   console.log("All Todos documents =>", insertResult);
-  return "done.";
+  return;
 }
 
-findTodo({ userId: 3, name: "Adam" })
-  .then(console.log)
-  .catch(console.error)
-  .finally(() => client.close());
+findAllTodos(0);
