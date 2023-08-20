@@ -21,5 +21,5 @@ export async function updateTodo(user, todo, newTodo) {
     { $set: { todo: newTodo } }
   );
   console.log("All Todos documents =>", insertResult);
-  return "done.";
+  return;
 }

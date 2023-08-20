@@ -9,6 +9,9 @@ export async function createUser(user) {
   const newUser = {
     userId: user.userId,
     name: user.name,
+    email: user.email,
+    username: user.username,
+    password: user.password,
     todo: [],
   };
   const db = client.db(dbName);

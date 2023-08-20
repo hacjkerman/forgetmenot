@@ -1,10 +1,11 @@
 import express from "express";
 import "dotenv/config";
-// import { storeTodo } from "./storeTodo.js";
-// import { findTodo } from "./todos/findTodo.js";
-// import { findAllTodos } from "./getAllTodos.js";
-// import { removeTodo } from "./removeTodo.js";
+import { storeTodo } from "../todos/storeTodo.js";
+import { findTodo } from "../todos/findTodo.js";
+import { getAllTodos } from "../todos/getAllTodos.js";
+import { removeTodo } from "../todos/removeTodo.js";
 import jwt from "jsonwebtoken";
+import { updateTodo } from "../todos/updateTodo.js";
 
 const { verify } = jwt;
 const app = express();
@@ -13,7 +14,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json("Hello");
 });
-
+// Todo Request Operations
 app.post("/storeTodo", async (req, res) => {
   const { name, todo, dueDate } = req.body;
   if (!name || !todo || !dueDate) {
@@ -22,11 +23,44 @@ app.post("/storeTodo", async (req, res) => {
   await storeTodo({ userId: 0, name, todo, dueDate });
   res.json("Successful");
 });
-app.get("/findTodo", (req, res) => {});
-app.get("/getAllTodos", (req, res) => {});
-app.put("/updateTodo", (req, res) => {});
-app.delete("/removeTodo", (req, res) => {});
 
+app.get("/findTodo", async (req, res) => {
+  const { user, todo } = req.body;
+  if (!todo) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const foundTodo = await findTodo(user, todo);
+  if (foundTodo === null) return res.sendStatus(404);
+  res.json({ todo: foundTodo.todo });
+});
+
+app.get("/getAllTodos", async (req, res) => {
+  const foundTodos = await getAllTodos(todo);
+  if (foundTodos === null) return res.sendStatus(404);
+  return foundTodos;
+});
+
+app.put("/updateTodo", async (req, res) => {
+  const { user, todo, newTodo } = req.body;
+  if (!todo) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const foundTodo = await updateTodo(user, todo, newTodo);
+  if (foundTodo === null) return res.sendStatus(404);
+  res.json({ todo: foundTodo.todo });
+});
+
+app.delete("/removeTodo", async (req, res) => {
+  const { user, todo } = req.body;
+  if (!todo) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const foundTodo = await removeTodo(user, todo);
+  if (foundTodo === null) return res.sendStatus(404);
+  res.json({ todo: foundTodo.todo });
+});
+
+// JWT Operations
 const posts = [
   {
     username: "Kyle",

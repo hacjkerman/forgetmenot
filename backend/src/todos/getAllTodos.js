@@ -11,14 +11,12 @@ const dbName = "mydb";
 //   console.log("aevaervrever");
 // }
 
-export async function findAllTodos(userId) {
+export async function getAllTodos(userId) {
   await client.connect();
   const db = client.db(dbName);
   const userID = userId.toString();
   const collection = db.collection(userID);
   const insertResult = await collection.find({}).toArray();
   console.log("All Todos documents =>", insertResult);
-  return;
+  return insertResult;
 }
-
-findAllTodos(0);
