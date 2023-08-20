@@ -29,10 +29,10 @@ app.post("/login", (req, res) => {
 
   const username = req.body.username;
   const user = { name: username };
-  const token = generateAccessToken(user);
+  const accessToken = generateAccessToken(user);
   const refreshToken = sign(user, process.env.REFRESH_TOKEN_SECRET);
   refreshTokens.push(refreshToken);
-  res.json({ accessToken: token, refreshToken: refreshToken });
+  res.json({ accessToken: accessToken, refreshToken: refreshToken });
 });
 
 app.listen(process.env.PORT2, () => {
