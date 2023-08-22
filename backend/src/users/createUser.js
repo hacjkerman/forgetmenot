@@ -16,7 +16,9 @@ export async function createUser(user) {
   };
   const db = client.db(dbName);
   const collection = db.collection("users");
+  // ISSUE - WILL INSERT DUPLICATE USERS. FIX FOR LATER
   const insertResult = await collection.insertOne(newUser);
   console.log("Created user =>", insertResult);
+  client.close();
   return newUser.userId;
 }

@@ -7,9 +7,9 @@ const dbName = "mydb";
 export async function findTodo(user, todo) {
   await client.connect();
   const db = client.db(dbName);
-  const userID = user.userId.toString();
+  const userID = user;
   const collection = db.collection(userID);
-  const insertResult = await collection.find({ todo: todo });
+  const insertResult = collection.find({ todo: todo });
   console.log("All Todos documents =>", insertResult);
   return insertResult;
 }

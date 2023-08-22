@@ -14,7 +14,7 @@ const dbName = "mydb";
 export async function updateTodo(user, todo, newTodo) {
   await client.connect();
   const db = client.db(dbName);
-  const userID = userId.toString();
+  const userID = user.userId.toString();
   const collection = db.collection(userID);
   const insertResult = await collection.updateOne(
     { todo: todo },

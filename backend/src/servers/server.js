@@ -6,6 +6,8 @@ import { getAllTodos } from "../todos/getAllTodos.js";
 import { removeTodo } from "../todos/removeTodo.js";
 import jwt from "jsonwebtoken";
 import { updateTodo } from "../todos/updateTodo.js";
+import { createUser } from "../users/createUser.js";
+import { findUser } from "../users/findUser.js";
 
 const { verify } = jwt;
 const app = express();
@@ -14,19 +16,20 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json("Hello");
 });
+
 // Todo Request Operations
 app.post("/storeTodo", async (req, res) => {
-  const { name, todo, dueDate } = req.body;
-  if (!name || !todo || !dueDate) {
+  const { username, password, todo, dueDate } = req.body;
+  if (!username || !password || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  await storeTodo({ userId: 0, name, todo, dueDate });
+  await storeTodo({ username, password }, { todo, dueDate });
   res.json("Successful");
 });
 
 app.get("/findTodo", async (req, res) => {
   const { user, todo } = req.body;
-  if (!todo) {
+  if (!user || !todo) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const foundTodo = await findTodo(user, todo);
@@ -58,6 +61,31 @@ app.delete("/removeTodo", async (req, res) => {
   const foundTodo = await removeTodo(user, todo);
   if (foundTodo === null) return res.sendStatus(404);
   res.json({ todo: foundTodo.todo });
+});
+
+// User Operations
+app.post("/createUser", async (req, res) => {
+  const { name, email, username, password } = req.body;
+  if (!name || !email || !username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await createUser({
+    userId: 2,
+    name,
+    email,
+    username,
+    password,
+  });
+  res.json(userId);
+});
+
+app.get("/findUser", async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await findUser(username, password);
+  res.json(userId);
 });
 
 // JWT Operations
