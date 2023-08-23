@@ -8,6 +8,8 @@ import jwt from "jsonwebtoken";
 import { updateTodo } from "../todos/updateTodo.js";
 import { createUser } from "../users/createUser.js";
 import { findUser } from "../users/findUser.js";
+import { removeUser } from "../users/deleteUser.js";
+import validator from "email-validator";
 
 const { verify } = jwt;
 const app = express();
@@ -23,8 +25,9 @@ app.post("/storeTodo", async (req, res) => {
   if (!username || !password || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  await storeTodo({ username, password }, { todo, dueDate });
-  res.json("Successful");
+  const userId = await findUser(username, password);
+  await storeTodo(userId, todo, dueDate);
+  res.json("Update Successful");
 });
 
 app.get("/findTodo", async (req, res) => {
@@ -34,23 +37,24 @@ app.get("/findTodo", async (req, res) => {
   }
   const foundTodo = await findTodo(user, todo);
   if (foundTodo === null) return res.sendStatus(404);
-  res.json({ todo: foundTodo.todo });
+  res.json(foundTodo);
 });
 
 app.get("/getAllTodos", async (req, res) => {
   const foundTodos = await getAllTodos(todo);
   if (foundTodos === null) return res.sendStatus(404);
-  return foundTodos;
+  res.json(foundTodos);
 });
 
 app.put("/updateTodo", async (req, res) => {
-  const { user, todo, newTodo } = req.body;
+  const { username, password, todo, newTodo } = req.body;
   if (!todo) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const foundTodo = await updateTodo(user, todo, newTodo);
+  const userId = await findUser(username, password);
+  const foundTodo = await updateTodo(userId, todo, newTodo);
   if (foundTodo === null) return res.sendStatus(404);
-  res.json({ todo: foundTodo.todo });
+  res.json("Hello");
 });
 
 app.delete("/removeTodo", async (req, res) => {
@@ -69,13 +73,16 @@ app.post("/createUser", async (req, res) => {
   if (!name || !email || !username || !password) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+  if (!validator.validate(email)) {
+    return res.status(400).json({ error: "Invalid Email" });
+  }
   const userId = await createUser({
-    userId: 2,
     name,
     email,
     username,
     password,
   });
+  if (userId === false) return res.status(400).json({ error: "Duplicate" });
   res.json(userId);
 });
 
@@ -86,6 +93,17 @@ app.get("/findUser", async (req, res) => {
   }
   const userId = await findUser(username, password);
   res.json(userId);
+});
+
+app.delete("/removeUser", async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await findUser(username, password);
+  console.log(userId);
+  const returnVal = await removeUser(userId);
+  res.json(returnVal);
 });
 
 // JWT Operations

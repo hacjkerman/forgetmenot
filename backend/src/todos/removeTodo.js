@@ -14,9 +14,8 @@ const dbName = "mydb";
 export async function removeTodo(userId, todo) {
   await client.connect();
   const db = client.db(dbName);
-  const userID = userId.toString();
-  const collection = db.collection(userID);
-  const insertResult = await collection.deleteOne({ todo: todo });
+  const collection = db.collection("users");
+  const insertResult = await collection.deleteOne({ _id: userId, todo: todo });
   console.log("Removed documents =>", insertResult);
   return "done.";
 }

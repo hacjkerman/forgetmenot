@@ -4,24 +4,15 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function storeTodo(userObj, todoObj) {
+export async function storeTodo(userId, todo, dueDate) {
   await client.connect();
   const db = client.db(dbName);
   const Users = db.collection("users");
-  const userResult = await Users.find({}).toArray();
-  console.log(userResult);
   const newTodo = {
-    todo: todoObj.todo,
-    dueDate: todoObj.date,
+    todo: todo,
+    dueDate: dueDate,
   };
-  // TODO find out why its not working
-  Users.update(
-    {
-      username: userObj.username,
-      password: userObj.password,
-    },
-    { $push: { todo: newTodo } }
-  );
-  console.log("Inserted documents =>", insertResult);
+
+  Users.updateOne({ _id: userId }, { $push: { todo: newTodo } });
   return;
 }

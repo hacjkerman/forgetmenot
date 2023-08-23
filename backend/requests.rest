@@ -26,3 +26,47 @@ Content-Type: application/json
 {
   "username": "Kyle"
 }
+
+###
+
+POST http://localhost:8080/createUser
+Content-Type: application/json
+
+{
+  "name": "Andrew",
+  "email": "andrewwang134@gmail.com",
+  "username": "dies34",
+  "password": "andrew1"
+}
+
+###
+
+GET http://localhost:8080/findUser
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "password": "andrew1"
+}
+
+###
+
+PUT http://localhost:8080/updateTodo
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "password": "andrew1",
+  "todo": "Save the World",
+  "newTodo": "Be Batman"
+}
+
+###
+
+DELETE http://localhost:8080/removeTodo
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "todo": "Save the World"
+}

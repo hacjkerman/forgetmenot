@@ -1,13 +1,18 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-const client = new MongoClient("mongodb://localhost:27017");
+const client = new MongoClient("mongodb://localhost:27017", {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
 
 const dbName = "mydb";
 
 export async function createUser(user) {
   await client.connect();
   const newUser = {
-    userId: user.userId,
     name: user.name,
     email: user.email,
     username: user.username,
@@ -17,8 +22,15 @@ export async function createUser(user) {
   const db = client.db(dbName);
   const collection = db.collection("users");
   // ISSUE - WILL INSERT DUPLICATE USERS. FIX FOR LATER
-  const insertResult = await collection.insertOne(newUser);
-  console.log("Created user =>", insertResult);
-  client.close();
-  return newUser.userId;
+  const foundCursor = collection.find({
+    $or: [{ username: newUser.username }, { email: newUser.email }],
+  });
+  const foundArray = await foundCursor.toArray();
+  if (foundArray.length === 0) {
+    const insertResult = await collection.insertOne(newUser);
+    console.log("Created user =>", insertResult);
+    await client.close();
+    return insertResult.insertedId;
+  }
+  return false;
 }

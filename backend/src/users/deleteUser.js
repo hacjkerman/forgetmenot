@@ -4,11 +4,12 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function findTodo(user, todo) {
+export async function removeUser(userId) {
   await client.connect();
+
   const db = client.db(dbName);
   const collection = db.collection("users");
-  const insertResult = collection.find({ todo: todo });
-  console.log("All Todos documents =>", insertResult);
-  return insertResult;
+  await collection.deleteOne({ _id: userId });
+  client.close();
+  return;
 }

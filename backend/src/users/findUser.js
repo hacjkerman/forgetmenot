@@ -12,9 +12,8 @@ export async function findUser(user, password) {
     username: user,
     password: password,
   });
-
   if (!userResult) {
     return false;
   }
-  return userResult;
+  return userResult._id;
 }

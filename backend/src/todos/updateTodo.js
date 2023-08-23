@@ -1,24 +1,24 @@
 import { MongoClient } from "mongodb";
+import { getAllTodos } from "./getAllTodos.js";
 
 const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
-// const currentDate1 = new Date();
-// const currentDate2 = new Date();
-// console.log(currentDate1);
-// console.log("acsd", currentDate2);
-// if (currentDate1.toString() === currentDate2.toString()) {
-//   console.log("aevaervrever");
-// }
 
 export async function updateTodo(user, todo, newTodo) {
   await client.connect();
   const db = client.db(dbName);
-  const userID = user.userId.toString();
-  const collection = db.collection(userID);
+  const collection = db.collection("users");
+  const Todos = await getAllTodos(user);
+  console.log(Todos);
+  let i = 0;
+  while (i < Todos.length) {
+    Todos[i].todo = Todos[i].todo.replace(todo, newTodo);
+    i++;
+  }
   const insertResult = await collection.updateOne(
-    { todo: todo },
-    { $set: { todo: newTodo } }
+    { _id: user, todo: todo },
+    { $set: { todo: Todos } }
   );
   console.log("All Todos documents =>", insertResult);
   return;
