@@ -1,7 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import { storeTodo } from "../todos/storeTodo.js";
-import { findTodo } from "../todos/findTodo.js";
+// import { findTodo } from "../todos/findTodo.js";
 import { getAllTodos } from "../todos/getAllTodos.js";
 import { removeTodo } from "../todos/removeTodo.js";
 import jwt from "jsonwebtoken";
@@ -26,22 +26,33 @@ app.post("/storeTodo", async (req, res) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const userId = await findUser(username, password);
-  await storeTodo(userId, todo, dueDate);
-  res.json("Update Successful");
+  const foundTodos = await getAllTodos(userId);
+  const storeResult = await storeTodo(userId, foundTodos, todo, dueDate);
+  if (storeResult === false) {
+    return res.status(400).json({ error: "Duplicate Storage" });
+  }
+  return res.json("Update Successful");
 });
 
-app.get("/findTodo", async (req, res) => {
-  const { user, todo } = req.body;
-  if (!user || !todo) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  const foundTodo = await findTodo(user, todo);
-  if (foundTodo === null) return res.sendStatus(404);
-  res.json(foundTodo);
-});
+// // NOT NEEDED???
+// app.get("/findTodo", async (req, res) => {
+//   const { username, password, todo } = req.body;
+//   if (!username || !password || !todo) {
+//     return res.status(400).json({ error: "Missing required fields" });
+//   }
+//   const userId = await findUser(username, password);
+//   const foundTodo = await findTodo(userId, todo);
+//   if (foundTodo === null) return res.sendStatus(404);
+//   res.json(foundTodo);
+// });
 
 app.get("/getAllTodos", async (req, res) => {
-  const foundTodos = await getAllTodos(todo);
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await findUser(username, password);
+  const foundTodos = await getAllTodos(userId);
   if (foundTodos === null) return res.sendStatus(404);
   res.json(foundTodos);
 });
@@ -51,6 +62,7 @@ app.put("/updateTodo", async (req, res) => {
   if (!todo) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
   const userId = await findUser(username, password);
   const foundTodo = await updateTodo(userId, todo, newTodo);
   if (foundTodo === null) return res.sendStatus(404);
@@ -58,13 +70,16 @@ app.put("/updateTodo", async (req, res) => {
 });
 
 app.delete("/removeTodo", async (req, res) => {
-  const { user, todo } = req.body;
-  if (!todo) {
+  const { username, password, todo } = req.body;
+  if (!username || !password || !todo) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const foundTodo = await removeTodo(user, todo);
-  if (foundTodo === null) return res.sendStatus(404);
-  res.json({ todo: foundTodo.todo });
+  // TOO MANY ASYNC CALLS???
+  const userId = await findUser(username, password);
+  const foundTodos = await getAllTodos(userId);
+  const removeResult = await removeTodo(userId, foundTodos, todo);
+  if (removeResult === null) return res.sendStatus(404);
+  res.json(`Removed Todo: ${todo}, Successfully.`);
 });
 
 // User Operations

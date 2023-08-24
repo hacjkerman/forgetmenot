@@ -4,7 +4,7 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function findTodo(user, todo) {
+export async function findTodo(userId, todo) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("users");

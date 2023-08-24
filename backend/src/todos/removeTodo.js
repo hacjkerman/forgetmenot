@@ -10,12 +10,16 @@ const dbName = "mydb";
 // if (currentDate1.toString() === currentDate2.toString()) {
 //   console.log("aevaervrever");
 // }
-
-export async function removeTodo(userId, todo) {
+// USING UPDATE TO DELETE
+export async function removeTodo(userId, todos, todo) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("users");
-  const insertResult = await collection.deleteOne({ _id: userId, todo: todo });
+  const filteredTodos = todos.filter((todoName) => todoName.todo !== todo);
+  const insertResult = await collection.updateOne(
+    { _id: userId },
+    { $set: { todo: filteredTodos } }
+  );
   console.log("Removed documents =>", insertResult);
-  return "done.";
+  return true;
 }

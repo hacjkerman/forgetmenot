@@ -51,14 +51,14 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/updateTodo
+POST http://localhost:8080/storeTodo
 Content-Type: application/json
 
 {
   "username": "dies34",
   "password": "andrew1",
   "todo": "Save the World",
-  "newTodo": "Be Batman"
+  "dueDate": "2025"
 }
 
 ###
@@ -68,5 +68,27 @@ Content-Type: application/json
 
 {
   "username": "dies34",
+  "password": "andrew1",
   "todo": "Save the World"
+}
+
+###
+
+GET http://localhost:8080/findTodo
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "password": "andrew1",
+  "todo": "Save the World"
+}
+
+###
+
+GET http://localhost:8080/getAllTodos
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "password": "andrew1"
 }
