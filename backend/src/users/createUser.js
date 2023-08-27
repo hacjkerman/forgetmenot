@@ -32,5 +32,5 @@ export async function createUser(user) {
     await client.close();
     return insertResult.insertedId;
   }
-  return false;
+  return undefined;
 }

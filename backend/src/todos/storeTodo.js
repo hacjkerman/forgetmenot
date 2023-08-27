@@ -12,8 +12,7 @@ export async function storeTodo(userId, Todos, todo, dueDate) {
     todo: todo,
     dueDate: dueDate,
   };
-  console.log("awedw");
-  console.log(Todos);
+  console.log(userId);
   const isFound = Todos.filter((todoName) => todoName.todo === todo);
   if (isFound.length === 0) {
     Users.updateOne({ _id: userId }, { $push: { todo: newTodo } });

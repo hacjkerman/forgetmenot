@@ -97,7 +97,7 @@ app.post("/createUser", async (req, res) => {
     username,
     password,
   });
-  if (userId === false) return res.status(400).json({ error: "Duplicate" });
+  if (userId === undefined) return res.status(400).json({ error: "Duplicate" });
   res.json(userId);
 });
 
