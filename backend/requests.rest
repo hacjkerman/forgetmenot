@@ -6,6 +6,8 @@ DELETE http://localhost:4000/logout
 Content-Type: application/json 
 
 {
+  "username": "dies34",
+  "password": "andrew1",
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3lsZSIsImlhdCI6MTY5MjUyMjY2M30.9az4wDcrYaeCt8RYOnOTaWqqTBhm5vAQwjrcHkkKbeA"
 }
 
@@ -25,15 +27,15 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "password": "andrew1"
-}
+  "password": "andrew1",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczM0IiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjkzNDA1NzQyLCJleHAiOjE2OTM0MDkzNDJ9.5Y0_OWRBR5oNV4XNLwQV1Rq_9EDk8cGafLRBFFH1QQw"}
 
 ###
 POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-  "username": "dies34",
+  "username": "dies33",
   "password": "andrew1"
 }
 
@@ -47,8 +49,8 @@ Content-Type: application/json
 
 {
   "name": "Andrew",
-  "email": "andrewwang134@gmail.com",
-  "username": "dies34",
+  "email": "andrewwang133@gmail.com",
+  "username": "dies33",
   "password": "andrew1"
 }
 
