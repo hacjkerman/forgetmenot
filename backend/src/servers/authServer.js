@@ -6,6 +6,7 @@ import { storeRefreshToken } from "../auth/storeRefreshToken.js";
 import { findUser } from "../users/findUser.js";
 import { storeActiveToken } from "../auth/storeToken.js";
 import { getAllActiveTokens } from "../auth/getallActiveTokens.js";
+import { removeRefreshToken } from "../auth/removeRefreshToken.js";
 
 const { sign, verify } = jwt;
 const app = express();
@@ -33,8 +34,10 @@ app.get("/activeTokens", async (req, res) => {
   res.json(refreshTokens);
 });
 
-app.delete("/logout", (req, res) => {
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+app.delete("/logout", async (req, res) => {
+  const { username, password } = req.body;
+  const userId = await findUser(username, password);
+  await removeRefreshToken(userId);
   res.sendStatus(204);
 });
 app.post("/login", async (req, res) => {

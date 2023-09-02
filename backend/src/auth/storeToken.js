@@ -13,7 +13,14 @@ export async function storeActiveToken(token) {
   const IdObj = new ObjectId(tokenStorage);
   await collection.updateOne(
     { _id: IdObj },
-    { $push: { activeTokens: token } }
+    {
+      $push: {
+        activeTokens: {
+          token: token,
+          expiresAt: { $date: "2024-09-01T16:00:00Z" },
+        },
+      },
+    }
   );
   return;
 }

@@ -1,6 +1,5 @@
 GET http://localhost:8080/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3lsZSIsImlhdCI6MTY5MjUyMTI2OSwiZXhwIjoxNjkyNTIxMjg0fQ.1xmT-sagioXODnN6ByFzmyC4O7ZxvfcmsUbcxg646gk
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTMxNDQ1MTAsImV4cCI6MTY5MzE0ODExMH0.mxjTZTsTziYoUMkKFEJaKu96mgfiOECop3y2ubUmrkI
 ###
 
 DELETE http://localhost:4000/logout
@@ -20,12 +19,26 @@ Content-Type: application/json
 }
 
 ###
+
+DELETE http://localhost:4000/logout 
+Content-Type: application/json 
+
+{
+  "username": "dies34",
+  "password": "andrew1"
+}
+
+###
 POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-  "username": "Kyle"
+  "username": "dies34",
+  "password": "andrew1"
 }
+
+###
+GET http://localhost:4000/activeTokens
 
 ###
 
