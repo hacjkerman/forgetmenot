@@ -14,7 +14,7 @@ export async function storeActiveToken(token) {
   //   (currToken) => currToken.userId.toString() === userStr
   // );
   // if (filteredTokens.length === 0) {
-  // RUN ONCE
+  // RUN ONCE WHEN INITIALISING APP
   await collection.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
   await collection.insertOne({
     token: token,
