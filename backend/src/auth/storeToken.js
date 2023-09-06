@@ -5,7 +5,7 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function storeActiveToken(token) {
+export async function storeActiveToken(username, token) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("activeTokens");
@@ -17,6 +17,7 @@ export async function storeActiveToken(token) {
   // RUN ONCE WHEN INITIALISING APP
   await collection.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
   await collection.insertOne({
+    username: username,
     token: token,
     createdAt: new Date(),
   });

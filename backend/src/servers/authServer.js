@@ -1,38 +1,23 @@
 import express from "express";
 import "dotenv/config";
+import axios from "axios";
 import generateAccessToken from "../auth/generateAccessToken.js";
-import jwt from "jsonwebtoken";
-import { storeRefreshToken } from "../auth/storeRefreshToken.js";
-import { findUser } from "../users/findUser.js";
 import { storeActiveToken } from "../auth/storeToken.js";
 import { getAllActiveTokens } from "../auth/getallActiveTokens.js";
 import { verifyToken } from "../auth/verifyToken.js";
-import { removeRefreshToken } from "../auth/removeRefreshToken.js";
+import { removeActiveToken } from "../auth/removeActiveToken.js";
+import { verifyUser } from "../auth/verifyUser.js";
+import { findUser } from "../auth/findUser.js";
 
-const { sign, verify } = jwt;
 const app = express();
 app.use(express.json());
-
-let refreshTokens = [];
-
-app.post("/token", (req, res) => {
-  const refreshToken = req.body.token;
-  if (refreshToken === null) return res.sendStatus(401);
-  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
-  verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    const accessToken = generateAccessToken({ name: user.name });
-    res.json({ accessToken: accessToken });
-  });
-});
 
 app.get("/activeTokens", async (req, res) => {
   const activeTokens = await getAllActiveTokens();
   if (activeTokens === undefined) {
     res.json("No active user sessions");
   }
-  refreshTokens = activeTokens;
-  res.json(refreshTokens);
+  res.json(activeTokens);
 });
 
 app.get("/verifyToken", async (req, res) => {
@@ -45,24 +30,48 @@ app.get("/verifyToken", async (req, res) => {
 });
 
 app.delete("/logout", async (req, res) => {
-  const { username, password, token } = req.body;
-  const userId = await findUser(username, password);
-  await removeRefreshToken(userId);
+  const { token } = req.body;
+  await removeActiveToken(token);
   res.sendStatus(204);
+});
+
+app.get("/verifyUser", async (req, res) => {
+  const { username, token } = req.body;
+  const isValidUser = await verifyUser(username, token);
+  if (!isValidUser) {
+    res.json(false);
+    return;
+  }
+  res.json(true);
 });
 
 app.post("/login", async (req, res) => {
   // Authenticate User
-
   const { username, password } = req.body;
-  const userId = await findUser(username, password);
+
+  // Check if user exists
+  const isFound = await axios({
+    method: "get",
+    url: "http://localhost:8080/validateUser",
+    data: {
+      username: username,
+      password: password,
+    },
+  });
+  if (!isFound) {
+    res.json({ error: "User not found" });
+    return;
+  }
+  // Check if user is already logged in
+  const userExists = await findUser(username);
+  if (userExists) {
+    res.json({ error: "User is already logged in" });
+    return;
+  }
   const user = { name: username, password: password };
   const accessToken = await generateAccessToken(user);
-  const refreshToken = sign(user, process.env.REFRESH_TOKEN_SECRET);
-  console.log(accessToken);
-  await storeActiveToken(accessToken);
-  await storeRefreshToken(userId, refreshToken);
-  res.json({ accessToken: accessToken, refreshToken: refreshToken });
+  await storeActiveToken(username, accessToken);
+  res.json({ accessToken: accessToken });
 });
 
 app.listen(process.env.PORT2, () => {

@@ -26,17 +26,42 @@ DELETE http://localhost:4000/logout
 Content-Type: application/json 
 
 {
-  "username": "dies34",
-  "password": "andrew1",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczM0IiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjkzNDA1NzQyLCJleHAiOjE2OTM0MDkzNDJ9.5Y0_OWRBR5oNV4XNLwQV1Rq_9EDk8cGafLRBFFH1QQw"}
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0MDA5Njg1LCJleHAiOjE2OTQwMTMyODV9.lhnCbG3lvTUu7HvddKs6sYw117o-xaNP-9dtE8orNoc"}
 
 ###
 POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-  "username": "dies33",
+  "username": "dies34",
   "password": "andrew1"
+}
+
+###
+GET http://localhost:4000/verifyUser
+Content-Type: application/json
+
+{
+  "username": "dies33",
+  "token": ".eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0MDEyNzMzLCJleHAiOjE2OTQwMTYzMzN9.6DWZOYFQv1RN5ZUaz0NWstvCT_GxzELSMWXh-IrXZT8"
+}
+
+###
+GET http://localhost:8080/validateUser
+Content-Type: application/json
+
+{
+  "username": "dies35",
+  "password": "andrew1"
+}
+
+###
+
+GET http://localhost:4000/verifyToken
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjkzOTI1NDUxLCJleHAiOjE2OTM5MjkwNTF9.uaa_zB58hQxKcPJmxqryCnB8fGVxKcoA5rJVmIVg_WE"
 }
 
 ###
