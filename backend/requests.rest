@@ -1,22 +1,12 @@
-GET http://localhost:8080/posts
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3lsZSIsImlhdCI6MTY5MjUyMTI2OSwiZXhwIjoxNjkyNTIxMjg0fQ.1xmT-sagioXODnN6ByFzmyC4O7ZxvfcmsUbcxg646gk
 
-###
-
-DELETE http://localhost:4000/logout
-Content-Type: application/json 
+POST http://localhost:4000/createUser
+Content-Type: application/json
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3lsZSIsImlhdCI6MTY5MjUyMjY2M30.9az4wDcrYaeCt8RYOnOTaWqqTBhm5vAQwjrcHkkKbeA"
-}
-
-###
-
-POST http://localhost:4000/token 
-Content-Type: application/json 
-
-{
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS3lsZSIsImlhdCI6MTY5MjUyMjY2M30.9az4wDcrYaeCt8RYOnOTaWqqTBhm5vAQwjrcHkkKbeA"
+  "name": "Andrew",
+  "email": "andrewwang133@gmail.com",
+  "username": "dies34",
+  "password": "andrew1"
 }
 
 ###
@@ -24,24 +14,63 @@ POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-  "username": "Kyle"
-}
-
-###
-
-POST http://localhost:8080/createUser
-Content-Type: application/json
-
-{
-  "name": "Andrew",
-  "email": "andrewwang134@gmail.com",
   "username": "dies34",
   "password": "andrew1"
 }
 
 ###
 
-GET http://localhost:8080/findUser
+DELETE http://localhost:4000/logout 
+Content-Type: application/json 
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0MDA5Njg1LCJleHAiOjE2OTQwMTMyODV9.lhnCbG3lvTUu7HvddKs6sYw117o-xaNP-9dtE8orNoc"}
+
+
+
+###
+GET http://localhost:4000/verifyUser
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "token": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM"
+}
+
+###
+GET http://localhost:4000/validateUser
+Content-Type: application/json
+
+{
+  "username": "dies35",
+  "password": "andrew1"
+}
+
+###
+
+GET http://localhost:4000/verifyToken
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0NTIwODM3LCJleHAiOjE2OTQ1MjQ0Mzd9.OMiamLU-k0OKlGmzGgPKhWP2cjGgwlbSvEpd_HEEXao"}
+
+###
+GET http://localhost:4000/activeTokens
+
+###
+POST http://localhost:8080/createUserTodo
+Content-Type: application/json 
+
+{
+  "username": "dies34",
+  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "Get fucking rich",
+  "dueDate": "2024"
+}
+
+###
+
+GET http://localhost:4000/findUser
 Content-Type: application/json
 
 {
@@ -56,8 +85,8 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "password": "andrew1",
-  "todo": "Save the World",
+  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "Be Superman",
   "dueDate": "2025"
 }
 
@@ -68,9 +97,22 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "password": "andrew1",
-  "todo": "Save the World"
+  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "Be batman"
 }
+
+###
+
+PUT http://localhost:8080/updateTodo
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "Be batman",
+  "newTodo": "Be Wonderwoman"
+}
+
 
 ###
 
