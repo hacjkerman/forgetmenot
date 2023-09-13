@@ -1,16 +1,17 @@
 import express from "express";
 import "dotenv/config";
-import axios from "axios";
-import generateAccessToken from "../auth/generateAccessToken.js";
-import { storeActiveToken } from "../auth/storeToken.js";
-import { getAllActiveTokens } from "../auth/getallActiveTokens.js";
-import { verifyToken } from "../auth/verifyToken.js";
-import { removeActiveToken } from "../auth/removeActiveToken.js";
-import { verifyUser } from "../auth/verifyUser.js";
-import { findUser } from "../auth/findUser.js";
-import { createUser } from "../users/createUser.js";
-import { removeUser } from "../users/deleteUser.js";
+import generateAccessToken from "./auth/generateAccessToken.js";
+import { storeActiveToken } from "./auth/storeToken.js";
+import { getAllActiveTokens } from "./auth/getallActiveTokens.js";
+import { verifyToken } from "./auth/verifyToken.js";
+import { removeActiveToken } from "./auth/removeActiveToken.js";
+import { verifyUser } from "./auth/verifyUserToken.js";
+import { findUserInTokens } from "./auth/findUserInTokens.js";
+import { createUser } from "./users/createUser.js";
+import { removeUser } from "./users/removeUser.js";
 import validator from "email-validator";
+import { validateUser } from "./users/validateUser.js";
+import { findUserInUsers } from "./users/findUserInUsers.js";
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,7 @@ app.get("/activeTokens", async (req, res) => {
   if (activeTokens === undefined) {
     res.json("No active user sessions");
   }
+
   res.json(activeTokens);
 });
 
@@ -40,11 +42,9 @@ app.delete("/logout", async (req, res) => {
 
 app.get("/verifyUser", async (req, res) => {
   const { username, token } = req.body;
-  console.log(token);
   const isValidUser = await verifyUser(username, token);
-  console.log(isValidUser);
   if (!isValidUser) {
-    res.json(false);
+    res.json({ error: "Username or Token invalid" });
     return;
   }
   res.json(true);
@@ -55,20 +55,16 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   // Check if user exists
-  const isFound = await axios({
-    method: "get",
-    url: "http://localhost:8080/validateUser",
-    data: {
-      username: username,
-      password: password,
-    },
-  });
+  const isFound = await findUserInUsers(username);
   if (!isFound) {
-    res.json({ error: "User not found" });
-    return;
+    return res.json({ error: "User not found" });
+  }
+  const isValid = await validateUser(username, password);
+  if (!isValid) {
+    return res.json({ error: "Invalid password" });
   }
   // Check if user is already logged in
-  const userExists = await findUser(username);
+  const userExists = await findUserInTokens(username);
   if (userExists) {
     res.json({ error: "User is already logged in" });
     return;
@@ -93,7 +89,8 @@ app.post("/createUser", async (req, res) => {
     username,
     password,
   });
-  if (userId === undefined) return res.status(400).json({ error: "Duplicate" });
+  if (userId === undefined)
+    return res.status(400).json({ error: "Duplicate User" });
   res.json(userId);
 });
 
@@ -111,10 +108,11 @@ app.delete("/removeUser", async (req, res) => {
   if (!username || !password) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const userId = await findUser(username, password);
+  const userId = await findUserInUsers(username, password);
   const returnVal = await removeUser(userId);
   res.json(returnVal);
 });
+
 app.listen(process.env.PORT2, () => {
   console.log(`Server is listening on http://localhost:${process.env.PORT2}`);
 });

@@ -17,7 +17,6 @@ export async function createUser(user) {
     email: user.email,
     username: user.username,
     password: user.password,
-    todo: [],
   };
   const db = client.db(dbName);
   const collection = db.collection("users");

@@ -5,7 +5,7 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function findUser(user) {
+export async function findUserInTokens(user) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("activeTokens");
