@@ -33,7 +33,7 @@ POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-  "username": "dies34",
+  "username": "dies33",
   "password": "andrew1"
 }
 
@@ -61,8 +61,7 @@ GET http://localhost:4000/verifyToken
 Content-Type: application/json
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjkzOTI1NDUxLCJleHAiOjE2OTM5MjkwNTF9.uaa_zB58hQxKcPJmxqryCnB8fGVxKcoA5rJVmIVg_WE"
-}
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0NTIwODM3LCJleHAiOjE2OTQ1MjQ0Mzd9.OMiamLU-k0OKlGmzGgPKhWP2cjGgwlbSvEpd_HEEXao"}
 
 ###
 GET http://localhost:4000/activeTokens
@@ -96,7 +95,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "password": "andrew1",
+  "sessionId": "JhbGciOJIUzI1NiIsInR5cCI6IkpXVC9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0NTE1MTk4LCJleHAiOjE2OTQ1MTg3OTh9.BfrT2ZUnbAvO61ngk1wxFzD8CikD07eHr-KgGmmIFv8",
   "todo": "Save the World",
   "dueDate": "2025"
 }

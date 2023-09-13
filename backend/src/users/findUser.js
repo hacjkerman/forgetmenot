@@ -14,7 +14,8 @@ export async function findUser(user, sessionId) {
       token: sessionId,
     },
   });
-  if (!isValid) {
+
+  if (!isValid.data) {
     return false;
   }
   await client.connect();

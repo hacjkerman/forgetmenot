@@ -8,6 +8,9 @@ import { verifyToken } from "../auth/verifyToken.js";
 import { removeActiveToken } from "../auth/removeActiveToken.js";
 import { verifyUser } from "../auth/verifyUser.js";
 import { findUser } from "../auth/findUser.js";
+import { createUser } from "../users/createUser.js";
+import { removeUser } from "../users/deleteUser.js";
+import validator from "email-validator";
 
 const app = express();
 app.use(express.json());
@@ -37,7 +40,9 @@ app.delete("/logout", async (req, res) => {
 
 app.get("/verifyUser", async (req, res) => {
   const { username, token } = req.body;
+  console.log(token);
   const isValidUser = await verifyUser(username, token);
+  console.log(isValidUser);
   if (!isValidUser) {
     res.json(false);
     return;
@@ -68,12 +73,48 @@ app.post("/login", async (req, res) => {
     res.json({ error: "User is already logged in" });
     return;
   }
-  const user = { name: username, password: password };
-  const accessToken = await generateAccessToken(user);
+  const accessToken = await generateAccessToken(username);
   await storeActiveToken(username, accessToken);
   res.json({ accessToken: accessToken });
 });
 
+// User Operations
+app.post("/createUser", async (req, res) => {
+  const { name, email, username, password } = req.body;
+  if (!name || !email || !username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  if (!validator.validate(email)) {
+    return res.status(400).json({ error: "Invalid Email" });
+  }
+  const userId = await createUser({
+    name,
+    email,
+    username,
+    password,
+  });
+  if (userId === undefined) return res.status(400).json({ error: "Duplicate" });
+  res.json(userId);
+});
+
+app.get("/validateUser", async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await validateUser(username, password);
+  res.json(userId);
+});
+
+app.delete("/removeUser", async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  const userId = await findUser(username, password);
+  const returnVal = await removeUser(userId);
+  res.json(returnVal);
+});
 app.listen(process.env.PORT2, () => {
   console.log(`Server is listening on http://localhost:${process.env.PORT2}`);
 });
