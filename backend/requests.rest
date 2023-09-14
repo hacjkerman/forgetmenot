@@ -24,7 +24,7 @@ DELETE http://localhost:4000/logout
 Content-Type: application/json 
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0MDA5Njg1LCJleHAiOjE2OTQwMTMyODV9.lhnCbG3lvTUu7HvddKs6sYw117o-xaNP-9dtE8orNoc"}
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQ3MjQ3NjAsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk0NzIxMTYwfQ.LH2Cd-n3mxH5ozAzyNrUDFaVA_7YUZjxc_hgVbehzHA"}
 
 
 
@@ -34,7 +34,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "token": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM"
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQ3MjM4NDEsImRhdGEiOiJkaWVzMzQiLCJpYXQiOjE2OTQ3MjAyNDF9.89MojotLE2dfm12mKQWQ327aXurBSXaQQBvuvacszno"
 }
 
 ###
@@ -52,7 +52,7 @@ GET http://localhost:4000/verifyToken
 Content-Type: application/json
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZGllczMzIiwicGFzc3dvcmQiOiJhbmRyZXcxIiwiaWF0IjoxNjk0NTIwODM3LCJleHAiOjE2OTQ1MjQ0Mzd9.OMiamLU-k0OKlGmzGgPKhWP2cjGgwlbSvEpd_HEEXao"}
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQ3MjQ4MTMsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk0NzIxMjEzfQ.5-mDY0gOdZnPB-M8kYVaJJdVyCkdO6N0tZ28UCIasGs"}
 
 ###
 GET http://localhost:4000/activeTokens
