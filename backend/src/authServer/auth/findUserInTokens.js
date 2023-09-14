@@ -10,7 +10,6 @@ export async function findUserInTokens(user) {
   const db = client.db(dbName);
   const collection = db.collection("activeTokens");
   const isFound = await collection.findOne({ username: user });
-  console.log(isFound);
   if (!isFound) {
     return false;
   }

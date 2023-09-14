@@ -69,9 +69,9 @@ app.post("/login", async (req, res) => {
     res.json({ error: "User is already logged in" });
     return;
   }
-  const accessToken = await generateAccessToken(username);
-  await storeActiveToken(username, accessToken);
-  res.json({ accessToken: accessToken });
+  const accessToken = await generateAccessToken(username, isFound.email);
+  await storeActiveToken(username, isFound.email, accessToken);
+  return res.cookie({ accessToken: accessToken });
 });
 
 // User Operations
@@ -109,7 +109,7 @@ app.delete("/removeUser", async (req, res) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const userId = await findUserInUsers(username, password);
-  const returnVal = await removeUser(userId);
+  const returnVal = await removeUser(userId._id);
   res.json(returnVal);
 });
 

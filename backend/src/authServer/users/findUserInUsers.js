@@ -15,5 +15,7 @@ export async function findUserInUsers(user) {
   if (!userResult) {
     return false;
   }
-  return userResult._id;
+  return userResult;
 }
+
+findUserInUsers("dies34");
