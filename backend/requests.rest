@@ -42,7 +42,7 @@ GET http://localhost:4000/validateUser
 Content-Type: application/json
 
 {
-  "username": "dies35",
+  "username": "dies34",
   "password": "andrew1"
 }
 

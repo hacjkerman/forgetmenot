@@ -12,12 +12,17 @@ export async function verifyToken(token) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("activeTokens");
-  // const verif = verify(
-  //   token,
-  //   "eee202809a069e78601c1bdc7c896fcaccd907afafd5009408042da01084ec16fb8a55ada0fa4f25a3d04226a4c028920ce867c14f647502462d85111c0c3da1"
-  // );
-  // console.log(verif);
-  const isFound = await collection.findOne({ token: token });
+  let verif;
+  try {
+  verif = verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET
+  ) 
+} catch (err) {
+    return err;
+  };
+
+  const isFound = await collection.findOne({$and: [{username: verif}, { token: token }]});
   if (!isFound) {
     return false;
   }
