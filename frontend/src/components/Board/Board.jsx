@@ -3,10 +3,10 @@ import Task from "../Task/Task";
 import BoardCSS from "./board.module.css";
 import { Droppable } from "react-beautiful-dnd";
 
-export default function Board() {
+export default function Board(props) {
   return (
     <div>
-      <Droppable droppableId="board" type="COLUMN" direction="horizontal">
+      <Droppable droppableId={props.title} type="COLUMN" direction="vertical">
         {(provided) => {
           return (
             <div
@@ -14,8 +14,11 @@ export default function Board() {
               {...provided.droppableProps}
               className={BoardCSS.container}
             >
-              <h1>Title</h1>
-              <Task date="2023-09-11" id="1" />
+              <h1>{props.title}</h1>
+              {props.data.map(({ id, todo, due }, index) => (
+                <Task key={id} due={due} id={id} todo={todo} index={index} />
+              ))}
+
               {provided.placeholder}
             </div>
           );
