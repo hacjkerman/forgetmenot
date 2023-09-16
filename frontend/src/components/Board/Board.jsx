@@ -18,7 +18,6 @@ export default function Board(props) {
               {props.data.map(({ id, todo, due }, index) => (
                 <Task key={id} due={due} id={id} todo={todo} index={index} />
               ))}
-
               {provided.placeholder}
             </div>
           );

@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import Board from "../Board/Board";
 import MainCSS from "./Main.module.css";
 import { DragDropContext } from "react-beautiful-dnd";
+import useSWR from "swr";
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Main() {
-  const data = [
-    { id: 0, todo: "Be Batman", due: "2023-09-13" },
-    { id: 1, todo: "Be Superman", due: "2023-10-13" },
-    { id: 2, todo: "Be Wonderwoman", due: "2023-11-13" },
-  ];
+  const { data, error } = useSWR("http://localhost:4000/getAllTodos", fetcher);
+  if (error) return "An error has occurred.";
+  // const data = [
+  //   { id: 0, todo: "Be Batman", due: "2023-09-13" },
+  //   { id: 1, todo: "Be Superman", due: "2023-10-13" },
+  //   { id: 2, todo: "Be Wonderwoman", due: "2023-11-13" },
+  // ];
   const data2 = [
     { id: 3, todo: "Be Spiderman", due: "2023-09-13" },
     { id: 4, todo: "Be Ironman", due: "2023-10-13" },
