@@ -9,6 +9,5 @@ export async function verifyUser(username, sessionId) {
       token: sessionId,
     },
   });
-
   return userId.data;
 }

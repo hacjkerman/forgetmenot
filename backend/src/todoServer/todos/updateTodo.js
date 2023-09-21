@@ -1,5 +1,4 @@
 import { MongoClient } from "mongodb";
-import { getAllTodos } from "./getAllTodos.js";
 
 const client = new MongoClient("mongodb://localhost:27017");
 

@@ -12,9 +12,6 @@ export async function verifyUser(user, sessionId) {
   const isFound = await collection.findOne({
     $and: [{ username: user }, { token: sessionId }],
   });
-  console.log(isFound);
-  if (!isFound) {
-    return false;
-  }
-  return true;
+
+  return isFound;
 }

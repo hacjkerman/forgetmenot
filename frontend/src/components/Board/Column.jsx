@@ -1,9 +1,9 @@
 import React from "react";
 import Task from "../Task/Task";
-import BoardCSS from "./board.module.css";
+import ColumnCSS from "./Column.module.css";
 import { Droppable } from "react-beautiful-dnd";
 
-export default function Board(props) {
+export default function Column(props) {
   return (
     <div>
       <Droppable droppableId={props.title} type="COLUMN" direction="vertical">
@@ -12,7 +12,7 @@ export default function Board(props) {
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={BoardCSS.container}
+              className={ColumnCSS.container}
             >
               <h1>{props.title}</h1>
               {props.data.map(({ id, todo, due }, index) => (

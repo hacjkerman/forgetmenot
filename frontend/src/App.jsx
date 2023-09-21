@@ -1,13 +1,13 @@
 import React from "react";
 import AppCSS from "./App.module.css";
 import Header from "./components/Header/Header";
-import Main from "./components/Main/Main";
+import Board from "./components/Boar/Board";
 
 function App() {
   return (
     <div className={AppCSS.main}>
       <Header />
-      <Main />
+      <Board />
     </div>
   );
 }

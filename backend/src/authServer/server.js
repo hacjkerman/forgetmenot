@@ -44,7 +44,7 @@ app.get("/verifyUser", async (req, res) => {
   const { username, token } = req.body;
   const isValidUser = await verifyUser(username, token);
   if (!isValidUser) {
-    res.json({ error: "Username or Token invalid" });
+    res.json(false);
     return;
   }
   res.json(true);

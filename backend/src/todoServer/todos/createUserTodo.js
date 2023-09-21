@@ -4,11 +4,12 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function createUserTodo(username, todo, dueDate) {
+export async function createUserTodo(username, column, todo, dueDate) {
   await client.connect();
   const db = client.db(dbName);
   const Users = db.collection("userTodos");
   const newTodo = {
+    column: column,
     todo: todo,
     dueDate: dueDate,
   };

@@ -10,6 +10,5 @@ export async function getAllTodos(user) {
   const collection = db.collection("userTodos");
   const insertResult = await collection.find({ username: user }).toArray();
   console.log("All Todos documents =>", insertResult);
-  console.log(insertResult[0].todo);
   return insertResult[0].todo;
 }

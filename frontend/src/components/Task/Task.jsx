@@ -1,6 +1,6 @@
 import React from "react";
 import image from "./images.jfif";
-import "./Task.css";
+import "./Task.module.css";
 import { Draggable } from "react-beautiful-dnd";
 
 export default function Task(props) {

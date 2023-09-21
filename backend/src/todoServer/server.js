@@ -6,21 +6,23 @@ import { removeTodo } from "./todos/removeTodo.js";
 import { updateTodo } from "./todos/updateTodo.js";
 import { verifyUser } from "./users/verifyUser.js";
 import { createUserTodo } from "./todos/createUserTodo.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Todo Request Operations
 app.post("/createUserTodo", async (req, res) => {
-  const { username, sessionId, todo, dueDate } = req.body;
-  if (!username || !todo || !dueDate) {
+  const { username, column, sessionId, todo, dueDate } = req.body;
+  if (!username || !column || !sessionId || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, sessionId);
   if (!validUser) {
     return res.json("Invalid authorisation");
   }
-  const storeResult = await createUserTodo(username, todo, dueDate);
+  const storeResult = await createUserTodo(username, column, todo, dueDate);
   if (storeResult === false) {
     return res.status(400).json({ error: "Duplicate Storage" });
   }
@@ -43,7 +45,7 @@ app.post("/storeTodo", async (req, res) => {
   return res.json("Update Successful");
 });
 
-app.get("/getAllTodos", async (req, res) => {
+app.post("/getAllTodos", async (req, res) => {
   const { username, sessionId } = req.body;
   if (!username || !sessionId) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -52,7 +54,7 @@ app.get("/getAllTodos", async (req, res) => {
   if (!validUser) {
     return res.json("Invalid authorisation");
   }
-  const foundTodos = await getAllTodos(username);
+  const foundTodos = await getAllTodos("dies34");
   if (foundTodos === null) return res.sendStatus(404);
   res.json(foundTodos);
 });
