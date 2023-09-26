@@ -63,8 +63,9 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTUzMjk2NzIsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk1MzI2MDcyfQ.8HWihBsS7M3DLI65AwG0IJVS21jx2URf1ggTepwT7Pc",
   "todo": "Get fucking rich",
+  "column": "Habits",
   "dueDate": "2024"
 }
 
@@ -80,13 +81,13 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/storeTodo
+POST http://localhost:8080/todos
 Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
-  "todo": "Be Superman",
+  "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTU2OTI3OTksImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk1Njg5MTk5fQ.S2nN-8s4p3CncCJduGuy8dNA7UaigTO4tencf0p6WwU",
+  "todo": "Be Spiderman",
   "dueDate": "2025"
 }
 

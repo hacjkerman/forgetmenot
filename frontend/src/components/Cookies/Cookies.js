@@ -15,15 +15,15 @@ const fetcher = (...args) =>
     },
     body: JSON.stringify({
       username: "dies34",
-      sessionId:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTUxNzAzNTksImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk1MTY2NzU5fQ.svRgy2L6UHHtT5veQpDJ9H7_4QNJi8cRNFJd-KpPiEA",
+      password: "andrew1",
     }),
   }).then((res) => res.json());
 export default function Cookies() {
-  const { data: result, error } = useSWR(url, fetcher);
   const [cookies, setCookie] = useCookies(["user"]);
   function handleLogin(user) {
-    setCookie("user", user, { path: "/" });
+    const { data: result, error } = useSWR(url, fetcher);
+    if (error) return error;
+    setCookie("user", result, { path: "/" });
   }
   return (
     <CookiesProvider>

@@ -28,7 +28,7 @@ app.post("/createUserTodo", async (req, res) => {
   }
   return res.json("Update Successful");
 });
-app.post("/storeTodo", async (req, res) => {
+app.post("/todos", async (req, res) => {
   const { username, sessionId, todo, dueDate } = req.body;
   if (!username || !sessionId || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -45,8 +45,8 @@ app.post("/storeTodo", async (req, res) => {
   return res.json("Update Successful");
 });
 
-app.post("/getAllTodos", async (req, res) => {
-  const { username, sessionId } = req.body;
+app.get("/todos", async (req, res) => {
+  const { username, sessionId } = req.query;
   if (!username || !sessionId) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -54,7 +54,7 @@ app.post("/getAllTodos", async (req, res) => {
   if (!validUser) {
     return res.json("Invalid authorisation");
   }
-  const foundTodos = await getAllTodos("dies34");
+  const foundTodos = await getAllTodos(username);
   if (foundTodos === null) return res.sendStatus(404);
   res.json(foundTodos);
 });
@@ -68,7 +68,7 @@ app.post("/getAllTodos", async (req, res) => {
 //   res.json(validUser);
 // });
 
-app.put("/updateTodo", async (req, res) => {
+app.put("/todos", async (req, res) => {
   const { username, sessionId, todo, newTodo } = req.body;
   if (!username || !sessionId || !todo || !newTodo) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -83,7 +83,7 @@ app.put("/updateTodo", async (req, res) => {
   res.json(updatedTodo);
 });
 
-app.delete("/removeTodo", async (req, res) => {
+app.delete("/todos", async (req, res) => {
   const { username, sessionId, todo } = req.body;
   if (!username || !sessionId || !todo) {
     return res.status(400).json({ error: "Missing required fields" });

@@ -14,12 +14,15 @@ export async function createUserTodo(username, column, todo, dueDate) {
     dueDate: dueDate,
   };
   const isFound = await Users.findOne({
-    $and: [{ username: username, todo: todo }],
+    username: username,
   });
   console.log(isFound);
-  if (!isFound) {
-    Users.insertOne({ username: username, todo: [newTodo] });
-    return true;
+  if (isFound) {
+    const duplicateTodo = isFound.todo.find((todo) => todo === todo);
+    if (duplicateTodo) {
+      return false;
+    }
   }
-  return false;
+  Users.insertOne({ username: username, todo: [newTodo] });
+  return true;
 }
