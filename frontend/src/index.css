@@ -1,5 +1,4 @@
-html {
-  background-color: aqua;
-  display: flex;
-  justify-content: center;
+body {
+  background: linear-gradient(#2a00b7, #42006c);
+  height: 100vh;
 }
