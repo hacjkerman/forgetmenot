@@ -1,6 +1,8 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import image from "./images.jfif";
+import TaskCSS from "./Task.module.css";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
@@ -20,7 +22,14 @@ export default function Task(props) {
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
         >
-          {props.task.content}
+          <div className={TaskCSS.upperBox}>
+            <img src={image} alt="pfp" id={TaskCSS.pfp} />
+            <p>{props.task.content}</p>
+          </div>
+          <div className={TaskCSS.lowerBox}>
+            <p id={TaskCSS.dueDate}>Due Date: {props.due}</p>
+            <p id={TaskCSS.propId}>#{props.task.id}</p>
+          </div>
         </Container>
       )}
     </Draggable>

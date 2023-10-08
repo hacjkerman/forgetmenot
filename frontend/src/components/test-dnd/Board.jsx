@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
+  margin-left: 3rem;
 `;
 
 function InnerList(props) {

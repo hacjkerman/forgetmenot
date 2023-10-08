@@ -7,13 +7,17 @@ const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 220px;
+  width: 300px;
   display: flex;
   flex-direction: column;
-  background: white;
+  background-color: rgb(235, 236, 240);
+  padding: 4px;
 `;
 const Title = styled.h3`
   padding: 8px;
+  margin: 0;
+  border-bottom: solid;
+  background-color: dark-grey;
 `;
 const TaskList = styled.div`
   padding: 8px;
@@ -21,7 +25,7 @@ const TaskList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? "skyblue" : "inherit "};
   flex-grow: 1;
-  min-height: 100px;
+  min-height: 150px;
 `;
 
 function InnerList(props) {

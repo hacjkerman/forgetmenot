@@ -7,8 +7,8 @@ import Board from "./components/test-dnd/Board";
 function App() {
   return (
     <div className={AppCSS.main}>
-      <Board />
       <Header />
+      <Board />
       <LoginContainer />
     </div>
   );
