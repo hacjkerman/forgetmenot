@@ -1,28 +1,27 @@
 const initialData = {
-  tasks: {
-    "task-1": { id: "task-1", content: "suck people" },
-    "task-2": { id: "task-2", content: "eat jas" },
-    "task-3": { id: "task-3", content: "fit people" },
-    "task-4": { id: "task-4", content: "be batman" },
-  },
-  columns: {
-    "column-1": {
+  columns: [
+    {
       id: "column-1",
       title: "To do",
-      taskIds: ["task-1", "task-2", "task-3", "task-4"],
+      tasks: [
+        { id: "task-1", content: "suck people", due: "2023" },
+        { id: "task-2", content: "eat jas", due: "2024" },
+      ],
     },
-    "column-2": {
+    {
       id: "column-2",
       title: "Doing",
-      taskIds: [],
+      tasks: [
+        { id: "task-3", content: "fit people", due: "2025" },
+        { id: "task-4", content: "be batman", due: "2026" },
+      ],
     },
-    "column-3": {
+    {
       id: "column-3",
       title: "Done",
-      taskIds: [],
+      tasks: [],
     },
-  },
-  columnOrder: ["column-1", "column-2", "column-3"],
+  ],
 };
 
 export default initialData;

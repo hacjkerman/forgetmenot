@@ -9,19 +9,13 @@ const Container = styled.div`
   margin-left: 3rem;
 `;
 
-function InnerList(props) {
-  const { column, taskMap, index } = props;
-  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return <Column column={column} tasks={tasks} index={index} />;
-}
-
 export default function Board() {
   const [data, setData] = useState(initialData);
-
   const onDragEnd = (result) => {
     // document.body.style.color = "inherit";
     // document.body.style.backgroundColor = "inherit";
-    const { destination, source, draggableId, type } = result;
+    const { destination, source, type } = result;
+    console.log(destination, source);
     if (!destination) {
       return;
     }
@@ -33,54 +27,52 @@ export default function Board() {
     }
 
     if (type === "column") {
-      const newColumnOrder = Array.from(data.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-
-      const newState = {
-        ...data,
-        columnOrder: newColumnOrder,
-      };
+      let newColumnOrder = Array.from(data.columns);
+      let destItem = newColumnOrder[destination.index];
+      newColumnOrder[destination.index] = newColumnOrder[source.index];
+      newColumnOrder[source.index] = destItem;
+      const newState = { columns: newColumnOrder };
       setData(newState);
       return;
     }
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
+    const start = source.droppableId;
+    const finish = destination.droppableId;
 
+    const newColumnOrder = Array.from(data.columns);
+    const StartObj = data.columns.find((element) => element.id === start);
+    const StartIndex = data.columns.findIndex(
+      (element) => element.id === start
+    );
+    const startTasks = StartObj.tasks;
+    const currDest = startTasks[destination.index];
+    const srcItem = startTasks[source.index];
     if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-      const newColumn = { ...start, taskIds: newTaskIds };
+      startTasks[destination.index] = srcItem;
+      startTasks[source.index] = currDest;
+      const newColumn = { ...StartObj, tasks: startTasks };
+      newColumnOrder[StartIndex] = newColumn;
       const newState = {
-        ...data,
-        columns: {
-          ...data.columns,
-          [newColumn.id]: newColumn,
-        },
+        columns: newColumnOrder,
       };
       setData(newState);
       return;
     }
+    const DestObj = data.columns.find((element) => element.id === finish);
+    const DestIndex = data.columns.findIndex(
+      (element) => element.id === finish
+    );
 
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStart = { ...start, taskIds: startTaskIds };
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
+    const newDestTasks = DestObj.tasks;
+    const newStartTasks = startTasks.filter((item) => item !== srcItem);
+    newDestTasks.splice(destination.index, 0, srcItem);
 
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
+    const newStartCol = { ...StartObj, tasks: newStartTasks };
+    const newDestCol = { ...DestObj, tasks: newDestTasks };
+    newColumnOrder[StartIndex] = newStartCol;
+    newColumnOrder[DestIndex] = newDestCol;
 
     const newState = {
-      ...data,
-      columns: {
-        ...data.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      },
+      columns: newColumnOrder,
     };
     setData(newState);
   };
@@ -97,7 +89,6 @@ export default function Board() {
   //       : 0;
   //     document.body.style.backgroundColor = `rgba(153,141,217, ${opacity})`;
   //   };
-
   return (
     <DragDropContext
       onDragEnd={onDragEnd}
@@ -107,14 +98,12 @@ export default function Board() {
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {data.columnOrder.map((columnId, index) => {
-              const column = data.columns[columnId];
-
+            {data.columns.map((column, index) => {
               return (
-                <InnerList
+                <Column
                   key={column.id}
                   column={column}
-                  taskMap={data.tasks}
+                  tasks={column.tasks}
                   index={index}
                 />
               );

@@ -20,14 +20,14 @@ export default function Task(props) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          isDragging={snapshot.isDragging}
+          $isDragging={snapshot.isDragging}
         >
           <div className={TaskCSS.upperBox}>
             <img src={image} alt="pfp" id={TaskCSS.pfp} />
             <p>{props.task.content}</p>
           </div>
           <div className={TaskCSS.lowerBox}>
-            <p id={TaskCSS.dueDate}>Due Date: {props.due}</p>
+            <p id={TaskCSS.dueDate}>Due Date: {props.task.due}</p>
             <p id={TaskCSS.propId}>#{props.task.id}</p>
           </div>
         </Container>

@@ -28,12 +28,6 @@ const TaskList = styled.div`
   min-height: 150px;
 `;
 
-function InnerList(props) {
-  return props.tasks.map((task, index) => (
-    <Task key={task.id} task={task} index={index} />
-  ));
-}
-
 export default function Column(props) {
   return (
     <Draggable draggableId={props.column.id} index={props.index}>
@@ -45,9 +39,11 @@ export default function Column(props) {
               <TaskList
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                isDraggingOver={snapshot.isDraggingOver}
+                $isDraggingOver={snapshot.isDraggingOver}
               >
-                <InnerList tasks={props.tasks} />
+                {props.tasks.map((task, index) => {
+                  return <Task key={task.id} task={task} index={index} />;
+                })}
                 {provided.placeholder}
               </TaskList>
             )}
