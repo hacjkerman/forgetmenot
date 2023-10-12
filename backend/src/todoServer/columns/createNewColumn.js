@@ -8,20 +8,15 @@ export async function createNewColumn(username, column) {
   await client.connect();
   const db = client.db(dbName);
   const Users = db.collection("userTodos");
-  const newColumn = {
-    column: column,
-    todos: [],
-  };
   const isFound = await Users.findOne({
     username: username,
   });
-  console.log(isFound);
   if (isFound) {
     const duplicateTodo = isFound.columns.find((column) => column === column);
     if (duplicateTodo) {
       return false;
     }
   }
-  Users.insertOne({ username: username, columns: [newColumn] });
+  Users.insertOne({ username: username, columnOrder: [column] });
   return true;
 }

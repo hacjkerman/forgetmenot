@@ -10,5 +10,5 @@ export async function getColumns(user) {
   const collection = db.collection("userTodos");
   const insertResult = await collection.find({ username: user }).toArray();
   console.log("All Todos documents =>", insertResult);
-  return insertResult[0].columns;
+  return insertResult[0].columnOrder;
 }

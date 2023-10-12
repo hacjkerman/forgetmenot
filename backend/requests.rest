@@ -83,7 +83,7 @@ Content-Type: application/json
 {
   "username": "dies34",
   "oldColumn": "Habits",
-  "newColumn": "Gang"
+  "newColumn": "gang"
 }
 ###
 POST http://localhost:8080/column
@@ -91,7 +91,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "column": "Habits"
+  "column": "Ggg"
 }
 
 ###

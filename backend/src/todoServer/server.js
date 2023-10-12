@@ -20,7 +20,7 @@ app.use(express.json());
 app.post("/createNewColumn", async (req, res) => {
   const { username, column } = req.body;
   if (!username || !column) {
-    return res.status(400).json({ error: "missing required fields" });
+    return res.status(400).json({ error: "Missing required fields" });
   }
   const storeResult = await createNewColumn(username, column);
   if (storeResult === false) {
@@ -29,10 +29,24 @@ app.post("/createNewColumn", async (req, res) => {
   return res.json("Update Successful");
 });
 
+app.put("/columnOrder", async (req, res) => {
+  const { username, srcIndex, destIndex } = req.body;
+  if (!username || !srcIndex || !destIndex) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  if (srcIndex === destIndex) {
+    return;
+  }
+  const updateResult = await updateOrder(username, srcIndex, destIndex);
+  if (updateResult === false) {
+    return res.status(400).json({ error: "Bad Storage" });
+  }
+  return res.json("Update Successful");
+});
 app.put("/column", async (req, res) => {
   const { username, oldColumn, newColumn } = req.body;
   if (!username || !oldColumn || !newColumn) {
-    return res.status(400).json({ error: "missing requried fields" });
+    return res.status(400).json({ error: "Missing required fields" });
   }
   const updateResult = await updateColumn(username, oldColumn, newColumn);
   if (updateResult === false) {

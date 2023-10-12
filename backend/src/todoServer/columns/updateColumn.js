@@ -9,18 +9,23 @@ export async function updateColumn(user, oldColumn, newColumn) {
   const db = client.db(dbName);
   const collection = db.collection("userTodos");
   const userData = await collection.find({ username: user }).toArray();
-  const columnData = userData[0].columns;
-  const columnIndex = columnData.findIndex(
-    (column) => column.column === oldColumn
-  );
-  const filteredColumn = columnData.filter(
-    (column) => column.column !== oldColumn
-  );
-  const updatedColumn = { ...columnData[columnIndex], column: newColumn };
-  const storeColumn = [...filteredColumn, updatedColumn];
+  const columnData = userData[0].columnOrder;
+  const isFound = columnData.filter((column) => column === oldColumn);
+  if (isFound.length === 0) {
+    // return "Column does not exist";
+    return false;
+  }
+  const duplicate = columnData.filter((column) => column === newColumn);
+  if (duplicate.length > 0) {
+    // return "Duplicate Storage";
+    return false;
+  }
+  const columnIndex = columnData.findIndex((column) => column === oldColumn);
+  columnData[columnIndex] = newColumn;
+  console.log(columnData);
   const insertResult = await collection.updateOne(
     { username: user },
-    { $set: { columns: storeColumn } }
+    { $set: { columnOrder: columnData } }
   );
   console.log("All Todos documents =>", insertResult);
   return insertResult;
