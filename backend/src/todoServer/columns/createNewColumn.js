@@ -4,25 +4,24 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function createUserTodo(username, column, todo, dueDate) {
+export async function createNewColumn(username, column) {
   await client.connect();
   const db = client.db(dbName);
   const Users = db.collection("userTodos");
   const newColumn = {
-    columns: column,
-    todos: [todo],
-    dueDate: dueDate,
+    column: column,
+    todos: [],
   };
   const isFound = await Users.findOne({
     username: username,
   });
   console.log(isFound);
   if (isFound) {
-    const duplicateTodo = isFound.todo.find((todo) => todo === todo);
+    const duplicateTodo = isFound.columns.find((column) => column === column);
     if (duplicateTodo) {
       return false;
     }
   }
-  Users.insertOne({ username: username, column: [newTodo] });
+  Users.insertOne({ username: username, columns: [newColumn] });
   return true;
 }

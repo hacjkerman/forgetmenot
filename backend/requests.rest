@@ -68,7 +68,47 @@ Content-Type: application/json
   "column": "Habits",
   "dueDate": "2024"
 }
+###
+POST http://localhost:8080/createNewColumn
+Content-Type: application/json 
 
+{
+  "username": "dies34",
+  "column": "Habits"
+}
+###
+PUT http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies34",
+  "oldColumn": "Habits",
+  "newColumn": "Gang"
+}
+###
+POST http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies34",
+  "column": "Habits"
+}
+
+###
+GET http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies34"
+}
+###
+DELETE http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies34",
+  "column": "Habits"
+}
 ###
 
 GET http://localhost:4000/findUser
