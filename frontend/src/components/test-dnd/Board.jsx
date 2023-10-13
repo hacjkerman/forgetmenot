@@ -3,30 +3,13 @@ import initialData from "./initial-data";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import useSWR from "swr";
-import {
-  getTodos,
-  storeTodo,
-  removeTodo,
-  updateTodo,
-  todosUrlEndpoint as cacheKey,
-} from "../../api/Todos/Todosapi";
 
 const Container = styled.div`
   display: flex;
   margin-left: 3rem;
 `;
 
-export default async function Board() {
-  const fetcher = await getTodos("dies34", sessionId);
-  const {
-    isLoading,
-    error,
-    data: columns,
-    mutate,
-  } = useSWR(cacheKey, fetcher, {
-    onSuccess: (data) => data.sort((a, b) => b.id - a.id),
-  });
+export default function Board() {
   const [data, setData] = useState(initialData);
   const onDragEnd = (result) => {
     // document.body.style.color = "inherit";
