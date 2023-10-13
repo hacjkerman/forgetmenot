@@ -4,7 +4,7 @@ const client = new MongoClient("mongodb://localhost:27017");
 
 const dbName = "mydb";
 
-export async function updateTodo(user, Todos, todo, newTodo) {
+export async function updateTodoColumn(user, Todos, todo, newColumn) {
   await client.connect();
   const db = client.db(dbName);
   const collection = db.collection("userTodos");
@@ -12,8 +12,7 @@ export async function updateTodo(user, Todos, todo, newTodo) {
   if (!todoIndex) {
     return false;
   }
-  console.log(todoIndex);
-  Todos[todoIndex].todo = newTodo;
+  Todos[todoIndex].column = newColumn;
   const insertResult = await collection.updateOne(
     { username: user },
     { $set: { todos: Todos } }

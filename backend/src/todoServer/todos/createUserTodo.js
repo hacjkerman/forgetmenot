@@ -8,21 +8,25 @@ export async function createUserTodo(username, column, todo, dueDate) {
   await client.connect();
   const db = client.db(dbName);
   const Users = db.collection("userTodos");
-  const newColumn = {
-    columns: column,
-    todos: [todo],
-    dueDate: dueDate,
+  const newTodo = {
+    column: column,
+    todo: todo,
+    due: dueDate,
   };
   const isFound = await Users.findOne({
     username: username,
   });
-  console.log(isFound);
-  if (isFound) {
+  if (!isFound) {
+    Users.insertOne({ username: username, todos: [newTodo] });
+    return true;
+  }
+  if (isFound && isFound.todo) {
     const duplicateTodo = isFound.todo.find((todo) => todo === todo);
     if (duplicateTodo) {
       return false;
     }
   }
-  Users.insertOne({ username: username, column: [newTodo] });
+  Users.updateOne({ username: username }, { $push: { todos: newTodo } });
+
   return true;
 }

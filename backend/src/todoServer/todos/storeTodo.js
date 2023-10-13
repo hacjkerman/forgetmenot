@@ -13,6 +13,11 @@ export async function storeTodo(user, column, Todos, todo, dueDate) {
     todo: todo,
     dueDate: dueDate,
   };
+  const columnExists = Todos.filter((todoName) => todoName.column === column);
+  if (columnExists.length === 0) {
+    // COLUMN DOES NOT EXIST
+    return false;
+  }
   const isFound = Todos.filter((todoName) => todoName.todo === todo);
   if (isFound.length === 0) {
     Users.updateOne({ username: user }, { $push: { todos: newTodo } });

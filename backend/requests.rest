@@ -63,8 +63,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTUzMjk2NzIsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk1MzI2MDcyfQ.8HWihBsS7M3DLI65AwG0IJVS21jx2URf1ggTepwT7Pc",
-  "todo": "Get fucking rich",
+  "todo": "Save the World",
   "column": "Habits",
   "dueDate": "2024"
 }
@@ -74,7 +73,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "column": "Habits"
+  "column": "GGG"
 }
 ###
 PUT http://localhost:8080/column
@@ -82,7 +81,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "oldColumn": "Habits",
+  "oldColumn": "cc",
   "newColumn": "gang"
 }
 ###
@@ -91,7 +90,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "column": "Ggg"
+  "column": "Habits"
 }
 
 ###
@@ -107,7 +106,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "column": "Habits"
+  "column": "GGG"
 }
 ###
 
@@ -126,34 +125,57 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTU2OTI3OTksImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk1Njg5MTk5fQ.S2nN-8s4p3CncCJduGuy8dNA7UaigTO4tencf0p6WwU",
-  "todo": "Be Spiderman",
+  "column":"Habits",
+  "todo": "Be batman",
   "dueDate": "2025"
 }
 
 ###
 
-DELETE http://localhost:8080/removeTodo
+DELETE http://localhost:8080/todos
 Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "column": "cc",
+  # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
   "todo": "Be batman"
 }
 
 ###
 
-PUT http://localhost:8080/updateTodo
+PUT http://localhost:8080/todos
 Content-Type: application/json
 
 {
   "username": "dies34",
-  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "column": "Habits",
+  # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
   "todo": "Be batman",
   "newTodo": "Be Wonderwoman"
 }
+###
 
+PUT http://localhost:8080/todosColumn
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "gang",
+  "newColumn": "gang"
+}
+###
+
+PUT http://localhost:8080/todosDate
+Content-Type: application/json
+
+{
+  "username": "dies34",
+  # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "todo": "gang",
+  "newDate": "2035"
+}
 
 ###
 

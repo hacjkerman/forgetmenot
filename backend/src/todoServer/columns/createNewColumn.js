@@ -11,12 +11,18 @@ export async function createNewColumn(username, column) {
   const isFound = await Users.findOne({
     username: username,
   });
+  if (!isFound) {
+    Users.insertOne({ username: username, columnOrder: [column] });
+    return true;
+  }
   if (isFound) {
-    const duplicateTodo = isFound.columns.find((column) => column === column);
+    const duplicateTodo = isFound.columnOrder.find(
+      (column) => column === column
+    );
     if (duplicateTodo) {
       return false;
     }
   }
-  Users.insertOne({ username: username, columnOrder: [column] });
+  Users.updateOne({ username: username }, { $push: { columnOrder: column } });
   return true;
 }
