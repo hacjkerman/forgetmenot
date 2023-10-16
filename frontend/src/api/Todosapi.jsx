@@ -4,7 +4,7 @@ const todosApi = axios.create({
   baseURL: "http://localhost:8080",
 });
 
-export const todosUrlEndpoint = "/todos";
+export const todosUrlEndpoint = "/todo";
 
 export const getTodos = async (username) => {
   const response = await todosApi.get(todosUrlEndpoint, {
@@ -18,6 +18,7 @@ export const getTodos = async (username) => {
   });
   return response.data;
 };
+
 export const storeTodo = async (username, column, todo, dueDate) => {
   const response = await todosApi.post(todosUrlEndpoint, {
     username,
@@ -28,7 +29,24 @@ export const storeTodo = async (username, column, todo, dueDate) => {
   return response.data;
 };
 export const updateTodo = async (username, column, todo, newTodo) => {
-  const response = await todosApi.post(todosUrlEndpoint, {
+  const response = await todosApi.put(todosUrlEndpoint, {
+    username,
+    column,
+    todo,
+    newTodo,
+  });
+  return response.data;
+};
+export const updateTodoColumn = async (username, todo, newColumn) => {
+  const response = await todosApi.put(todosUrlEndpoint + "/Column", {
+    username,
+    todo,
+    newColumn,
+  });
+  return response.data;
+};
+export const updateTodoDate = async (username, column, todo, newTodo) => {
+  const response = await todosApi.put(todosUrlEndpoint + "/Date", {
     username,
     column,
     todo,
@@ -37,7 +55,7 @@ export const updateTodo = async (username, column, todo, newTodo) => {
   return response.data;
 };
 export const removeTodo = async (username, column, todo) => {
-  const response = await todosApi.post(todosUrlEndpoint, {
+  const response = await todosApi.delete(todosUrlEndpoint, {
     username,
     column,
     todo,

@@ -1,16 +1,11 @@
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
 export async function createUserTodo(username, column, todo, dueDate) {
-  await client.connect();
-  const db = client.db(dbName);
+  const db = await dbConnect();
   const Users = db.collection("userTodos");
   const newTodo = {
-    column: column,
-    todo: todo,
+    column,
+    todo,
     due: dueDate,
   };
   const isFound = await Users.findOne({
@@ -26,7 +21,7 @@ export async function createUserTodo(username, column, todo, dueDate) {
       return false;
     }
   }
-  Users.updateOne({ username: username }, { $push: { todos: newTodo } });
-
+  await Users.updateOne({ username: username }, { $push: { todos: newTodo } });
+  await dbClose();
   return true;
 }

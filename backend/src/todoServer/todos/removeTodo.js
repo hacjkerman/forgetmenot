@@ -1,20 +1,15 @@
-import { MongoClient } from "mongodb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
-
-export async function removeTodo(user, column, Todos, todo) {
-  await client.connect();
-  const db = client.db(dbName);
+export async function removeTodo(user, column, todos, todo) {
+  const db = await dbConnect();
   const collection = db.collection("userTodos");
-  const isFound = Todos.filter((todoName) => todoName.column === column);
+  const isFound = todos.filter((todoName) => todoName.column === column);
   if (isFound.length === 0) {
     // COLUMN DOES NOT EXIST
     return false;
   }
-  const filteredTodos = Todos.filter((todoName) => todoName.todo !== todo);
-  if (filteredTodos.length === Todos.length) {
+  const filteredTodos = todos.filter((todoName) => todoName.todo !== todo);
+  if (filteredTodos.length === todos.length) {
     // TODO DOES NOT EXIST
     return false;
   }
@@ -24,5 +19,6 @@ export async function removeTodo(user, column, Todos, todo) {
     { $set: { todos: filteredTodos } }
   );
   console.log("Removed documents =>", insertResult);
+  await dbClose();
   return true;
 }

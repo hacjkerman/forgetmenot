@@ -4,7 +4,7 @@ const todosApi = axios.create({
   baseURL: "http://localhost:8080",
 });
 
-export const todosUrlEndpoint = "/columns";
+export const todosUrlEndpoint = "/column";
 
 export const getColumns = async (username) => {
   const response = await todosApi.get(todosUrlEndpoint, {
@@ -18,32 +18,33 @@ export const getColumns = async (username) => {
   });
   return response.data;
 };
-// TODO edit functions
-export const storeColumn = async (username, column, todo, dueDate) => {
+export const storeColumn = async (username, column) => {
   const response = await todosApi.post(todosUrlEndpoint, {
     username,
     column,
-    todo,
-    dueDate,
   });
   return response.data;
 };
-// TODO edit functions
-export const updateColumm = async (username, column, todo, newTodo) => {
-  const response = await todosApi.post(todosUrlEndpoint, {
+export const updateColumn = async (username, oldColumn, newColumn) => {
+  const response = await todosApi.put(todosUrlEndpoint, {
     username,
-    column,
-    todo,
-    newTodo,
+    oldColumn,
+    newColumn,
   });
   return response.data;
 };
-// TODO edit functions
-export const removeColumn = async (username, column, todo) => {
-  const response = await todosApi.post(todosUrlEndpoint, {
+export const updateColumnOrder = async (username, srcIndex, destIndex) => {
+  const response = await todosApi.put(todosUrlEndpoint + "/Order", {
+    username,
+    srcIndex,
+    destIndex,
+  });
+  return response.data;
+};
+export const removeColumn = async (username, column) => {
+  const response = await todosApi.delete(todosUrlEndpoint, {
     username,
     column,
-    todo,
   });
   return response.data;
 };

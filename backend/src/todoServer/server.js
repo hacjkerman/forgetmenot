@@ -29,10 +29,10 @@ app.post("/createNewColumn", async (req, res) => {
   if (storeResult === false) {
     return res.status(400).json({ error: "Duplicate Storage" });
   }
-  return res.json("Update Successful");
+  return res.json({ msg: "Update Successful" });
 });
 
-app.put("/columnOrder", async (req, res) => {
+app.put("/column/Order", async (req, res) => {
   const { username, srcIndex, destIndex } = req.body;
   if (!username || !srcIndex || !destIndex) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -44,7 +44,7 @@ app.put("/columnOrder", async (req, res) => {
   if (updateResult === false) {
     return res.status(400).json({ error: "Bad Storage" });
   }
-  return res.json("Update Successful");
+  return res.json({ msg: "Update Successful" });
 });
 app.put("/column", async (req, res) => {
   const { username, oldColumn, newColumn } = req.body;
@@ -55,7 +55,7 @@ app.put("/column", async (req, res) => {
   if (updateResult === false) {
     return res.status(400).json({ error: "Duplicate Storage" });
   }
-  return res.json("Update Successful");
+  return res.json({ msg: "Update Successful" });
 });
 
 app.post("/column", async (req, res) => {
@@ -71,11 +71,11 @@ app.post("/column", async (req, res) => {
   if (storeResult === false) {
     return res.status(400).json({ error: "Duplicate Storage" });
   }
-  return res.json("Update Successful");
+  return res.json({ msg: "Update Successful" });
 });
 
 app.get("/column", async (req, res) => {
-  const { username } = req.body;
+  const { username } = req.query;
   if (!username) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -102,11 +102,11 @@ app.delete("/column", async (req, res) => {
   const removeResult = await removeColumn(username, foundColumns, column);
   if (removeResult === false) return res.sendStatus(404);
   else {
-    res.json(`Removed Todo: ${column}, Successfully.`);
+    res.json({ msg: "Removed Todo: " + column + ", Successfully." });
   }
 });
 // Todo Request Operations
-app.post("/createUserTodo", async (req, res) => {
+app.post("/todo", async (req, res) => {
   const { username, column, todo, dueDate } = req.body;
   if (!username || !column || !todo || !dueDate) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -119,32 +119,10 @@ app.post("/createUserTodo", async (req, res) => {
   if (storeResult === false) {
     return res.status(400).json({ error: "Duplicate Storage" });
   }
-  return res.json("Update Successful");
-});
-app.post("/todos", async (req, res) => {
-  const { username, column, todo, dueDate } = req.body;
-  if (!username || !todo || !dueDate) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  // const validUser = await verifyUser(username, sessionId);
-  // if (!validUser) {
-  //   return res.json("Invalid authorisation");
-  // }
-  const foundTodos = await getAllTodos(username);
-  const storeResult = await storeTodo(
-    username,
-    column,
-    foundTodos,
-    todo,
-    dueDate
-  );
-  if (storeResult === false) {
-    return res.status(400).json({ error: "Duplicate Storage" });
-  }
-  return res.json("Update Successful");
+  return res.json({ msg: "Update Successful" });
 });
 
-app.get("/todos", async (req, res) => {
+app.get("/todo", async (req, res) => {
   const { username } = req.query;
   if (!username) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -167,7 +145,7 @@ app.get("/todos", async (req, res) => {
 //   res.json(validUser);
 // });
 
-app.put("/todos", async (req, res) => {
+app.put("/todo", async (req, res) => {
   const { username, column, todo, newTodo } = req.body;
   if (!username || !todo || !newTodo) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -188,7 +166,7 @@ app.put("/todos", async (req, res) => {
   res.json(updatedTodo);
 });
 
-app.put("/todosColumn", async (req, res) => {
+app.put("/todo/Column", async (req, res) => {
   const { username, todo, newColumn } = req.body;
   if (!username || !todo || !newColumn) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -212,9 +190,9 @@ app.put("/todosColumn", async (req, res) => {
   res.json(updatedTodo);
 });
 
-app.put("/todosDate", async (req, res) => {
-  const { username, todo, newDate } = req.body;
-  if (!username || !todo || !newDate) {
+app.put("/todo/Date", async (req, res) => {
+  const { username, column, todo, newDate } = req.body;
+  if (!username || !column || !todo || !newDate) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   // const validUser = await verifyUser(username, sessionId);
@@ -222,12 +200,18 @@ app.put("/todosDate", async (req, res) => {
   //   return res.json("Invalid authorisation");
   // }
   const foundTodos = await getAllTodos(username);
-  const updatedTodo = await updateTodoDate(username, foundTodos, todo, newDate);
+  const updatedTodo = await updateTodoDate(
+    username,
+    foundTodos,
+    column,
+    todo,
+    newDate
+  );
   if (updatedTodo === null) return res.sendStatus(404);
   res.json(updatedTodo);
 });
 
-app.delete("/todos", async (req, res) => {
+app.delete("/todo", async (req, res) => {
   const { username, column, todo } = req.body;
   if (!username || !column || !todo) {
     return res.status(400).json({ error: "Missing required fields" });

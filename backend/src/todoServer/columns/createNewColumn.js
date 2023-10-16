@@ -1,18 +1,13 @@
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
 export async function createNewColumn(username, column) {
-  await client.connect();
-  const db = client.db(dbName);
-  const Users = db.collection("userTodos");
-  const isFound = await Users.findOne({
+  const db = await dbConnect();
+  const userTodos = db.collection("userTodos");
+  const isFound = await userTodos.findOne({
     username: username,
   });
   if (!isFound) {
-    Users.insertOne({ username: username, columnOrder: [column] });
+    userTodos.insertOne({ username: username, columnOrder: [column] });
     return true;
   }
   if (isFound) {
@@ -23,6 +18,10 @@ export async function createNewColumn(username, column) {
       return false;
     }
   }
-  Users.updateOne({ username: username }, { $push: { columnOrder: column } });
+  await userTodos.updateOne(
+    { username: username },
+    { $push: { columnOrder: column } }
+  );
+  await dbClose();
   return true;
 }

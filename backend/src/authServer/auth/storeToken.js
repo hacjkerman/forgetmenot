@@ -1,13 +1,8 @@
-import { MongoClient } from "mongodb";
+import { dbClose, dbConnect } from "../../database/db.js";
 import "dotenv/config";
 
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
-
 export async function storeActiveToken(username, email, token) {
-  await client.connect();
-  const db = client.db(dbName);
+  const db = await dbConnect();
   const collection = db.collection("activeTokens");
   // const Tokens = await collection.find({}).toArray();
   // const filteredTokens = Tokens[0].activeTokens.filter(
@@ -22,5 +17,6 @@ export async function storeActiveToken(username, email, token) {
     token: token,
     createdAt: new Date(),
   });
+  await dbClose();
   return;
 }

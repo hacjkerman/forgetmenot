@@ -1,14 +1,9 @@
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
 export async function updateName(userId, name) {
-  await client.connect();
-
-  const db = client.db(dbName);
+  const db = await dbConnect();
   const collection = db.collection("users");
   await collection.updateOne({ _id: userId }, { name: name });
+  await dbClose();
   return;
 }

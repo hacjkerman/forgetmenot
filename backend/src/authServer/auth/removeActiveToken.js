@@ -1,14 +1,10 @@
-import { MongoClient, ObjectId } from "mongodb";
 import "dotenv/config";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
 export async function removeActiveToken(token) {
-  await client.connect();
-  const db = client.db(dbName);
+  const db = await dbConnect();
   const collection = db.collection("activeTokens");
   await collection.deleteOne({ token: token });
+  await dbClose();
   return;
 }

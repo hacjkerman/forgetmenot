@@ -1,22 +1,18 @@
-import { MongoClient } from "mongodb";
+import { dbClose, dbConnect } from "../../database/db.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
-
-export async function updateTodoColumn(user, Todos, todo, newColumn) {
-  await client.connect();
-  const db = client.db(dbName);
+export async function updateTodoColumn(user, todos, todo, newColumn) {
+  const db = await dbConnect();
   const collection = db.collection("userTodos");
-  const todoIndex = Todos.findIndex((todoList) => todoList.todo === todo);
+  const todoIndex = todos.findIndex((todoList) => todoList.todo === todo);
   if (!todoIndex) {
     return false;
   }
-  Todos[todoIndex].column = newColumn;
+  todos[todoIndex].column = newColumn;
   const insertResult = await collection.updateOne(
     { username: user },
-    { $set: { todos: Todos } }
+    { $set: { todos: todos } }
   );
   console.log("All Todos documents =>", insertResult);
+  await dbClose();
   return insertResult;
 }

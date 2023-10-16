@@ -1,19 +1,15 @@
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
-
+import { dbClose, dbConnect } from "../../database/db.js";
 export async function validateUser(user, password) {
-  await client.connect();
-  const db = client.db(dbName);
-  const Users = db.collection("users");
-  const userResult = await Users.findOne({
+  const db = await dbConnect();
+  const users = db.collection("users");
+  const userResult = await users.findOne({
     username: user,
     password: password,
   });
   if (!userResult) {
+    await dbClose();
     return false;
   }
+  await dbClose();
   return userResult._id;
 }

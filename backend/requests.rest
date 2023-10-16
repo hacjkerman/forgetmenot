@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "name": "Andrew",
-  "email": "andrewwang133@gmail.com",
-  "username": "dies34",
+  "email": "andrewwang132@gmail.com",
+  "username": "dies33",
   "password": "andrew1"
 }
 
@@ -24,7 +24,7 @@ DELETE http://localhost:4000/logout
 Content-Type: application/json 
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTQ3MjQ3NjAsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk0NzIxMTYwfQ.LH2Cd-n3mxH5ozAzyNrUDFaVA_7YUZjxc_hgVbehzHA"}
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc0NDk1ODAsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk3NDQ1OTgwfQ.drJrSOqADnnxrs1R3N302fitmsU2HUnZRd8qthUdbzU"}
 
 
 
@@ -63,9 +63,9 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "todo": "Save the World",
+  "todo": "Save the black",
   "column": "Habits",
-  "dueDate": "2024"
+  "dueDate": "2025"
 }
 ###
 POST http://localhost:8080/createNewColumn
@@ -94,7 +94,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/column
+GET http://localhost:8080/columns
 Content-Type: application/json 
 
 {
@@ -156,7 +156,7 @@ Content-Type: application/json
 }
 ###
 
-PUT http://localhost:8080/todosColumn
+PUT http://localhost:8080/todos/Column
 Content-Type: application/json
 
 {
@@ -167,7 +167,7 @@ Content-Type: application/json
 }
 ###
 
-PUT http://localhost:8080/todosDate
+PUT http://localhost:8080/todos/Date
 Content-Type: application/json
 
 {
