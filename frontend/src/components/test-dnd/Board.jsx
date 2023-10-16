@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import initialData from "./initial-data";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
@@ -9,8 +8,9 @@ const Container = styled.div`
   margin-left: 3rem;
 `;
 
-export default function Board() {
-  const [data, setData] = useState(initialData);
+export default function Board(props) {
+  const data = props.data;
+  const setData = props.setData;
   const onDragEnd = (result) => {
     // document.body.style.color = "inherit";
     // document.body.style.backgroundColor = "inherit";

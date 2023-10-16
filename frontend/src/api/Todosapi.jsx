@@ -45,12 +45,12 @@ export const updateTodoColumn = async (username, todo, newColumn) => {
   });
   return response.data;
 };
-export const updateTodoDate = async (username, column, todo, newTodo) => {
+export const updateTodoDate = async (username, column, todo, newDate) => {
   const response = await todosApi.put(todosUrlEndpoint + "/Date", {
     username,
     column,
     todo,
-    newTodo,
+    newDate,
   });
   return response.data;
 };
