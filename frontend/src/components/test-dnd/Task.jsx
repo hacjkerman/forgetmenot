@@ -24,7 +24,7 @@ export default function Task(props) {
         >
           <div className={TaskCSS.upperBox}>
             <img src={image} alt="pfp" id={TaskCSS.pfp} />
-            <p>{props.task.content}</p>
+            <p>{props.task.todo}</p>
           </div>
           <div className={TaskCSS.lowerBox}>
             <p id={TaskCSS.dueDate}>Due Date: {props.task.due}</p>

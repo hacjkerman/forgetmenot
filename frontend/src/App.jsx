@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppCSS from "./App.module.css";
 import initialData from "./components/test-dnd/initial-data";
 import Header from "./components/Header/Header";
@@ -8,7 +8,8 @@ import Data from "./components/test-dnd/Data";
 
 function App() {
   const [data, setData] = useState(initialData);
-
+  console.log(data);
+  useEffect(() => {}, [setData]);
   return (
     <div className={AppCSS.main}>
       <Header />

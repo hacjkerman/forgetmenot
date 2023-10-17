@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
