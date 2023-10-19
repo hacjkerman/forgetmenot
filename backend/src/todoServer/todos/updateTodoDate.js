@@ -1,15 +1,18 @@
 import { dbClose, dbConnect } from "../../database/db.js";
 
-export async function updateTodoDate(user, todos, column, todo, newDate) {
+export async function updateTodoDate(user, column, todos, todoId, newDate) {
   const db = await dbConnect();
-  const collection = db.collection("userTodos");
-  const todoIndex = todos.findIndex((todoList) => todoList.todo === todo);
+  const userTodos = db.collection("userTodos");
+  const todoIndex = todos.findIndex((todoList) => todoList.id === todoId);
+  if (todoIndex < 0) {
+    // INDEX DOES NOT EXIST
+    return false;
+  }
   todos[todoIndex].due = newDate;
-  const insertResult = await collection.updateOne(
+  const insertResult = await userTodos.updateOne(
     { username: user },
-    { $set: { todos: todos } }
+    { $set: { [column]: todos } }
   );
-  console.log("All Todos documents =>", insertResult);
   await dbClose();
   return insertResult;
 }

@@ -58,55 +58,55 @@ Content-Type: application/json
 GET http://localhost:4000/activeTokens
 
 ###
-POST http://localhost:8080/createUserTodo
+POST http://localhost:8080/todo
 Content-Type: application/json 
 
 {
-  "username": "dies34",
+  "username": "dies35",
   "todo": "Save the black",
-  "column": "Habits",
+  "column": "gang",
   "dueDate": "2025"
 }
 ###
-POST http://localhost:8080/createNewColumn
-Content-Type: application/json 
-
-{
-  "username": "dies34",
-  "column": "GGG"
-}
-###
-PUT http://localhost:8080/column
-Content-Type: application/json 
-
-{
-  "username": "dies34",
-  "oldColumn": "cc",
-  "newColumn": "gang"
-}
-###
-POST http://localhost:8080/column
+GET http://localhost:8080/todo
 Content-Type: application/json 
 
 {
   "username": "dies34",
   "column": "Habits"
 }
-
 ###
-GET http://localhost:8080/columns
+PUT http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies34"
+  "username": "dies35",
+  "oldColumn": "Habit",
+  "newColumn": "rab"
+}
+###
+POST http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies35",
+  "column": "cc"
+}
+
+###
+GET http://localhost:8080/column
+Content-Type: application/json 
+
+{
+  "username": "dies35"
 }
 ###
 DELETE http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies34",
-  "column": "GGG"
+  "username": "dies35",
+  "column": "Habits"
 }
 ###
 
@@ -120,60 +120,62 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/todos
+POST http://localhost:8080/todo
 Content-Type: application/json
 
 {
   "username": "dies34",
   "column":"Habits",
-  "todo": "Be batman",
+  "todo": "Be Spiderman",
   "dueDate": "2025"
 }
 
 ###
 
-DELETE http://localhost:8080/todos
+DELETE http://localhost:8080/todo
 Content-Type: application/json
 
 {
-  "username": "dies34",
-  "column": "cc",
+  "username": "dies35",
+  "column": "gang",
   # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
-  "todo": "Be batman"
+  "todoId": 6
 }
 
 ###
 
-PUT http://localhost:8080/todos
+PUT http://localhost:8080/todo
 Content-Type: application/json
 
 {
-  "username": "dies34",
-  "column": "Habits",
+  "username": "dies35",
+  "column": "gang",
   # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
-  "todo": "Be batman",
+  "todoId": 4,
   "newTodo": "Be Wonderwoman"
 }
 ###
 
-PUT http://localhost:8080/todos/Column
+PUT http://localhost:8080/todo/Column
 Content-Type: application/json
 
 {
-  "username": "dies34",
+  "username": "dies35",
+  "column": "gang",
   # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
-  "todo": "gang",
-  "newColumn": "gang"
+  "todoId": 5,
+  "newColumn": "cc"
 }
 ###
 
-PUT http://localhost:8080/todos/Date
+PUT http://localhost:8080/todo/Date
 Content-Type: application/json
 
 {
-  "username": "dies34",
+  "username": "dies35",
+  "column": "gang",
   # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
-  "todo": "gang",
+  "todoId": 4,
   "newDate": "2035"
 }
 

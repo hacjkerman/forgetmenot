@@ -1,23 +1,33 @@
 import { dbClose, dbConnect } from "../../database/db.js";
+import findColumn from "../columns/findColumn.js";
 
-export async function storeTodo(user, column, todos, todo, dueDate) {
+export async function storeTodo(username, column, todo, dueDate) {
   const db = await dbConnect();
-  const Users = db.collection("userTodos");
+  const userTodos = db.collection("userTodos");
+
+  const isFound = await userTodos.findOne({
+    username: username,
+  });
+  if (!isFound) {
+    await dbClose();
+    // USER DOES NOT EXIST
+    return false;
+  }
   const newTodo = {
-    column: column,
-    todo: todo,
-    dueDate: dueDate,
+    id: isFound.todoIndex,
+    todo,
+    due: dueDate,
   };
-  const columnExists = todos.filter((todoName) => todoName.column === column);
-  if (columnExists.length === 0) {
+  const foundCol = findColumn(isFound, column);
+  if (!foundCol) {
+    await dbClose();
     // COLUMN DOES NOT EXIST
     return false;
   }
-  const isFound = todos.filter((todoName) => todoName.todo === todo);
-  if (isFound.length === 0) {
-    Users.updateOne({ username: user }, { $push: { todos: newTodo } });
-    return true;
-  }
+  await userTodos.updateOne(
+    { username: username },
+    { $push: { [column]: newTodo }, $inc: { todoIndex: 1 } }
+  );
   await dbClose();
-  return false;
+  return true;
 }

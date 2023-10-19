@@ -3,10 +3,14 @@ import { dbClose, dbConnect } from "../../database/db.js";
 export async function updateColumn(user, oldColumn, newColumn) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const userData = await userTodos.find({ username: user }).toArray();
-  const columnData = userData[0].columnOrder;
-  const isFound = columnData.filter((column) => column === oldColumn);
-  if (isFound.length === 0) {
+  const isFound = await userTodos.findOne({ username: user });
+  if (!isFound) {
+    await dbClose();
+    return false;
+  }
+  const columnData = isFound.columnOrder;
+  const foundCol = columnData.filter((column) => column === oldColumn);
+  if (foundCol.length === 0) {
     // return "Column does not exist";
     return false;
   }
@@ -17,12 +21,12 @@ export async function updateColumn(user, oldColumn, newColumn) {
   }
   const columnIndex = columnData.findIndex((column) => column === oldColumn);
   columnData[columnIndex] = newColumn;
-  console.log(columnData);
   const insertResult = await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: columnData } }
   );
-  console.log("All Todos documents =>", insertResult);
+  await userTodos.updateOne({ username: user }, { $set: { [newColumn]: [] } });
+  await userTodos.updateOne({ username: user }, { $unset: { [oldColumn]: 1 } });
   await dbClose();
   return insertResult;
 }

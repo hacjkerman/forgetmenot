@@ -15,7 +15,6 @@ export async function updateColumn(user, srcIndex, destIndex) {
     { username: user },
     { $set: { columnOrder: columnData } }
   );
-  console.log("All Todos documents =>", insertResult);
   await dbClose();
   return insertResult;
 }
