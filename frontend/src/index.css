@@ -1,4 +1,7 @@
 body {
   background: linear-gradient(#2a00b7, #42006c);
   height: 100vh;
+  margin: 0;
+  display: flex;
+  overflow-y: hidden;
 }

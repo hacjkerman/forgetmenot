@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const todosApi = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.REACT_APP_BACKEND_ADDRESS,
 });
 
 export const todosUrlEndpoint = "/todo";

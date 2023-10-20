@@ -1,0 +1,16 @@
+.columnHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.removeColButton {
+  font-size: 25px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  border: none;
+}
+
+.removeColButton:hover {
+  background-color: lightgrey;
+}

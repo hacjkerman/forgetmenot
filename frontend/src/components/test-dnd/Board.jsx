@@ -1,19 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import BoardCSS from "./Board.module.css";
+import NewColumn from "../Column/newColumn.jsx";
 import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
+  flex-direction: row;
   margin-left: 3rem;
+  flex-wrap: nowrap;
+`;
+
+const Button = styled.button`
+  width: 38px;
+  height: 38px;
+  padding: 4px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-size: 25px;
+  margin-right: 20px;
 `;
 
 export default function Board(props) {
   const data = props.data;
   const setData = props.setData;
+  const [isTriggered, setIsTriggered] = useState(false);
   const onDragEnd = (result) => {
-    // document.body.style.color = "inherit";
-    // document.body.style.backgroundColor = "inherit";
     const { destination, source, type } = result;
     if (!destination) {
       return;
@@ -76,24 +89,13 @@ export default function Board(props) {
     setData(newState);
   };
 
-  //   onDragStart = (start) => {
-  //     document.body.style.color = "orange";
-  //     document.body.style.transition = "background-color 0.2s ease";
-  //   };
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsTriggered(!isTriggered);
+  };
 
-  //   onDragUpdate = (update) => {
-  //     const { destination } = update;
-  //     const opacity = destination
-  //       ? destination.index / Object.keys(data.tasks).length
-  //       : 0;
-  //     document.body.style.backgroundColor = `rgba(153,141,217, ${opacity})`;
-  //   };
   return (
-    <DragDropContext
-      onDragEnd={onDragEnd}
-      // onDragStart={this.onDragStart}
-      // onDragUpdate={this.onDragUpdate}
-    >
+    <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
@@ -108,6 +110,14 @@ export default function Board(props) {
               );
             })}
             {provided.placeholder}
+            {isTriggered ? (
+              <NewColumn
+                trigger={isTriggered}
+                setTrigger={setIsTriggered}
+              ></NewColumn>
+            ) : (
+              <Button onClick={handleClick}>+</Button>
+            )}
           </Container>
         )}
       </Droppable>
