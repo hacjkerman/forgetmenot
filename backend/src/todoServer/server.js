@@ -13,6 +13,7 @@ import { removeColumn } from "./columns/removeColumn.js";
 import { storeTodo } from "./todos/storeTodo.js";
 import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
+import { getColumnOrder } from "./columns/getColumnOrder.js";
 
 const app = express();
 app.use(cors());
@@ -76,8 +77,24 @@ app.get("/column", async (req, res) => {
   res.json(foundColumns);
 });
 
+app.get("/column/Order", async (req, res) => {
+  // CHANGE TO BODY IF BACKEND TESTING
+  const { username } = req.query;
+  if (!username) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  // const validUser = await verifyUser(username, sessionId);
+  // if (!validUser) {
+  //   return res.json("Invalid authorisation");
+  // }
+  const foundColumns = await getColumnOrder(username);
+  if (foundColumns === null) return res.sendStatus(404);
+  res.json(foundColumns);
+});
+
 app.delete("/column", async (req, res) => {
   const { username, column } = req.body;
+  console.log(username, column);
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -86,11 +103,8 @@ app.delete("/column", async (req, res) => {
   // if (!validUser) {
   //   return res.json("Invalid authorisation");
   // }
-  const foundColumns = await getColumns(username);
-  if (!foundColumns) {
-    return res.json({ error: "No Columns Found" });
-  }
-  const removeResult = await removeColumn(username, foundColumns, column);
+
+  const removeResult = await removeColumn(username, column);
   if (removeResult === false) return res.sendStatus(404);
   else {
     res.json({ msg: "Removed Todo: " + column + ", Successfully." });
@@ -115,7 +129,7 @@ app.post("/todo", async (req, res) => {
 
 app.get("/todo", async (req, res) => {
   // CHANGE TO BODY IF BACKEND TESTING ELSE QUERY
-  const { username, column } = req.body;
+  const { username, column } = req.query;
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
   }

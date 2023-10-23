@@ -3,7 +3,7 @@ export default function findColumn(foundObj, columnName) {
   const foundColumn = foundArray.find((column) => column === columnName);
   if (foundColumn) {
     // COLUMN FOUND
-    return true;
+    return foundColumn;
   }
   return false;
 }

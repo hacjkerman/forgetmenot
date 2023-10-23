@@ -17,5 +17,5 @@ export async function getAllTodos(user, column) {
     return false;
   }
   await dbClose();
-  return isFound[column];
+  return isFound[foundCol];
 }

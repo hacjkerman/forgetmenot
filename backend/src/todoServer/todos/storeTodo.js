@@ -14,7 +14,7 @@ export async function storeTodo(username, column, todo, dueDate) {
     return false;
   }
   const newTodo = {
-    id: isFound.todoIndex,
+    id: isFound.todoIndex.toString(),
     todo,
     due: dueDate,
   };
