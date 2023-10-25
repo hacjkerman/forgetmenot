@@ -21,9 +21,6 @@ function App() {
       ) : (
         <LoginForm setUser={setUser} setIsLoggedIn={setIsLoggedIn} />
       )}
-      {/* <Board data={data} setData={setData} /> */}
-      {/* <LoginContainer setUser={setUser} /> */}
-      {/* <LoginForm setUser={setUser} /> */}
     </div>
   );
 }

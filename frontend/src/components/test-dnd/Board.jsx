@@ -27,8 +27,9 @@ const Button = styled.button`
 export default function Board(props) {
   const data = props.data;
   const setData = props.setData;
+  const user = props.user;
   const [isTriggered, setIsTriggered] = useState(false);
-  const headers = { username: "dies34" };
+  const headers = { username: user };
   const url = "http://localhost:8080/column/Order";
   const { data: columnOrder, mutate } = useSWR([url, headers], fetcher, {
     revalidateOnFocus: false,
@@ -115,6 +116,7 @@ export default function Board(props) {
                     key={"column-" + (index + 1)}
                     column={column}
                     index={index}
+                    user={user}
                   />
                 );
               })}

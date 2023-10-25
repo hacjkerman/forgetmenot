@@ -38,7 +38,8 @@ const TaskList = styled.div`
 
 export default function Column(props) {
   const url = "http://localhost:8080/todo";
-  const headers = { username: "dies34", column: props.column };
+  const user = props.user;
+  const headers = { username: user, column: props.column };
   const { data: todos, mutate } = useSWR([url, headers], todoFetcher, {
     revalidateOnFocus: false,
   });
