@@ -8,14 +8,12 @@ export async function removeColumn(user, columnName) {
     username: user,
   });
   if (!isFound) {
-    await dbClose();
     // USER NOT FOUND
     return false;
   }
 
   const foundCol = findColumn(isFound, columnName);
   if (!foundCol) {
-    await dbClose();
     // COLUMN EXISTS
     return false;
   }
@@ -33,6 +31,5 @@ export async function removeColumn(user, columnName) {
     { $set: { columnOrder: filteredColumns } }
   );
 
-  await dbClose();
   return true;
 }

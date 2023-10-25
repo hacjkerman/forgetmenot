@@ -10,14 +10,13 @@ import updateColumn from "./components/Column/updateColumn";
 import LoginForm from "./components/Login/LoginForm";
 
 function App() {
-  const [data, setData] = useState(initialData);
   const [user, setUser] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   return (
     <div className={AppCSS.main}>
       <Header />
       {isLoggedIn ? (
-        <Board data={data} user={user} />
+        <Board user={user} />
       ) : (
         <LoginForm setUser={setUser} setIsLoggedIn={setIsLoggedIn} />
       )}

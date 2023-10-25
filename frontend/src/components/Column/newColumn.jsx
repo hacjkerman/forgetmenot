@@ -1,17 +1,30 @@
 import React from "react";
 import newColumnCSS from "./newColumn.module.css";
-import { storeColumn } from "../../api/Columnapi";
 
 function NewColumn(props) {
   const handleClose = (e) => {
     e.preventDefault();
     props.setTrigger(!props.trigger);
   };
+  const handleDuplicate = (e) => {
+    e.preventDefault();
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const columnOrder = props.columnOrder;
+
     const column = e.target[0].value;
-    storeColumn("dies34", column);
-    handleClose(e);
+    if (columnOrder.find((columnName) => columnName === column)) {
+      handleDuplicate(e);
+      handleClose(e);
+      return { error: "Duplicate Column" };
+    } else {
+      const addColumn = props.addColumn;
+      const user = props.user;
+      addColumn(user, column, columnOrder);
+      handleClose(e);
+    }
   };
   return props.trigger ? (
     <div className={newColumnCSS.popup}>

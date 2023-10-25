@@ -3,7 +3,6 @@ import Task from "./Task.jsx";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
-import { removeColumn } from "../../api/Columnapi.jsx";
 import useSWR from "swr";
 import { todoFetcher } from "../../api/Todosapi.jsx";
 const Container = styled.div`
@@ -17,6 +16,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: rgb(235, 236, 240);
   padding: 4px;
+  height: 100vh;
 `;
 const Title = styled.h3`
   padding: 8px;
@@ -31,9 +31,17 @@ const TaskList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? "skyblue" : "inherit "};
   flex-grow: 1;
-  min-height: 750px;
-  max-height: 750px;
-  overflow-y: auto;
+  min-height: 350px;
+  max-height: 350px;
+  overflow-y: scroll;
+`;
+const AddTodo = styled.button`
+  width: 100%;
+  font-weight: 700;
+  height: 5vh;
+  border-radius: 16px;
+  border: 1px;
+  box-shadow: 1px 2px 0px black;
 `;
 
 export default function Column(props) {
@@ -43,10 +51,12 @@ export default function Column(props) {
   const { data: todos, mutate } = useSWR([url, headers], todoFetcher, {
     revalidateOnFocus: false,
   });
-  const handleClick = (e) => {
+  const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
-    console.log(currCol);
-    removeColumn("dies34", currCol);
+    const deleteColumn = props.deleteColumn;
+    const columnOrder = props.columnOrder;
+    deleteColumn(user, currCol, columnOrder);
+    return;
   };
   const handleUpdateColumn = (e) => {
     console.log(e.target.textContent);
@@ -55,6 +65,8 @@ export default function Column(props) {
       return;
     }
   };
+
+  const handleAddTodo = (e) => {};
   return (
     <Draggable draggableId={props.column} index={props.index}>
       {(provided) => (
@@ -69,8 +81,8 @@ export default function Column(props) {
             </Title>
             <button
               className={ColumnCSS.removeColButton}
-              onClick={handleClick}
-              value={props.column.title}
+              onClick={handleDeleteColumn}
+              value={props.column}
             >
               -
             </button>
@@ -91,6 +103,7 @@ export default function Column(props) {
               </TaskList>
             )}
           </Droppable>
+          <AddTodo onClick={handleAddTodo}>Add Todo</AddTodo>
         </Container>
       )}
     </Draggable>

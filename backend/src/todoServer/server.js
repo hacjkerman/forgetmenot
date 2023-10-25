@@ -14,6 +14,7 @@ import { storeTodo } from "./todos/storeTodo.js";
 import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
 import { getColumnOrder } from "./columns/getColumnOrder.js";
+import { updateColOrder } from "./columns/updateColOrder.js";
 
 const app = express();
 app.use(cors());
@@ -22,13 +23,17 @@ app.use(express.json());
 
 app.put("/column/Order", async (req, res) => {
   const { username, srcIndex, destIndex } = req.body;
-  if (!username || !srcIndex || !destIndex) {
+  if (
+    username === undefined ||
+    srcIndex === undefined ||
+    destIndex === undefined
+  ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   if (srcIndex === destIndex) {
     return;
   }
-  const updateResult = await updateOrder(username, srcIndex, destIndex);
+  const updateResult = await updateColOrder(username, srcIndex, destIndex);
   if (updateResult === false) {
     return res.status(400).json({ error: "Bad Storage" });
   }
@@ -46,8 +51,10 @@ app.put("/column", async (req, res) => {
   return res.json({ msg: "Update Successful" });
 });
 
-app.post("/column", async (req, res) => {
+app.post("/column/Order", async (req, res) => {
   const { username, column } = req.body;
+  console.log(username, column);
+
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -92,9 +99,8 @@ app.get("/column/Order", async (req, res) => {
   res.json(foundColumns);
 });
 
-app.delete("/column", async (req, res) => {
+app.delete("/column/Order", async (req, res) => {
   const { username, column } = req.body;
-  console.log(username, column);
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
   }

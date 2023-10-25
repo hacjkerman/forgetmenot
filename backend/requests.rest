@@ -63,7 +63,7 @@ Content-Type: application/json
 
 {
   "username": "dies34",
-  "todo": "be supermam",
+  "todo": "be spiderman",
   "column": "Habits",
   "dueDate": "2025"
 }
@@ -89,8 +89,8 @@ POST http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies34",
-  "column": "gang"
+  "username": "dies35",
+  "column": "Habits"
 }
 
 ###

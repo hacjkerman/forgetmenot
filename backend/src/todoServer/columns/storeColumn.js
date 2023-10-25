@@ -13,14 +13,12 @@ export async function storeColumn(user, column) {
       { username: user },
       { $set: { [column]: [], todoIndex: 0 } }
     );
-    await dbClose();
     // USER NOT FOUND
     return false;
   }
 
   const foundCol = findColumn(isFound, column);
   if (foundCol) {
-    await dbClose();
     // COLUMN EXISTS
     return false;
   }
@@ -31,6 +29,5 @@ export async function storeColumn(user, column) {
     { $push: { columnOrder: column } }
   );
 
-  await dbClose();
   return true;
 }

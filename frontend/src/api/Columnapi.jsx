@@ -1,13 +1,13 @@
 import axios from "axios";
 
 const todosApi = axios.create({
-  baseURL: process.env.REACT_APP_COLUMN_ADDRESS,
+  baseURL: "http://localhost:8080",
 });
-export const todosUrlEndpoint = "/column";
+export const todosUrlEndpoint = "/column/Order";
 
-export const fetcher = async (params) => {
-  const [url, headers] = params;
-  const response = await todosApi.get(url, {
+export const getColumns = async (params) => {
+  const [todosUrlEndpoint, headers] = params;
+  const response = await todosApi.get(todosUrlEndpoint, {
     params: {
       username: headers.username,
     },
@@ -28,9 +28,9 @@ export const fetcher = async (params) => {
 //   return response.data;
 // };
 
-export const storeColumn = (username, column) => {
-  const response = todosApi.post("http://localhost:8080/column", {
-    username,
+export const storeColumn = (user, column) => {
+  const response = todosApi.post(todosUrlEndpoint, {
+    username: user,
     column,
   });
   return response.data;
@@ -44,7 +44,7 @@ export const updateColumn = async (username, oldColumn, newColumn) => {
   return response.data;
 };
 export const updateColumnOrder = async (username, srcIndex, destIndex) => {
-  const response = await todosApi.put(todosUrlEndpoint + "/Order", {
+  const response = await todosApi.put(todosUrlEndpoint, {
     username,
     srcIndex,
     destIndex,
@@ -52,7 +52,7 @@ export const updateColumnOrder = async (username, srcIndex, destIndex) => {
   return response.data;
 };
 export const removeColumn = (username, column) => {
-  const response = todosApi.delete("http://localhost:8080/column", {
+  const response = todosApi.delete(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",
     },
