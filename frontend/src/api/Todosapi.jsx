@@ -19,6 +19,17 @@ export const getTodos = async (username) => {
   return response.data;
 };
 
+export const todoFetcher = async (params) => {
+  const [url, headers] = params;
+  const response = await todosApi.get(url, {
+    params: {
+      username: headers.username,
+      column: headers.column,
+    },
+  });
+  return response.data;
+};
+
 export const storeTodo = async (username, column, todo, dueDate) => {
   const response = await todosApi.post(todosUrlEndpoint, {
     username,

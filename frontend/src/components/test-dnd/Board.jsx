@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import BoardCSS from "./Board.module.css";
 import NewColumn from "../Column/newColumn.jsx";
 import styled from "styled-components";
+import useSWR from "swr";
+import { fetcher } from "../../api/Columnapi.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -26,8 +28,15 @@ export default function Board(props) {
   const data = props.data;
   const setData = props.setData;
   const [isTriggered, setIsTriggered] = useState(false);
+  const headers = { username: "dies34" };
+  const url = "http://localhost:8080/column/Order";
+  const { data: columnOrder, mutate } = useSWR([url, headers], fetcher, {
+    revalidateOnFocus: false,
+  });
+
   const onDragEnd = (result) => {
     const { destination, source, type } = result;
+    console.log(destination, source, type);
     if (!destination) {
       return;
     }
@@ -39,7 +48,7 @@ export default function Board(props) {
     }
 
     if (type === "column") {
-      let newColumnOrder = Array.from(data.columns);
+      let newColumnOrder = Array.from(columnOrder);
       let destItem = newColumnOrder[destination.index];
       newColumnOrder[destination.index] = newColumnOrder[source.index];
       newColumnOrder[source.index] = destItem;
@@ -99,17 +108,18 @@ export default function Board(props) {
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {data.columns.map((column, index) => {
-              return (
-                <Column
-                  key={column.id}
-                  column={column}
-                  tasks={column.tasks}
-                  index={index}
-                />
-              );
-            })}
+            {columnOrder &&
+              columnOrder.map((column, index) => {
+                return (
+                  <Column
+                    key={"column-" + (index + 1)}
+                    column={column}
+                    index={index}
+                  />
+                );
+              })}
             {provided.placeholder}
+
             {isTriggered ? (
               <NewColumn
                 trigger={isTriggered}

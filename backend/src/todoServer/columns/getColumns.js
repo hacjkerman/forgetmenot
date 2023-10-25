@@ -14,6 +14,5 @@ export async function getColumns(user) {
     }
     columnObj[columns[i]] = isFound[1];
   }
-  await dbClose();
   return columnObj;
 }

@@ -10,7 +10,7 @@ function NewColumn(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const column = e.target[0].value;
-    // storeColumn("dies34", column);
+    storeColumn("dies34", column);
     handleClose(e);
   };
   return props.trigger ? (

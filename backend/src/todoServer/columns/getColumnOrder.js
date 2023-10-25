@@ -5,6 +5,6 @@ export async function getColumnOrder(user) {
   const userTodos = db.collection("userTodos");
   const insertResult = await userTodos.find({ username: user }).toArray();
 
-  await dbClose();
-  return insertResult[0].columnOrder;
+  const columnOrder = insertResult[0].columnOrder;
+  return columnOrder;
 }

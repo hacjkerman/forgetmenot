@@ -62,9 +62,9 @@ POST http://localhost:8080/todo
 Content-Type: application/json 
 
 {
-  "username": "dies35",
-  "todo": "Save the black",
-  "column": "gang",
+  "username": "dies34",
+  "todo": "be supermam",
+  "column": "Habits",
   "dueDate": "2025"
 }
 ###
@@ -89,8 +89,8 @@ POST http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies35",
-  "column": "cc"
+  "username": "dies34",
+  "column": "gang"
 }
 
 ###

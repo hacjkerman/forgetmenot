@@ -6,16 +6,16 @@ export async function getAllTodos(user, column) {
   const userTodos = db.collection("userTodos");
   const isFound = await userTodos.findOne({ username: user });
   if (!isFound) {
-    await dbClose();
     // USER DOES NOT EXIST
     return false;
   }
+
   const foundCol = findColumn(isFound, column);
   if (!foundCol) {
-    await dbClose();
     // COLUMN DOES NOT EXIST
     return false;
   }
-  await dbClose();
-  return isFound[foundCol];
+
+  const colItems = isFound[foundCol];
+  return colItems;
 }

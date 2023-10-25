@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import LoginCSS from "./Login.module.css";
+import { useForm } from "react-hook-form";
 
 import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
 
 export default function Login(props) {
-  const [email, setEmail] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
+  console.log(errors);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    console.log(e.target.value);
+  const handleUsername = (e) => {
+    setUsername(e.target.value);
   };
   const handlePassword = (e) => {
     setPassword(e.target.value);
@@ -25,10 +32,10 @@ export default function Login(props) {
         <div className={LoginCSS.input}>
           <img src={email_icon} alt="" />
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={handleEmail}
+            type="username"
+            placeholder="Username"
+            value={username}
+            onChange={handleUsername}
           />
         </div>
         <div className={LoginCSS.input}>

@@ -1,15 +1,28 @@
-import React, { useEffect } from "react";
-import { getColumns } from "../../api/Columnapi";
+import React, { useEffect, useState } from "react";
+import useSWR from "swr";
+import {
+  getColumns,
+  storeColumn,
+  updateColumn,
+  updateColumnOrder,
+  removeColumn,
+  fetcher,
+} from "../../api/Columnapi";
 
 export default function Data(props) {
   const setData = props.setData;
+
+  const { data: columns, error } = useSWR(
+    "http://localhost:8080/column",
+    fetcher,
+    {}
+  );
   useEffect(() => {
-    async function fetchData() {
-      const columnReq = await getColumns("dies34");
+    if (columns) {
       const finalCol = { columns: [] };
-      const cols = columnReq.columnOrder;
+      const cols = columns.columnOrder;
       for (let i = 0; i < cols.length; i++) {
-        const todoInCol = columnReq[cols[i]];
+        const todoInCol = columns[cols[i]];
 
         const colId = i + 1;
         const mappedData = {
@@ -22,8 +35,7 @@ export default function Data(props) {
       setData(finalCol);
       return;
     }
-    fetchData();
-  }, [setData]);
+  }, [columns]);
 
   return <div></div>;
 }
