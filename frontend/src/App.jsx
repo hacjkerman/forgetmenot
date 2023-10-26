@@ -15,8 +15,11 @@ function App() {
   return (
     <div className={AppCSS.main}>
       <Header />
+
       {isLoggedIn ? (
-        <Board user={user} />
+        <div className={AppCSS.container}>
+          <Board user={user} />
+        </div>
       ) : (
         <LoginForm setUser={setUser} setIsLoggedIn={setIsLoggedIn} />
       )}

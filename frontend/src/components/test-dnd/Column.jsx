@@ -6,17 +6,18 @@ import styled from "styled-components";
 import useSWR from "swr";
 import { todoFetcher } from "../../api/Todosapi.jsx";
 const Container = styled.div`
-  margin: 8px;
+  margin: 0.5rem;
   border: 1px solid lightgrey;
   border-radius: 2px;
-  width: 350px;
+  width: 20rem;
   overflow-y: hidden;
-  min-width: 350px;
+  min-width: 20rem;
   display: flex;
   flex-direction: column;
   background-color: rgb(235, 236, 240);
-  padding: 4px;
-  height: 100vh;
+  padding: 0.5rem;
+  height: 100%;
+  border-radius: 6px;
 `;
 const Title = styled.h3`
   padding: 8px;
@@ -31,31 +32,25 @@ const TaskList = styled.div`
   background-color: ${(props) =>
     props.isDraggingOver ? "skyblue" : "inherit "};
   flex-grow: 1;
-  min-height: 350px;
-  max-height: 350px;
-  overflow-y: scroll;
+  height: 62vh;
+  overflow-y: hidden;
 `;
 const AddTodo = styled.button`
   width: 100%;
   font-weight: 700;
   height: 5vh;
-  border-radius: 16px;
+  border-radius: 2rem;
   border: 1px;
   box-shadow: 1px 2px 0px black;
 `;
 
 export default function Column(props) {
-  const url = "http://localhost:8080/todo";
   const user = props.user;
-  const headers = { username: user, column: props.column };
-  const { data: todos, mutate } = useSWR([url, headers], todoFetcher, {
-    revalidateOnFocus: false,
-  });
+  const todos = props.todos;
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
     const deleteColumn = props.deleteColumn;
-    const columnOrder = props.columnOrder;
-    deleteColumn(user, currCol, columnOrder);
+    deleteColumn(user, currCol);
     return;
   };
   const handleUpdateColumn = (e) => {
@@ -87,23 +82,29 @@ export default function Column(props) {
               -
             </button>
           </div>
-          <Droppable droppableId={props.column} type="task">
-            {(provided, snapshot) => (
-              <TaskList
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                $isDraggingOver={snapshot.isDraggingOver}
-              >
-                {todos &&
-                  todos.length > 0 &&
-                  todos.map((task, index) => {
-                    return <Task key={task.id} task={task} index={index} />;
-                  })}
-                {provided.placeholder}
-              </TaskList>
-            )}
-          </Droppable>
-          <AddTodo onClick={handleAddTodo}>Add Todo</AddTodo>
+          <div className={ColumnCSS.taskbox}>
+            <div>
+              <Droppable droppableId={props.column} type="task">
+                {(provided, snapshot) => (
+                  <TaskList
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    $isDraggingOver={snapshot.isDraggingOver}
+                  >
+                    {todos &&
+                      todos.length > 0 &&
+                      todos.map((task, index) => {
+                        return <Task key={task.id} task={task} index={index} />;
+                      })}
+                    {provided.placeholder}
+                  </TaskList>
+                )}
+              </Droppable>
+            </div>
+            <div>
+              <AddTodo onClick={handleAddTodo}>Add Todo</AddTodo>
+            </div>
+          </div>
         </Container>
       )}
     </Draggable>

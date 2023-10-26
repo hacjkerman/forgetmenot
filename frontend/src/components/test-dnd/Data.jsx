@@ -1,41 +1,40 @@
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
-import {
-  getColumns,
-  storeColumn,
-  updateColumn,
-  updateColumnOrder,
-  removeColumn,
-  fetcher,
-} from "../../api/Columnapi";
+import { getTodos } from "../../api/Todosapi";
+import { getColumns } from "../../api/Columnapi";
 
-export default function Data(props) {
-  const setData = props.setData;
-
-  const { data: columns, error } = useSWR(
-    "http://localhost:8080/column",
-    fetcher,
-    {}
-  );
+export default function GetData(user) {
+  const [data, setData] = useState("");
   useEffect(() => {
-    if (columns) {
+    async function fetchData() {
+      const columnReq = await getColumns(user);
+      const todoReq = await getTodos(user);
+      let taskIdTotal = 1;
       const finalCol = { columns: [] };
-      const cols = columns.columnOrder;
-      for (let i = 0; i < cols.length; i++) {
-        const todoInCol = columns[cols[i]];
-
+      for (let i = 0; i < columnReq.length; i++) {
+        const todoInCol = todoReq.filter(
+          (todo) => todo.column === columnReq[i]
+        );
+        if (todoInCol.length === 0) {
+          continue;
+        }
+        for (let j = 0; j < todoInCol.length; j++) {
+          todoInCol[j].id = "task-" + taskIdTotal;
+          taskIdTotal++;
+        }
         const colId = i + 1;
         const mappedData = {
           id: "column-" + colId,
-          title: cols[i],
+          title: columnReq[i],
           tasks: todoInCol,
         };
         finalCol.columns.push(mappedData);
       }
+      console.log(finalCol);
       setData(finalCol);
-      return;
+      return finalCol;
     }
-  }, [columns]);
+    fetchData();
+  }, []);
 
-  return <div></div>;
+  return;
 }

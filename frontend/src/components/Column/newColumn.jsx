@@ -12,9 +12,8 @@ function NewColumn(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const columnOrder = props.columnOrder;
-
     const column = e.target[0].value;
+    const columnOrder = props.columnOrder;
     if (columnOrder.find((columnName) => columnName === column)) {
       handleDuplicate(e);
       handleClose(e);
@@ -22,7 +21,7 @@ function NewColumn(props) {
     } else {
       const addColumn = props.addColumn;
       const user = props.user;
-      addColumn(user, column, columnOrder);
+      addColumn(user, column);
       handleClose(e);
     }
   };

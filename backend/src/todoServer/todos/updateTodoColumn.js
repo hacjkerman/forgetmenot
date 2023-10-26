@@ -4,8 +4,8 @@ import findColumn from "../columns/findColumn.js";
 export async function updateTodoColumn(
   user,
   oldColumn,
-  todos,
-  todoId,
+  srcIndex,
+  destIndex,
   newColumn
 ) {
   const db = await dbConnect();

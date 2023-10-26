@@ -14,3 +14,7 @@
 .removeColButton:hover {
   background-color: lightgrey;
 }
+
+.taskbox {
+  justify-content: space-between;
+}

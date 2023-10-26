@@ -12,12 +12,16 @@ import {
   todosUrlEndpoint,
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
+import getData from "./Data.jsx";
+import { storeTodo, updateTodoOrder } from "../../api/Todosapi.jsx";
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: 3rem;
+  margin-left: 0.5rem;
   flex-wrap: nowrap;
+  height: 95%;
+  padding-right: 5rem;
 `;
 
 const Button = styled.button`
@@ -27,54 +31,85 @@ const Button = styled.button`
   margin-top: 8px;
   cursor: pointer;
   font-size: 25px;
-  margin-right: 20px;
+  margin-right: 2rem;
 `;
 
 export default function Board(props) {
   const user = props.user;
   const [isTriggered, setIsTriggered] = useState(false);
   const headers = { username: user };
-  const url = "http://localhost:8080/column/Order";
-  const { data: columnOrder, mutate } = useSWR(
-    [todosUrlEndpoint, headers],
-    getColumns,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-  const addColumn = async (user, column, columnOrder) => {
-    try {
-      await storeColumn(user, column);
-      const newArray = Array.from(columnOrder);
+  const {
+    data: columns,
+    error,
+    mutate,
+  } = useSWR([headers], getColumns, { refreshInterval: 3000 });
 
-      newArray.push(column);
-      mutate(newArray, false);
+  const addColumn = async (user, column) => {
+    try {
+      const newColumns = { ...columns };
+
+      newColumns.columnOrder.push(column);
+      mutate(newColumns, false);
+      await storeColumn(user, column);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const deleteColumn = async (user, column, columnOrder) => {
+  const deleteColumn = async (user, column) => {
     try {
-      await removeColumn(user, column);
-
-      const filteredArray = columnOrder.filter(
+      const newColumns = { ...columns };
+      const filteredArray = newColumns.columnOrder.filter(
         (columnName) => columnName !== column
       );
-      mutate(filteredArray, false);
+      newColumns.columnOrder = filteredArray;
+      mutate(newColumns, false);
+      await removeColumn(user, column);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const updateColOrder = async (user, srcIndex, destIndex, columnOrder) => {
+  const updateColOrder = async (user, srcIndex, destIndex) => {
     try {
-      const newColumnOrder = Array.from(columnOrder);
+      const newColumns = { ...columns };
+      const newColumnOrder = Array.from(newColumns.columnOrder);
       const destItem = newColumnOrder[destIndex];
       newColumnOrder[destIndex] = newColumnOrder[srcIndex];
       newColumnOrder[srcIndex] = destItem;
-      mutate(newColumnOrder, false);
+      newColumns.columnOrder = newColumnOrder;
+      mutate(newColumns, false);
       await updateColumnOrder(user, srcIndex, destIndex);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addTodo = async (user, column, todo, due) => {
+    try {
+      await storeTodo(user, column, todo, due);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const removeTodo = async (user, column, todo) => {
+    try {
+      await removeTodo(user, column, todo);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const changeTodoOrder = async (
+    user,
+    oldColumn,
+    srcIndex,
+    destIndex,
+    newColumn
+  ) => {
+    try {
+      updateTodoOrder(user, oldColumn, srcIndex, destIndex, newColumn);
     } catch (err) {
       console.log(err);
     }
@@ -93,18 +128,20 @@ export default function Board(props) {
     }
 
     if (type === "column") {
-      // let newColumnOrder = Array.from(columnOrder);
-      updateColOrder(user, source.index, destination.index, columnOrder);
-      // let destItem = newColumnOrder[destination.index];
-      // newColumnOrder[destination.index] = newColumnOrder[source.index];
-      // newColumnOrder[source.index] = destItem;
-      // const newState = { columns: newColumnOrder };
-      // setData(newState);
+      updateColOrder(user, source.index, destination.index);
       return;
     }
-    // const start = source.droppableId;
-    // const finish = destination.droppableId;
-
+    const start = source.droppableId;
+    const finish = destination.droppableId;
+    const srcItem = columns[start];
+    if (start === finish) {
+      const temp = srcItem[destination.index];
+      srcItem[destination.index] = srcItem[source.index];
+      srcItem[source.index] = temp;
+      columns[start] = srcItem;
+      mutate(columns, false);
+      changeTodoOrder(user, srcItem, source.index, destination.index, srcItem);
+    }
     // const newColumnOrder = Array.from(columnOrder);
     // const StartObj = data.columns.find((element) => element.id === start);
     // const StartIndex = data.columns.findIndex(
@@ -153,15 +190,15 @@ export default function Board(props) {
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
         {(provided) => (
           <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {columnOrder &&
-              columnOrder.map((column, index) => {
+            {columns &&
+              columns.columnOrder.map((column, index) => {
                 return (
                   <Column
-                    key={"column-" + column}
+                    key={column}
                     column={column}
                     index={index}
                     user={user}
-                    columnOrder={columnOrder}
+                    todos={columns[column]}
                     deleteColumn={deleteColumn}
                   />
                 );
@@ -174,7 +211,7 @@ export default function Board(props) {
                 setTrigger={setIsTriggered}
                 addColumn={addColumn}
                 user={user}
-                columnOrder={columnOrder}
+                columnOrder={columns.columnOrder}
               ></NewColumn>
             ) : (
               <Button onClick={handleClick}>+</Button>

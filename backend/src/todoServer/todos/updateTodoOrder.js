@@ -1,6 +1,12 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
-export async function updateTodo(user, column, todos, todoId, newTodo) {
+export async function updateTodoColumn(
+  user,
+  oldColumn,
+  srcIndex,
+  destIndex,
+  newColumn
+) {
   const db = await dbConnect();
   const collection = db.collection("userTodos");
   const todoIndex = todos.findIndex((todoList) => todoList.id === todoId);

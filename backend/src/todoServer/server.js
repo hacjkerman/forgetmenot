@@ -51,9 +51,8 @@ app.put("/column", async (req, res) => {
   return res.json({ msg: "Update Successful" });
 });
 
-app.post("/column/Order", async (req, res) => {
+app.post("/column", async (req, res) => {
   const { username, column } = req.body;
-  console.log(username, column);
 
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -99,7 +98,7 @@ app.get("/column/Order", async (req, res) => {
   res.json(foundColumns);
 });
 
-app.delete("/column/Order", async (req, res) => {
+app.delete("/column", async (req, res) => {
   const { username, column } = req.body;
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
@@ -181,6 +180,37 @@ app.put("/todo", async (req, res) => {
   );
   if (updatedTodo === null) return res.sendStatus(404);
   res.json(updatedTodo);
+});
+
+app.put("/todo/Order", async (req, res) => {
+  const { username, oldColumn, srcIndex, destIndex, newColumn } = req.body;
+  if (!username || !oldColumn || !srcIndex || !destIndex || !newColumn) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+  // const validUser = await verifyUser(username, sessionId);
+  // if (!validUser) {
+  //   return res.json("Invalid authorisation");
+  // }
+  if (!validateColumn(user, oldColumn) || !validateColumn(user, newColumn)) {
+    res.json({ error: "Column invalid" });
+  }
+  if (newColumn !== oldColumn) {
+    const oldTodos = await getAllTodos(username, oldColumn);
+    const newTodos = await getAllTodos(username, newColumn);
+    if (!newTodos || !oldTodos) {
+      return res.json({ error: "No Todos Found" });
+    }
+  }
+
+  const updatedTodoColumn = await updateTodoColumn(
+    username,
+    oldColumn,
+    srcIndex,
+    destIndex,
+    newColumn
+  );
+  if (updatedTodoColumn === null) return res.sendStatus(404);
+  res.json(updatedTodoColumn);
 });
 
 app.put("/todo/Column", async (req, res) => {
