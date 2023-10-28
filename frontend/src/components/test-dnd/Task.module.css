@@ -20,6 +20,7 @@
 
 .upperBox {
   display: flex;
+  justify-content: space-between;
   padding: 5px;
 }
 
@@ -28,6 +29,19 @@
 }
 .upperBox img {
   margin-right: 10px;
+}
+
+.removeTaskButton {
+  font-size: 25px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+}
+
+.removeTaskButton:hover {
+  background-color: lightgrey;
 }
 
 .lowerBox {

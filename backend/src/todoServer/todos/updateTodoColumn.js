@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import findColumn from "../columns/findColumn.js";
 
 export async function updateTodoColumn(
@@ -14,37 +14,48 @@ export async function updateTodoColumn(
     username: user,
   });
   if (!isFound) {
-    await dbClose();
     // USER DOES NOT EXIST
     return false;
   }
-  const foundCol = findColumn(isFound, newColumn);
-  if (!foundCol) {
-    await dbClose();
+  const oldColFound = findColumn(isFound, oldColumn);
+  if (!oldColFound) {
     // COLUMN DOES NOT EXIST
     return false;
   }
-  const filteredTodos = todos.filter((todoName) => todoName.id !== todoId);
-  if (filteredTodos.length === todos.length) {
-    // TODO DOES NOT EXIST
+  const newColFound = findColumn(isFound, newColumn);
+  if (!newColFound) {
+    // COLUMN DOES NOT EXIST
     return false;
   }
+  if (oldColumn === newColumn) {
+    const temp = oldColFound[destIndex];
+    oldColFound[destIndex] = oldColFound[srcIndex];
+    oldColFound[srcIndex] = temp;
+    await userTodos.updateOne(
+      { username: user },
+      { $set: { [oldColumn]: oldColFound } }
+    );
+    return;
+  }
 
+  const oldTodos = isFound[oldColumn];
+  const temp = oldTodos[srcIndex];
+  const filteredTodos = oldTodos.filter((todoName) => todoName.id !== temp.id);
+  if (filteredTodos.length === oldTodos.length) {
+    // TODO DOES NOT EXIST
+
+    return false;
+  }
+  const newTodos = isFound[newColumn];
+  newTodos.splice(destIndex, 0, temp);
   await userTodos.updateOne(
     { username: user },
     { $set: { [oldColumn]: filteredTodos } }
   );
-  const foundTodo = todos.find((todoName) => todoName.id === todoId);
-  if (!foundTodo) {
-    await dbClose();
-    // TODO DOES NOT EXIST
-    return false;
-  }
   await userTodos.updateOne(
     { username: user },
-    { $push: { [newColumn]: foundTodo } }
+    { $set: { [newColumn]: newTodos } }
   );
-  await dbClose();
   // SUCCESS
   return true;
 }

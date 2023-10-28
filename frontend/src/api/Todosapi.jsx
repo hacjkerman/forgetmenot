@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const todosApi = axios.create({
-  baseURL: process.env.REACT_APP_BACKEND_ADDRESS,
+  baseURL: "http://localhost:8080",
 });
 
 export const todosUrlEndpoint = "/todo";
@@ -14,17 +14,6 @@ export const getTodos = async (username) => {
     params: {
       username: username,
       // sessionId: sessionId,
-    },
-  });
-  return response.data;
-};
-
-export const todoFetcher = async (params) => {
-  const [url, headers] = params;
-  const response = await todosApi.get(url, {
-    params: {
-      username: headers.username,
-      column: headers.column,
     },
   });
   return response.data;
@@ -62,6 +51,7 @@ export const updateTodoOrder = async (
     destIndex,
     newColumn,
   });
+  console.log(response);
   return response.data;
 };
 export const updateTodoColumn = async (username, todo, newColumn) => {
@@ -81,11 +71,17 @@ export const updateTodoDate = async (username, column, todo, newDate) => {
   });
   return response.data;
 };
-export const removeTodo = async (username, column, todo) => {
+export const removeTodo = async (username, column, todoId) => {
+  console.log(username, column, todoId);
   const response = await todosApi.delete(todosUrlEndpoint, {
-    username,
-    column,
-    todo,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      username,
+      column,
+      todoId,
+    },
   });
   return response.data;
 };

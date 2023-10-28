@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Task from "./Task.jsx";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
-import useSWR from "swr";
-import { todoFetcher } from "../../api/Todosapi.jsx";
+import NewTask from "../Todos/newTask.jsx";
 const Container = styled.div`
   margin: 0.5rem;
   border: 1px solid lightgrey;
@@ -47,6 +46,10 @@ const AddTodo = styled.button`
 export default function Column(props) {
   const user = props.user;
   const todos = props.todos;
+  const addTodo = props.addTodo;
+  const deleteTodo = props.deleteTodo;
+  const column = props.column;
+  const [isTriggered, setIsTriggered] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
     const deleteColumn = props.deleteColumn;
@@ -61,9 +64,12 @@ export default function Column(props) {
     }
   };
 
-  const handleAddTodo = (e) => {};
+  const handleClick = (e) => {
+    e.preventDefault();
+    setIsTriggered(!isTriggered);
+  };
   return (
-    <Draggable draggableId={props.column} index={props.index}>
+    <Draggable draggableId={column} index={props.index}>
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
           <div className={ColumnCSS.columnHeader} {...provided.dragHandleProps}>
@@ -72,19 +78,19 @@ export default function Column(props) {
               onKeyDown={handleUpdateColumn}
               suppressContentEditableWarning="true"
             >
-              {props.column}
+              {column}
             </Title>
             <button
               className={ColumnCSS.removeColButton}
               onClick={handleDeleteColumn}
-              value={props.column}
+              value={column}
             >
               -
             </button>
           </div>
           <div className={ColumnCSS.taskbox}>
             <div>
-              <Droppable droppableId={props.column} type="task">
+              <Droppable droppableId={column} type="task">
                 {(provided, snapshot) => (
                   <TaskList
                     ref={provided.innerRef}
@@ -94,7 +100,16 @@ export default function Column(props) {
                     {todos &&
                       todos.length > 0 &&
                       todos.map((task, index) => {
-                        return <Task key={task.id} task={task} index={index} />;
+                        return (
+                          <Task
+                            key={task.id}
+                            task={task}
+                            index={index}
+                            column={column}
+                            deleteTodo={deleteTodo}
+                            user={user}
+                          />
+                        );
                       })}
                     {provided.placeholder}
                   </TaskList>
@@ -102,7 +117,20 @@ export default function Column(props) {
               </Droppable>
             </div>
             <div>
-              <AddTodo onClick={handleAddTodo}>Add Todo</AddTodo>
+              {isTriggered ? (
+                <NewTask
+                  trigger={isTriggered}
+                  setTrigger={setIsTriggered}
+                  addTodo={addTodo}
+                  user={user}
+                  todos={todos}
+                  column={column}
+                ></NewTask>
+              ) : (
+                <AddTodo onClick={handleClick} value={column}>
+                  Add Todo
+                </AddTodo>
+              )}
             </div>
           </div>
         </Container>

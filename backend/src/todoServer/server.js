@@ -15,6 +15,7 @@ import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
 import { getColumnOrder } from "./columns/getColumnOrder.js";
 import { updateColOrder } from "./columns/updateColOrder.js";
+import findColumn from "./columns/findColumn.js";
 
 const app = express();
 app.use(cors());
@@ -100,6 +101,7 @@ app.get("/column/Order", async (req, res) => {
 
 app.delete("/column", async (req, res) => {
   const { username, column } = req.body;
+  console.log(username, column);
   if (!username || !column) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -184,24 +186,25 @@ app.put("/todo", async (req, res) => {
 
 app.put("/todo/Order", async (req, res) => {
   const { username, oldColumn, srcIndex, destIndex, newColumn } = req.body;
-  if (!username || !oldColumn || !srcIndex || !destIndex || !newColumn) {
+  if (
+    username === undefined ||
+    oldColumn === undefined ||
+    srcIndex === undefined ||
+    destIndex === undefined ||
+    newColumn === undefined
+  ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   // const validUser = await verifyUser(username, sessionId);
   // if (!validUser) {
   //   return res.json("Invalid authorisation");
   // }
-  if (!validateColumn(user, oldColumn) || !validateColumn(user, newColumn)) {
-    res.json({ error: "Column invalid" });
+  if (
+    !validateColumn(username, oldColumn) ||
+    !validateColumn(username, newColumn)
+  ) {
+    return res.json({ error: "Column invalid" });
   }
-  if (newColumn !== oldColumn) {
-    const oldTodos = await getAllTodos(username, oldColumn);
-    const newTodos = await getAllTodos(username, newColumn);
-    if (!newTodos || !oldTodos) {
-      return res.json({ error: "No Todos Found" });
-    }
-  }
-
   const updatedTodoColumn = await updateTodoColumn(
     username,
     oldColumn,
@@ -264,7 +267,8 @@ app.put("/todo/Date", async (req, res) => {
 
 app.delete("/todo", async (req, res) => {
   const { username, column, todoId } = req.body;
-  if (!username || !column || !todoId) {
+  console.log(username, column, todoId);
+  if (username === undefined || column === undefined || todoId === undefined) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   // TOO MANY ASYNC CALLS???

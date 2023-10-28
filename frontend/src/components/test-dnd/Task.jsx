@@ -13,6 +13,16 @@ const Container = styled.div`
 `;
 
 export default function Task(props) {
+  const deleteTodo = props.deleteTodo;
+  const user = props.user;
+  const column = props.column;
+  const todo = props.task;
+  const removeTask = (e) => {
+    e.preventDefault();
+    deleteTodo(user, column, todo);
+    console.log(e.target.value);
+    return;
+  };
   return (
     <Draggable draggableId={props.task.id} index={props.index}>
       {(provided, snapshot) => (
@@ -23,8 +33,10 @@ export default function Task(props) {
           $isDragging={snapshot.isDragging}
         >
           <div className={TaskCSS.upperBox}>
-            <img src={image} alt="pfp" id={TaskCSS.pfp} />
             <p>{props.task.todo}</p>
+            <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
+              -
+            </button>
           </div>
           <div className={TaskCSS.lowerBox}>
             <p id={TaskCSS.dueDate}>Due Date: {props.task.due}</p>

@@ -7,6 +7,7 @@ function NewColumn(props) {
     props.setTrigger(!props.trigger);
   };
   const handleDuplicate = (e) => {
+    // ADD POPUP
     e.preventDefault();
   };
   const handleSubmit = (e) => {

@@ -13,7 +13,7 @@ import {
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
 import getData from "./Data.jsx";
-import { storeTodo, updateTodoOrder } from "../../api/Todosapi.jsx";
+import { removeTodo, storeTodo, updateTodoOrder } from "../../api/Todosapi.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -44,6 +44,9 @@ export default function Board(props) {
     mutate,
   } = useSWR([headers], getColumns, { refreshInterval: 3000 });
 
+  if (columns) {
+    console.log(columns);
+  }
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
@@ -87,15 +90,25 @@ export default function Board(props) {
 
   const addTodo = async (user, column, todo, due) => {
     try {
+      const newColumns = { ...columns };
+      const newTodo = { id: columns.todoIndex + 1, todo, due };
+      newColumns[column].push(newTodo);
+      mutate(newColumns, false);
       await storeTodo(user, column, todo, due);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const removeTodo = async (user, column, todo) => {
+  const deleteTodo = async (user, column, todo) => {
     try {
-      await removeTodo(user, column, todo);
+      const newColumns = { ...columns };
+      const filteredColumn = newColumns[column].filter(
+        (items) => items.id !== todo.id
+      );
+      newColumns[column] = filteredColumn;
+      mutate(newColumns, false);
+      await removeTodo(user, column, todo.id);
     } catch (err) {
       console.log(err);
     }
@@ -109,7 +122,27 @@ export default function Board(props) {
     newColumn
   ) => {
     try {
-      updateTodoOrder(user, oldColumn, srcIndex, destIndex, newColumn);
+      const newColumns = { ...columns };
+      const srcItem = newColumns[oldColumn];
+      if (oldColumn === newColumn) {
+        const temp = srcItem[destIndex];
+        srcItem[destIndex] = srcItem[srcIndex];
+        srcItem[srcIndex] = temp;
+        newColumns[oldColumn] = srcItem;
+        mutate(newColumns, false);
+        await updateTodoOrder(user, oldColumn, srcIndex, destIndex, oldColumn);
+        return;
+      }
+      const destItem = newColumns[newColumn];
+      const temp = srcItem[srcIndex];
+      const srcCol = srcItem.filter((item) => item.id !== temp.id);
+      destItem.splice(destIndex, 0, temp);
+      console.log(destItem);
+      console.log(newColumns[newColumn]);
+      newColumns[newColumn] = destItem;
+      newColumns[oldColumn] = srcCol;
+      mutate(newColumns, false);
+      await updateTodoOrder(user, oldColumn, srcIndex, destIndex, newColumn);
     } catch (err) {
       console.log(err);
     }
@@ -133,15 +166,9 @@ export default function Board(props) {
     }
     const start = source.droppableId;
     const finish = destination.droppableId;
-    const srcItem = columns[start];
-    if (start === finish) {
-      const temp = srcItem[destination.index];
-      srcItem[destination.index] = srcItem[source.index];
-      srcItem[source.index] = temp;
-      columns[start] = srcItem;
-      mutate(columns, false);
-      changeTodoOrder(user, srcItem, source.index, destination.index, srcItem);
-    }
+
+    changeTodoOrder(user, start, source.index, destination.index, finish);
+    return;
     // const newColumnOrder = Array.from(columnOrder);
     // const StartObj = data.columns.find((element) => element.id === start);
     // const StartIndex = data.columns.findIndex(
@@ -200,6 +227,8 @@ export default function Board(props) {
                     user={user}
                     todos={columns[column]}
                     deleteColumn={deleteColumn}
+                    addTodo={addTodo}
+                    deleteTodo={deleteTodo}
                   />
                 );
               })}

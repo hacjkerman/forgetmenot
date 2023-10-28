@@ -4,15 +4,23 @@ export async function getColumns(user) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
   const insertResult = await userTodos.find({ username: user }).toArray();
-  const columns = insertResult[0].columnOrder;
-  const userEntries = Object.entries(insertResult[0]);
-  const columnObj = { columnOrder: columns };
-  for (let i = 0; i < columns.length; i++) {
-    const isFound = userEntries.find((val) => val[0] === columns[i]);
+  // all items in object from user
+  const columns = insertResult[0];
+  const columnOrder = columns.columnOrder;
+  const todoIndex = columns.todoIndex;
+  // storing all object items in array
+  const userEntries = Object.entries(columns);
+  const newColumnObj = {
+    columnOrder: columnOrder,
+    todoIndex: todoIndex,
+  };
+  // mapping column todos into new column object
+  for (let i = 0; i < columnOrder.length; i++) {
+    const isFound = userEntries.find((val) => val[0] === columnOrder[i]);
     if (!isFound) {
       continue;
     }
-    columnObj[columns[i]] = isFound[1];
+    newColumnObj[columnOrder[i]] = isFound[1];
   }
-  return columnObj;
+  return newColumnObj;
 }

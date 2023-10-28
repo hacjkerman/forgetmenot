@@ -1,13 +1,22 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function validateColumn(user, column) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const insertResult = await userTodos.find({ username: user }).toArray();
-  const isValid = insertResult[0].columnOrder.filter(
+  const isFound = await userTodos.findOne({
+    username: user,
+  });
+  if (!isFound) {
+    // USER DOES NOT EXIST
+    return false;
+  }
+
+  const isValid = isFound.columnOrder.filter(
     (columnName) => columnName === column
   );
+  if (!isFound[column]) {
+    return false;
+  }
 
-  await dbClose();
   return isValid !== 0;
 }

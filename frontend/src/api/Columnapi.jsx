@@ -53,6 +53,8 @@ export const updateColumnOrder = async (username, srcIndex, destIndex) => {
   return response.data;
 };
 export const removeColumn = (username, column) => {
+  console.log(username, column);
+
   const response = todosApi.delete(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",
