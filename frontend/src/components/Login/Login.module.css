@@ -75,8 +75,9 @@
 
 .submit_container {
   display: flex;
-  gap: 30px;
+  gap: 10px;
   margin: 60px auto;
+  flex-direction: column;
 }
 
 .submit {
@@ -105,4 +106,17 @@
   cursor: pointer;
   background-color: #eaeaea;
   color: #676767;
+}
+
+.register {
+  background-color: #fff;
+  border: none;
+  text-decoration: underline purple;
+  color: purple;
+}
+
+.password_button {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
 }

@@ -26,8 +26,8 @@ export default function RegisterForm(props) {
       />
       <input
         type="text"
-        placeholder="Last_name"
-        {...register("Last name", { required: true, maxLength: 100 })}
+        placeholder="Email"
+        {...register("Email", { required: true, maxLength: 100 })}
       />
       <input
         type="text"
@@ -35,12 +35,12 @@ export default function RegisterForm(props) {
         {...register("Username", { required: true, maxLength: 100 })}
       />
       <input
-        type="text"
+        type="password"
         placeholder="Password"
         {...register("password", { required: true, maxLength: 100 })}
       />
       <input
-        type="text"
+        type="password"
         placeholder="confirm_password"
         {...register("confirm_password", {
           required: true,
@@ -50,20 +50,6 @@ export default function RegisterForm(props) {
               return "Your passwords do not match";
             }
           },
-        })}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        {...register("Email", { required: true, pattern: /^\S+@\S+$/i })}
-      />
-      <input
-        type="tel"
-        placeholder="Mobile number"
-        {...register("Mobile number", {
-          required: true,
-          minLength: 6,
-          maxLength: 12,
         })}
       />
 

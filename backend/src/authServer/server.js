@@ -99,8 +99,8 @@ app.get("/validateUser", async (req, res) => {
   if (!username || !password) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const userId = await validateUser(username, password);
-  res.json(userId);
+  const user = await validateUser(username, password);
+  res.json(user);
 });
 
 app.delete("/removeUser", async (req, res) => {

@@ -2,6 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import LoginCSS from "./Login.module.css";
 import Login from "./Login";
+import email_icon from "./Assets/email.png";
+import password_icon from "./Assets/password.png";
 
 export default function LoginForm(props) {
   const setUser = props.setUser;
@@ -15,22 +17,57 @@ export default function LoginForm(props) {
     setUser(data.Username);
     setIsLoggedIn(true);
   };
-  console.log(errors);
 
+  const handleRegister = (e) => {
+    e.preventDefault();
+  };
+
+  const toggleShowPassword = (e) => {
+    e.preventDefault();
+    let x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={LoginCSS.container}>
-      <input
-        type="text"
-        placeholder="Username"
-        {...register("Username", { required: true, maxLength: 100 })}
-      />
-      <input
-        type="text"
-        placeholder="password"
-        {...register("password", { required: true, maxLength: 100 })}
-      />
+      <div className={LoginCSS.header}>
+        <div className={LoginCSS.text}>Login</div>
+        <div className={LoginCSS.underline}></div>
+      </div>
+      <div className={LoginCSS.inputs}>
+        <div className={LoginCSS.input}>
+          <img src={email_icon} alt="" />
 
-      <input type="submit" />
+          <input
+            type="text"
+            placeholder="Username"
+            {...register("Username", { required: true, maxLength: 100 })}
+          />
+        </div>
+        <div className={LoginCSS.input}>
+          <img src={password_icon} alt="" />
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            {...register("Password", { required: true, maxLength: 100 })}
+          />
+        </div>
+        <div className={LoginCSS.password_button}>
+          <input type="checkbox" onclick={toggleShowPassword} />
+          <p>Show Password</p>
+        </div>
+
+        <div className={LoginCSS.submit_container}>
+          <input type="submit" className={LoginCSS.submit} />
+          <button className={LoginCSS.register} onClick={handleRegister}>
+            Sign Up?
+          </button>
+        </div>
+      </div>
     </form>
   );
 }

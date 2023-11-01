@@ -7,9 +7,7 @@ export async function findUserInUsers(user) {
     username: user,
   });
   if (!userResult) {
-    await dbClose();
     return false;
   }
-  await dbClose();
   return userResult;
 }
