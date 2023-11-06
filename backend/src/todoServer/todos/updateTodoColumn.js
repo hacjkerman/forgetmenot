@@ -27,13 +27,16 @@ export async function updateTodoColumn(
     // COLUMN DOES NOT EXIST
     return false;
   }
-  if (oldColumn === newColumn) {
-    const temp = oldColFound[destIndex];
-    oldColFound[destIndex] = oldColFound[srcIndex];
-    oldColFound[srcIndex] = temp;
+
+  if (oldColFound === newColFound) {
+    const currCol = isFound[oldColFound];
+    const temp = currCol[destIndex];
+    console.log(temp);
+    currCol[destIndex] = currCol[srcIndex];
+    currCol[srcIndex] = temp;
     await userTodos.updateOne(
       { username: user },
-      { $set: { [oldColumn]: oldColFound } }
+      { $set: { [oldColumn]: currCol } }
     );
     return;
   }

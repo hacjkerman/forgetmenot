@@ -16,8 +16,8 @@ export async function createUser(user) {
     bcrypt.hash(user.password, saltRounds, async function (err, hash) {
       newUser.password = hash;
       const insertResult = await users.insertOne(newUser);
-      return insertResult.insertedId;
     });
+    return { status: "Success" };
   }
   return undefined;
 }

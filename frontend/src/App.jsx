@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppCSS from "./App.module.css";
 import Header from "./components/Header/Header";
 import Board from "./components/test-dnd/Board";
-import LoginForm from "./components/Login/LoginForm";
-import RegisterForm from "./components/Login/RegisterForm";
+import LoginContainer from "./components/Login/LoginContainer";
 
 function App() {
   const [user, setUser] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <div className={AppCSS.main}>
       <Header />
@@ -18,8 +18,7 @@ function App() {
         </div>
       ) : (
         <>
-          <LoginForm setUser={setUser} setIsLoggedIn={setIsLoggedIn} />
-          {/* <RegisterForm /> */}
+          <LoginContainer setUser={setUser} setIsLoggedIn={setIsLoggedIn} />
         </>
       )}
     </div>

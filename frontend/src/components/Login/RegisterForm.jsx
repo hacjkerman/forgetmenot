@@ -1,56 +1,109 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import RegisterCSS from "./Register.module.css";
+import email_icon from "./Assets/email.png";
+import password_icon from "./Assets/password.png";
+import person_icon from "./Assets/person.png";
+import { signUp } from "../../api/Loginapi.jsx";
 
 export default function RegisterForm(props) {
   const setUser = props.setUser;
+  const setPage = props.setPage;
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    setUser(data.Username);
+  const onSubmit = async (data) => {
+    if (errors) {
+      console.log(errors);
+    }
+    console.log(data);
+    const response = await registerUser(
+      data.username,
+      data.email,
+      data.password
+    );
+    if (response.error) {
+      // POP UP FOR LOGGING IN ERRORS
+      // MAYBE ADD LOADING SCREEN
+      console.log(response.error);
+      return;
+    }
+    setPage("Login");
   };
-  console.log(errors);
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setPage("Login");
+    return;
+  };
+
+  const registerUser = async (user, email, password) => {
+    try {
+      const response = await signUp(user, email, password);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
-        placeholder="First_name"
-        {...register("First name", { required: true, maxLength: 80 })}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        {...register("Email", { required: true, maxLength: 100 })}
-      />
-      <input
-        type="text"
-        placeholder="Username"
-        {...register("Username", { required: true, maxLength: 100 })}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        {...register("password", { required: true, maxLength: 100 })}
-      />
-      <input
-        type="password"
-        placeholder="confirm_password"
-        {...register("confirm_password", {
-          required: true,
-          maxLength: 100,
-          validate: (val) => {
-            if (watch("password") != val) {
-              return "Your passwords do not match";
-            }
-          },
-        })}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} className={RegisterCSS.container}>
+      <div className={RegisterCSS.header}>
+        <div className={RegisterCSS.text}>Register</div>
+        <div className={RegisterCSS.underline}></div>
+      </div>
+      <div className={RegisterCSS.inputs}>
+        <div className={RegisterCSS.input}>
+          <img src={person_icon} alt="" />
+          <input
+            type="text"
+            placeholder="Username"
+            {...register("username", { required: true, maxLength: 100 })}
+          />
+        </div>
+        <div className={RegisterCSS.input}>
+          <img src={email_icon} alt="" />
+          <input
+            type="text"
+            placeholder="Email"
+            {...register("email", { required: true, maxLength: 100 })}
+          />
+        </div>
 
-      <input type="submit" />
+        <div className={RegisterCSS.input}>
+          <img src={password_icon} alt="" />
+          <input
+            type="password"
+            placeholder="Password"
+            {...register("password", { required: true, maxLength: 100 })}
+          />
+        </div>
+        <div className={RegisterCSS.input}>
+          <img src={password_icon} alt="" />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            {...register("confirm_password", {
+              required: true,
+              maxLength: 100,
+              validate: (val) => {
+                if (watch("password") != val) {
+                  // POP UP SAYING PASSWORDS DO NOT MATCH
+                  return "Your passwords do not match";
+                }
+              },
+            })}
+          />
+        </div>
+        <div className={RegisterCSS.submit_container}>
+          <button className={RegisterCSS.submit_gray} onClick={handleLogin}>
+            Login
+          </button>
+          <input type="submit" value="Sign Up" className={RegisterCSS.submit} />
+        </div>
+      </div>
     </form>
   );
 }

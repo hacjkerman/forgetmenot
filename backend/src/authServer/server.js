@@ -1,5 +1,6 @@
 import express from "express";
 import "dotenv/config";
+import cors from "cors";
 import generateAccessToken from "./auth/generateAccessToken.js";
 import { storeActiveToken } from "./auth/storeToken.js";
 import { getAllActiveTokens } from "./auth/getallActiveTokens.js";
@@ -14,6 +15,7 @@ import { validateUser } from "./users/validateUser.js";
 import { findUserInUsers } from "./users/findUserInUsers.js";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get("/activeTokens", async (req, res) => {
@@ -53,7 +55,9 @@ app.get("/verifyUser", async (req, res) => {
 app.post("/login", async (req, res) => {
   // Authenticate User
   const { username, password } = req.body;
-
+  if (username === undefined || password === undefined) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
   // Check if user exists
   const isFound = await findUserInUsers(username);
   if (!isFound) {
@@ -71,26 +75,24 @@ app.post("/login", async (req, res) => {
   }
   const accessToken = await generateAccessToken(username, isFound.email);
   await storeActiveToken(username, isFound.email, accessToken);
-  return res.cookie({ accessToken: accessToken });
+  return res.json({ accessToken: accessToken });
 });
 
 // User Operations
-app.post("/createUser", async (req, res) => {
-  const { name, email, username, password } = req.body;
-  if (!name || !email || !username || !password) {
-    return res.status(400).json({ error: "Missing required fields" });
+app.post("/register", async (req, res) => {
+  const { email, username, password } = req.body;
+  if (username === undefined || password === undefined || email === undefined) {
+    return res.json({ error: "Missing required fields" });
   }
   if (!validator.validate(email)) {
-    return res.status(400).json({ error: "Invalid Email" });
+    return res.json({ error: "Invalid Email" });
   }
   const userId = await createUser({
-    name,
     email,
     username,
     password,
   });
-  if (userId === undefined)
-    return res.status(400).json({ error: "Duplicate User" });
+  if (userId === undefined) return res.json({ error: "Duplicate User" });
   res.json(userId);
 });
 

@@ -30,6 +30,7 @@ const Button = styled.button`
   font-size: 25px;
   margin-right: 2rem;
 `;
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 export default function Board(props) {
   const user = props.user;
@@ -86,10 +87,11 @@ export default function Board(props) {
   const addTodo = async (user, column, todo, due) => {
     try {
       const newColumns = { ...columns };
-      const newTodo = { id: columns.todoIndex + 1, todo, due };
+      const newTodo = { id: (columns.todoIndex + 1).toString(), todo, due };
       newColumns[column].push(newTodo);
       mutate(newColumns, false);
       await storeTodo(user, column, todo, due);
+      await delay(5000);
     } catch (err) {
       console.log(err);
     }

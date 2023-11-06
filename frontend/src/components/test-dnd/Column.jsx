@@ -32,7 +32,8 @@ const TaskList = styled.div`
     props.isDraggingOver ? "skyblue" : "inherit "};
   flex-grow: 1;
   height: 62vh;
-  overflow-y: hidden;
+  overflow-y: scroll;
+  scrollbar-width: thin;
 `;
 const AddTodo = styled.button`
   width: 100%;
@@ -40,7 +41,8 @@ const AddTodo = styled.button`
   height: 5vh;
   border-radius: 2rem;
   border: 1px;
-  box-shadow: 1px 2px 0px black;
+  box-shadow: 1px 1px 0px grey;
+  z-index: 10;
 `;
 
 export default function Column(props) {

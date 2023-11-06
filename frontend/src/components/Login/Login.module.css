@@ -115,6 +115,7 @@
   border: none;
   text-decoration: underline purple;
   color: purple;
+  cursor: pointer;
 }
 
 .password_button {

@@ -11,6 +11,7 @@ export async function validateUser(user, password) {
     // USER DOES NOT EXIST
     return false;
   }
+  console.log(password);
   const result = await bcrypt.compare(password, userResult.password);
   if (result) {
     return userResult.username;
