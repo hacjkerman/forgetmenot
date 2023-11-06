@@ -9,10 +9,6 @@ function NewTask(props) {
     e.preventDefault();
     props.setTrigger(!props.trigger);
   };
-  const handleDuplicate = (e) => {
-    // ADD POPUP
-    e.preventDefault();
-  };
   const handleAddTodo = (e) => {
     e.preventDefault();
     const todo = e.target[0].value;

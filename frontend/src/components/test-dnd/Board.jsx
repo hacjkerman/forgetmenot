@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Column from "./Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import BoardCSS from "./Board.module.css";
 import NewColumn from "../Column/newColumn.jsx";
 import styled from "styled-components";
 import useSWR from "swr";
@@ -9,10 +8,8 @@ import {
   getColumns,
   removeColumn,
   storeColumn,
-  todosUrlEndpoint,
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
-import getData from "./Data.jsx";
 import { removeTodo, storeTodo, updateTodoOrder } from "../../api/Todosapi.jsx";
 
 const Container = styled.div`
@@ -38,11 +35,9 @@ export default function Board(props) {
   const user = props.user;
   const [isTriggered, setIsTriggered] = useState(false);
   const headers = { username: user };
-  const {
-    data: columns,
-    error,
-    mutate,
-  } = useSWR([headers], getColumns, { refreshInterval: 3000 });
+  const { data: columns, mutate } = useSWR([headers], getColumns, {
+    refreshInterval: 3000,
+  });
 
   if (columns) {
     console.log(columns);
@@ -169,43 +164,6 @@ export default function Board(props) {
 
     changeTodoOrder(user, start, source.index, destination.index, finish);
     return;
-    // const newColumnOrder = Array.from(columnOrder);
-    // const StartObj = data.columns.find((element) => element.id === start);
-    // const StartIndex = data.columns.findIndex(
-    //   (element) => element.id === start
-    // );
-    // const startTasks = StartObj.tasks;
-    // const currDest = startTasks[destination.index];
-    // const srcItem = startTasks[source.index];
-    // if (start === finish) {
-    //   startTasks[destination.index] = srcItem;
-    //   startTasks[source.index] = currDest;
-    //   const newColumn = { ...StartObj, tasks: startTasks };
-    //   newColumnOrder[StartIndex] = newColumn;
-    //   const newState = {
-    //     // columns: newColumnOrder,
-    //   };
-    //   // setData(newState);
-    //   return;
-    // }
-    // const DestObj = data.columns.find((element) => element.id === finish);
-    // const DestIndex = data.columns.findIndex(
-    //   (element) => element.id === finish
-    // );
-
-    // const newDestTasks = DestObj.tasks;
-    // const newStartTasks = startTasks.filter((item) => item !== srcItem);
-    // newDestTasks.splice(destination.index, 0, srcItem);
-
-    // const newStartCol = { ...StartObj, tasks: newStartTasks };
-    // const newDestCol = { ...DestObj, tasks: newDestTasks };
-    // newColumnOrder[StartIndex] = newStartCol;
-    // newColumnOrder[DestIndex] = newDestCol;
-
-    // const newState = {
-    //   columns: newColumnOrder,
-    // };
-    // setData(newState);
   };
 
   const handleClick = (e) => {

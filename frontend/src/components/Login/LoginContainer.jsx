@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Login from "./Login";
-import Register from "./Register";
+import LoginForm from "./LoginForm";
+import RegisterForm from "./RegisterForm";
 
 export default function LoginContainer() {
   const [page, setPage] = useState("Login");
   if (page === "Login") {
-    return <Login setPage={setPage} />;
+    return <LoginForm setPage={setPage} />;
   }
   if (page === "Sign Up") {
-    return <Register setPage={setPage} />;
+    return <RegisterForm setPage={setPage} />;
   }
 }

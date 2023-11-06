@@ -1,7 +1,6 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
-import image from "./images.jfif";
 import TaskCSS from "./Task.module.css";
 
 const Container = styled.div`

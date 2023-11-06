@@ -1,10 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import Login from "./Login";
 
 export default function RegisterForm(props) {
   const setUser = props.setUser;
-  const setIsLoggedIn = props.setIsLoggedIn;
   const {
     register,
     handleSubmit,
@@ -13,7 +11,6 @@ export default function RegisterForm(props) {
   } = useForm();
   const onSubmit = (data) => {
     setUser(data.Username);
-    setIsLoggedIn(true);
   };
   console.log(errors);
 

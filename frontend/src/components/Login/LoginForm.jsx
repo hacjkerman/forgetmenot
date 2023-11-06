@@ -1,19 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import LoginCSS from "./Login.module.css";
-import Login from "./Login";
 import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
 
 export default function LoginForm(props) {
   const setUser = props.setUser;
   const setIsLoggedIn = props.setIsLoggedIn;
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    if (errors) {
+      console.log(errors);
+    }
     setUser(data.Username);
     setIsLoggedIn(true);
   };
@@ -24,13 +27,9 @@ export default function LoginForm(props) {
 
   const toggleShowPassword = (e) => {
     e.preventDefault();
-    let x = document.getElementById("password");
-    if (x.type === "password") {
-      x.type = "text";
-    } else {
-      x.type = "password";
-    }
+    setShowPassword(!showPassword);
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={LoginCSS.container}>
       <div className={LoginCSS.header}>
@@ -47,17 +46,30 @@ export default function LoginForm(props) {
             {...register("Username", { required: true, maxLength: 100 })}
           />
         </div>
-        <div className={LoginCSS.input}>
-          <img src={password_icon} alt="" />
-          <input
-            type="password"
-            placeholder="Password"
-            id="password"
-            {...register("Password", { required: true, maxLength: 100 })}
-          />
-        </div>
+        {showPassword ? (
+          <div className={LoginCSS.input}>
+            <img src={password_icon} alt="" />
+            <input
+              type="text"
+              placeholder="Password"
+              id="password"
+              {...register("Password", { required: true, maxLength: 100 })}
+            />
+          </div>
+        ) : (
+          <div className={LoginCSS.input}>
+            <img src={password_icon} alt="" />
+            <input
+              type="password"
+              placeholder="Password"
+              id="password"
+              {...register("Password", { required: true, maxLength: 100 })}
+            />
+          </div>
+        )}
+
         <div className={LoginCSS.password_button}>
-          <input type="checkbox" onclick={toggleShowPassword} />
+          <input type="checkbox" onClick={toggleShowPassword} />
           <p>Show Password</p>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AppCSS from "./App.module.css";
 import Header from "./components/Header/Header";
 import Board from "./components/test-dnd/Board";

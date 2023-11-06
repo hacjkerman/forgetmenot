@@ -4,7 +4,8 @@
   background-color: #fff;
   margin-top: 200px;
   margin: auto;
-  width: 600px;
+  width: 100%;
+  border-radius: 2%;
   padding-bottom: 30px;
 }
 
@@ -34,17 +35,17 @@
   margin-top: 55px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
 }
 
 .input {
   display: flex;
   align-items: center;
   margin: auto;
-  width: 480px;
+  width: 90%;
   height: 80px;
   background: #eaeaea;
   border-radius: 6px;
+  margin-bottom: 10px;
 }
 
 .input img {
@@ -76,7 +77,7 @@
 .submit_container {
   display: flex;
   gap: 10px;
-  margin: 60px auto;
+  margin: 20px auto;
   flex-direction: column;
 }
 
@@ -92,6 +93,7 @@
   font-size: 19px;
   font-weight: 700;
   cursor: pointer;
+  margin: 0;
 }
 
 .submit_gray {
@@ -118,5 +120,10 @@
 .password_button {
   display: flex;
   justify-content: center;
-  gap: 4px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    width: 60%;
+  }
 }
