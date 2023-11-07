@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import LoginCSS from "./Login.module.css";
 import email_icon from "./Assets/email.png";
@@ -9,6 +9,7 @@ export default function LoginForm(props) {
   const setUser = props.setUser;
   const setIsLoggedIn = props.setIsLoggedIn;
   const setPage = props.setPage;
+  const cookies = props.cookies;
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -27,6 +28,8 @@ export default function LoginForm(props) {
       console.log(response.error);
       return;
     }
+
+    cookies.set("jwt_auth", response);
     setUser(data.username);
     setIsLoggedIn(true);
   };

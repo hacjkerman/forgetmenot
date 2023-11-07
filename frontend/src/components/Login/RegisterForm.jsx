@@ -7,7 +7,6 @@ import person_icon from "./Assets/person.png";
 import { signUp } from "../../api/Loginapi.jsx";
 
 export default function RegisterForm(props) {
-  const setUser = props.setUser;
   const setPage = props.setPage;
   const {
     register,
@@ -89,7 +88,7 @@ export default function RegisterForm(props) {
               required: true,
               maxLength: 100,
               validate: (val) => {
-                if (watch("password") != val) {
+                if (watch("password") !== val) {
                   // POP UP SAYING PASSWORDS DO NOT MATCH
                   return "Your passwords do not match";
                 }

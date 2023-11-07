@@ -10,7 +10,7 @@ function NewColumn(props) {
     // ADD POPUP
     e.preventDefault();
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const column = e.target[0].value;
@@ -22,7 +22,7 @@ function NewColumn(props) {
     } else {
       const addColumn = props.addColumn;
       const user = props.user;
-      addColumn(user, column);
+      await addColumn(user, column);
       handleClose(e);
     }
   };

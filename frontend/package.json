@@ -13,6 +13,7 @@
     "ant": "^0.2.0",
     "antd": "^5.9.0",
     "axios": "^1.5.0",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-cookie": "^6.1.1",
@@ -22,6 +23,7 @@
     "react-scripts": "5.0.1",
     "styled-components": "^6.0.7",
     "swr": "^2.2.2",
+    "universal-cookie": "^6.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

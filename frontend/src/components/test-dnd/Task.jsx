@@ -23,7 +23,7 @@ export default function Task(props) {
     return;
   };
   return (
-    <Draggable draggableId={props.task.id} index={props.index}>
+    <Draggable key={props.key} draggableId={props.task.id} index={props.index}>
       {(provided, snapshot) => (
         <Container
           {...provided.draggableProps}

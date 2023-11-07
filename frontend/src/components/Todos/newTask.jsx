@@ -9,12 +9,12 @@ function NewTask(props) {
     e.preventDefault();
     props.setTrigger(!props.trigger);
   };
-  const handleAddTodo = (e) => {
+  const handleAddTodo = async (e) => {
     e.preventDefault();
     const todo = e.target[0].value;
     const due = e.target[1].value;
 
-    addTodo(user, column, todo, due);
+    await addTodo(user, column, todo, due);
     handleClose(e);
     return;
   };
