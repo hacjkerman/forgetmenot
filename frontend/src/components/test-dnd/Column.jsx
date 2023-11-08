@@ -43,6 +43,7 @@ const AddTodo = styled.button`
   border: 1px;
   box-shadow: 1px 1px 0px grey;
   z-index: 10;
+  background-color: ghostwhite;
 `;
 
 export default function Column(props) {
@@ -118,22 +119,22 @@ export default function Column(props) {
                 )}
               </Droppable>
             </div>
-            <div>
-              {isTriggered ? (
-                <NewTask
-                  trigger={isTriggered}
-                  setTrigger={setIsTriggered}
-                  addTodo={addTodo}
-                  user={user}
-                  todos={todos}
-                  column={column}
-                ></NewTask>
-              ) : (
-                <AddTodo onClick={handleClick} value={column}>
-                  Add Todo
-                </AddTodo>
-              )}
-            </div>
+          </div>
+          <div>
+            {isTriggered ? (
+              <NewTask
+                trigger={isTriggered}
+                setTrigger={setIsTriggered}
+                addTodo={addTodo}
+                user={user}
+                todos={todos}
+                column={column}
+              ></NewTask>
+            ) : (
+              <AddTodo onClick={handleClick} value={column}>
+                Add Todo
+              </AddTodo>
+            )}
           </div>
         </Container>
       )}

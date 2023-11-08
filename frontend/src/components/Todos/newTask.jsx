@@ -36,7 +36,7 @@ function NewTask(props) {
             </label>
             <label className={newTaskCSS.colInput}>
               <h3>Due</h3>
-              <input type="text" placeholder="2023" required></input>
+              <input type="date" placeholder="2023" required></input>
             </label>
           </div>
           <div className={newTaskCSS.lowerFormButtons}>

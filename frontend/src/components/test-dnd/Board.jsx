@@ -17,18 +17,17 @@ const Container = styled.div`
   flex-direction: row;
   margin-left: 0.5rem;
   flex-wrap: nowrap;
+  width: fit-content;
   height: 95%;
-  padding-right: 5rem;
+  margin-right: 0.5rem;
 `;
 
 const Button = styled.button`
   width: 38px;
   height: 38px;
-  padding: 4px;
-  margin-top: 8px;
   cursor: pointer;
-  font-size: 25px;
-  margin-right: 2rem;
+  font-size: 200%;
+  margin-top: 0.5rem;
 `;
 
 export default function Board(props) {
@@ -176,6 +175,7 @@ export default function Board(props) {
               columns.columnOrder.map((column, index) => {
                 return (
                   <Column
+                    className=""
                     key={column}
                     column={column}
                     index={index}
