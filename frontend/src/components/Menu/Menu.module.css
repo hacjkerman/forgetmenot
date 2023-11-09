@@ -5,6 +5,8 @@
   top: 0;
   bottom: 0;
   background-color: bisque;
+  display: flex;
+  justify-content: center;
 }
 
 .exitIcon {
@@ -13,5 +15,16 @@
   height: 50px;
   right: 5%;
   top: 2%;
+  cursor: pointer;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+.links button {
+  background-color: bisque;
+  border: none;
   cursor: pointer;
 }

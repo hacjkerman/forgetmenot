@@ -30,14 +30,22 @@ app.get("/activeTokens", async (req, res) => {
 app.get("/verifyToken", async (req, res) => {
   const token = req.body;
   if (!token) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.json({ error: "Missing required fields" });
   }
   const isValid = await verifyToken(token.token);
   res.json(isValid);
 });
 
 app.delete("/logout", async (req, res) => {
-  const { token } = req.body;
+  const { username, token } = req.body;
+  if (username === undefined || token === undefined) {
+    return res.json({ error: "Missing required fields" });
+  }
+  const isValidUser = await verifyUser(username, token);
+  if (!isValidUser) {
+    res.json({ error: "Invalid User" });
+    return;
+  }
   await removeActiveToken(token);
   res.sendStatus(204);
 });

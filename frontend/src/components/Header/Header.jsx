@@ -14,12 +14,14 @@ export default function Header(props) {
       {menu ? (
         ""
       ) : (
-        <img
-          src={menuIcon}
-          alt="Menu Icon"
-          className={HeaderCSS.menuIcon}
-          onClick={toggleMenu}
-        />
+        <>
+          <img
+            src={menuIcon}
+            alt="Menu Icon"
+            className={HeaderCSS.menuIcon}
+            onClick={toggleMenu}
+          />
+        </>
       )}
     </div>
   );

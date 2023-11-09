@@ -20,3 +20,16 @@ export const signUp = async (username, email, password) => {
   });
   return response.data;
 };
+
+export const logout = async (username, token) => {
+  const response = await todosApi.delete("/logout", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      username,
+      token,
+    },
+  });
+  return response.data;
+};

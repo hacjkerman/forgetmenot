@@ -7,6 +7,5 @@ export async function verifyUser(user, sessionId) {
   const isFound = await tokens.findOne({
     $and: [{ username: user }, { token: sessionId }],
   });
-  await dbClose();
   return isFound;
 }

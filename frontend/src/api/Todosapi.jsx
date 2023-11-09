@@ -19,12 +19,13 @@ export const getTodos = async (username) => {
   return response.data;
 };
 
-export const storeTodo = async (username, column, todo, dueDate) => {
+export const storeTodo = async (username, column, todo, dueDate, token) => {
   const response = await todosApi.post(todosUrlEndpoint, {
     username,
     column,
     todo,
     dueDate,
+    token,
   });
   return response.data;
 };
@@ -71,8 +72,7 @@ export const updateTodoDate = async (username, column, todo, newDate) => {
   });
   return response.data;
 };
-export const removeTodo = async (username, column, todoId) => {
-  console.log(username, column, todoId);
+export const removeTodo = async (username, column, todoId, token) => {
   const response = await todosApi.delete(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",
@@ -81,6 +81,7 @@ export const removeTodo = async (username, column, todoId) => {
       username,
       column,
       todoId,
+      token,
     },
   });
   return response.data;

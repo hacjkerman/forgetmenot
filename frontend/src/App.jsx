@@ -8,41 +8,64 @@ import Board from "./components/test-dnd/Board";
 import LoginContainer from "./components/Login/LoginContainer";
 
 function App() {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
+  console.log(user);
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token.accessToken);
       const data = decoded.data;
-      console.log(data.user);
       setUser(data.user);
       setIsLoggedIn(true);
+      return;
     }
+    setUser("");
+    setIsLoggedIn(false);
   }, [token]);
-  useEffect(() => {
-    console.log(menu);
-  }, [menu]);
+  useEffect(() => {}, [menu]);
+  let render;
+  if (user === null) {
+    render = <div>Loading...</div>;
+  }
+  if (isLoggedIn && user !== null) {
+    render = (
+      <div className={AppCSS.container}>
+        {" "}
+        <Board user={user} token={token} />
+      </div>
+    );
+  } else {
+    render = (
+      <>
+        <LoginContainer
+          setUser={setUser}
+          setIsLoggedIn={setIsLoggedIn}
+          cookies={cookies}
+        />
+      </>
+    );
+  }
   return (
     <div className={AppCSS.main}>
       <Header setMenu={setMenu} menu={menu} />
-      {menu ? <Menu setMenu={setMenu} menu={menu} /> : ""}
-
-      {isLoggedIn ? (
-        <div className={AppCSS.container}>
-          <Board user={user} />
-        </div>
+      {menu ? (
+        <Menu
+          cookies={cookies}
+          setMenu={setMenu}
+          menu={menu}
+          isLoggedIn={isLoggedIn}
+          setIsLoggedIn={setIsLoggedIn}
+          user={user}
+          setUser={setUser}
+        />
       ) : (
-        <>
-          <LoginContainer
-            setUser={setUser}
-            setIsLoggedIn={setIsLoggedIn}
-            cookies={cookies}
-          />
-        </>
+        ""
       )}
+
+      {render}
     </div>
   );
 }

@@ -11,7 +11,6 @@ export async function verifyToken(token) {
   try {
     verif = verify(token, process.env.ACCESS_TOKEN_SECRET);
   } catch (err) {
-    await dbClose();
     return err;
   }
   const isFound = await collection.findOne({
@@ -22,9 +21,7 @@ export async function verifyToken(token) {
     ],
   });
   if (!isFound) {
-    await dbClose();
     return false;
   }
-  await dbClose();
   return true;
 }

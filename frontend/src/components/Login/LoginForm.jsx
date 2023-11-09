@@ -28,8 +28,11 @@ export default function LoginForm(props) {
       console.log(response.error);
       return;
     }
+    const now = new Date();
+    now.getTime();
 
-    cookies.set("jwt_auth", response);
+    now.setHours(now.getHours() + 1);
+    cookies.set("jwt_auth", response, { expires: now });
     setUser(data.username);
     setIsLoggedIn(true);
   };

@@ -32,19 +32,19 @@ const Button = styled.button`
 
 export default function Board(props) {
   const user = props.user;
+  const token = props.token;
   const [isTriggered, setIsTriggered] = useState(false);
-  const headers = { username: user };
+  const headers = { username: user, token: token };
   const { data: columns, mutate } = useSWR([headers], getColumns, {
     refreshInterval: 3000,
   });
-
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
 
       newColumns.columnOrder.push(column);
       mutate(newColumns, false);
-      await storeColumn(user, column);
+      await storeColumn(user, column, token);
     } catch (err) {
       console.log(err);
     }
@@ -58,7 +58,7 @@ export default function Board(props) {
       );
       newColumns.columnOrder = filteredArray;
       mutate(newColumns, false);
-      await removeColumn(user, column);
+      await removeColumn(user, column, token);
     } catch (err) {
       console.log(err);
     }
@@ -71,9 +71,11 @@ export default function Board(props) {
       const destItem = newColumnOrder[destIndex];
       newColumnOrder[destIndex] = newColumnOrder[srcIndex];
       newColumnOrder[srcIndex] = destItem;
+      console.log(newColumns.columnOrder);
       newColumns.columnOrder = newColumnOrder;
+      console.log(newColumns.columnOrder);
       mutate(newColumns, false);
-      await updateColumnOrder(user, srcIndex, destIndex);
+      await updateColumnOrder(user, srcIndex, destIndex, token);
     } catch (err) {
       console.log(err);
     }
@@ -85,7 +87,7 @@ export default function Board(props) {
       const newTodo = { id: columns.todoIndex.toString(), todo, due };
       newColumns[column].push(newTodo);
       mutate(newColumns, false);
-      await storeTodo(user, column, todo, due);
+      await storeTodo(user, column, todo, due, token);
     } catch (err) {
       console.log(err);
     }
@@ -99,7 +101,7 @@ export default function Board(props) {
       );
       newColumns[column] = filteredColumn;
       mutate(newColumns, false);
-      await removeTodo(user, column, todo.id);
+      await removeTodo(user, column, todo.id, token);
     } catch (err) {
       console.log(err);
     }
@@ -121,7 +123,14 @@ export default function Board(props) {
         srcItem[srcIndex] = temp;
         newColumns[oldColumn] = srcItem;
         mutate(newColumns, false);
-        await updateTodoOrder(user, oldColumn, srcIndex, destIndex, oldColumn);
+        await updateTodoOrder(
+          user,
+          oldColumn,
+          srcIndex,
+          destIndex,
+          oldColumn,
+          token
+        );
         return;
       }
       const destItem = newColumns[newColumn];
@@ -133,7 +142,14 @@ export default function Board(props) {
       newColumns[newColumn] = destItem;
       newColumns[oldColumn] = srcCol;
       mutate(newColumns, false);
-      await updateTodoOrder(user, oldColumn, srcIndex, destIndex, newColumn);
+      await updateTodoOrder(
+        user,
+        oldColumn,
+        srcIndex,
+        destIndex,
+        newColumn,
+        token
+      );
     } catch (err) {
       console.log(err);
     }
