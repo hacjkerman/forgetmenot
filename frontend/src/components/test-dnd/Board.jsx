@@ -35,9 +35,7 @@ export default function Board(props) {
   const token = props.token;
   const [isTriggered, setIsTriggered] = useState(false);
   const headers = { username: user, token: token };
-  const { data: columns, mutate } = useSWR([headers], getColumns, {
-    refreshInterval: 3000,
-  });
+  const { data: columns, mutate } = useSWR([headers], getColumns);
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
@@ -68,12 +66,10 @@ export default function Board(props) {
     try {
       const newColumns = { ...columns };
       const newColumnOrder = Array.from(newColumns.columnOrder);
-      const destItem = newColumnOrder[destIndex];
-      newColumnOrder[destIndex] = newColumnOrder[srcIndex];
-      newColumnOrder[srcIndex] = destItem;
-      console.log(newColumns.columnOrder);
+      const temp = newColumnOrder[srcIndex];
+      newColumnOrder.splice(srcIndex, 1);
+      newColumnOrder.splice(destIndex, 0, temp);
       newColumns.columnOrder = newColumnOrder;
-      console.log(newColumns.columnOrder);
       mutate(newColumns, false);
       await updateColumnOrder(user, srcIndex, destIndex, token);
     } catch (err) {
@@ -118,9 +114,9 @@ export default function Board(props) {
       const newColumns = { ...columns };
       const srcItem = newColumns[oldColumn];
       if (oldColumn === newColumn) {
-        const temp = srcItem[destIndex];
-        srcItem[destIndex] = srcItem[srcIndex];
-        srcItem[srcIndex] = temp;
+        const temp = srcItem[srcIndex];
+        srcItem.splice(srcIndex, 1);
+        srcItem.splice(destIndex, 0, temp);
         newColumns[oldColumn] = srcItem;
         mutate(newColumns, false);
         await updateTodoOrder(
@@ -135,12 +131,10 @@ export default function Board(props) {
       }
       const destItem = newColumns[newColumn];
       const temp = srcItem[srcIndex];
-      const srcCol = srcItem.filter((item) => item.id !== temp.id);
+      srcItem.splice(srcIndex, 1);
       destItem.splice(destIndex, 0, temp);
-      console.log(destItem);
-      console.log(newColumns[newColumn]);
       newColumns[newColumn] = destItem;
-      newColumns[oldColumn] = srcCol;
+      newColumns[oldColumn] = srcItem;
       mutate(newColumns, false);
       await updateTodoOrder(
         user,

@@ -19,7 +19,6 @@ export default function Task(props) {
   const removeTask = (e) => {
     e.preventDefault();
     deleteTodo(user, column, todo);
-    console.log(e.target.value);
     return;
   };
   return (

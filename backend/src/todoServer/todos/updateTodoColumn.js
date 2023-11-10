@@ -17,6 +17,7 @@ export async function updateTodoColumn(
     // USER DOES NOT EXIST
     return false;
   }
+
   const oldColFound = findColumn(isFound, oldColumn);
   if (!oldColFound) {
     // COLUMN DOES NOT EXIST
@@ -30,30 +31,23 @@ export async function updateTodoColumn(
 
   if (oldColFound === newColFound) {
     const currCol = isFound[oldColFound];
-    const temp = currCol[destIndex];
-    console.log(temp);
-    currCol[destIndex] = currCol[srcIndex];
-    currCol[srcIndex] = temp;
+    const temp = currCol[srcIndex];
+    currCol.splice(srcIndex, 1);
+    currCol.splice(destIndex, 0, temp);
     await userTodos.updateOne(
       { username: user },
       { $set: { [oldColumn]: currCol } }
     );
     return;
   }
-
   const oldTodos = isFound[oldColumn];
   const temp = oldTodos[srcIndex];
-  const filteredTodos = oldTodos.filter((todoName) => todoName.id !== temp.id);
-  if (filteredTodos.length === oldTodos.length) {
-    // TODO DOES NOT EXIST
-
-    return false;
-  }
+  oldTodos.splice(srcIndex, 1);
   const newTodos = isFound[newColumn];
   newTodos.splice(destIndex, 0, temp);
   await userTodos.updateOne(
     { username: user },
-    { $set: { [oldColumn]: filteredTodos } }
+    { $set: { [oldColumn]: oldTodos } }
   );
   await userTodos.updateOne(
     { username: user },

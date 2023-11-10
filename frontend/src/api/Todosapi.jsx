@@ -29,12 +29,13 @@ export const storeTodo = async (username, column, todo, dueDate, token) => {
   });
   return response.data;
 };
-export const updateTodo = async (username, column, todo, newTodo) => {
+export const updateTodo = async (username, column, todo, newTodo, token) => {
   const response = await todosApi.put(todosUrlEndpoint, {
     username,
     column,
     todo,
     newTodo,
+    token,
   });
   return response.data;
 };
@@ -43,7 +44,8 @@ export const updateTodoOrder = async (
   oldColumn,
   srcIndex,
   destIndex,
-  newColumn
+  newColumn,
+  token
 ) => {
   const response = await todosApi.put(todosUrlEndpoint + "/Order", {
     username,
@@ -51,6 +53,7 @@ export const updateTodoOrder = async (
     srcIndex,
     destIndex,
     newColumn,
+    token,
   });
   console.log(response);
   return response.data;

@@ -110,7 +110,6 @@ app.get("/column/Order", async (req, res) => {
 
 app.delete("/column", async (req, res) => {
   const { username, column, token } = req.body;
-  console.log(username, column);
   if (!username || !column || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }

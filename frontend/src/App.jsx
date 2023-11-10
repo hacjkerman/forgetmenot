@@ -13,7 +13,6 @@ function App() {
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
-  console.log(user);
   useEffect(() => {
     if (token) {
       const decoded = jwtDecode(token.accessToken);
