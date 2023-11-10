@@ -22,7 +22,8 @@ function Menu(props) {
       console.log(logoutRes.error);
       return;
     }
-    setIsLoggedIn(false);
+    setIsLoggedIn(!isLoggedIn);
+    setMenu(!menu);
     setUser("");
     if (cookies.get("jwt_auth") !== undefined) {
       cookies.remove("jwt_auth");

@@ -32,7 +32,7 @@ function NewTask(props) {
           <div className={newTaskCSS.upperForm}>
             <label className={newTaskCSS.colInput}>
               <h3>Todo</h3>
-              <input type="text" placeholder="Be Batman" required></input>
+              <input type="text" placeholder="Go for a run" required></input>
             </label>
             <label className={newTaskCSS.colInput}>
               <h3>Due</h3>
