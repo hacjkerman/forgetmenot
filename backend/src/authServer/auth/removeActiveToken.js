@@ -1,10 +1,10 @@
 import "dotenv/config";
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function removeActiveToken(token) {
   const db = await dbConnect();
-  const collection = db.collection("activeTokens");
-  await collection.deleteOne({ token: token });
-  await dbClose();
-  return;
+  const tokens = db.collection("activeTokens");
+  await tokens.deleteOne({ token: token });
+  // valid return
+  return true;
 }

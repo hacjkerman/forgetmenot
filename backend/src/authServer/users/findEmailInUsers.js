@@ -1,10 +1,10 @@
 import { dbConnect } from "../../database/db.js";
 
-export async function findUserInUsers(user) {
+export async function findEmailInUsers(email) {
   const db = await dbConnect();
   const users = db.collection("users");
   const userResult = await users.findOne({
-    username: user,
+    email: email,
   });
   if (!userResult) {
     return false;
