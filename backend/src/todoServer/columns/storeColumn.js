@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import findColumn from "./findColumn.js";
 
 export async function storeColumn(user, column) {
@@ -13,14 +13,12 @@ export async function storeColumn(user, column) {
       { username: user },
       { $set: { [column]: [], todoIndex: 0 } }
     );
-    // USER NOT FOUND
-    return false;
+    return { status: "New user" };
   }
 
   const foundCol = findColumn(isFound, column);
   if (foundCol) {
-    // COLUMN EXISTS
-    return false;
+    return { error: "Column already exists" };
   }
 
   await userTodos.updateOne({ username: user }, { $set: { [column]: [] } });
@@ -29,5 +27,5 @@ export async function storeColumn(user, column) {
     { $push: { columnOrder: column } }
   );
 
-  return true;
+  return { status: "Storage successful" };
 }

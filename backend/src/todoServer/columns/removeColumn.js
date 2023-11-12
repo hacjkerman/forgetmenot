@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import findColumn from "./findColumn.js";
 
 export async function removeColumn(user, columnName) {
@@ -8,14 +8,12 @@ export async function removeColumn(user, columnName) {
     username: user,
   });
   if (!isFound) {
-    // USER NOT FOUND
-    return false;
+    return { error: "User not found" };
   }
 
   const foundCol = findColumn(isFound, columnName);
   if (!foundCol) {
-    // COLUMN EXISTS
-    return false;
+    return { error: "Column not found" };
   }
   await userTodos.updateOne(
     { username: user },
@@ -24,12 +22,12 @@ export async function removeColumn(user, columnName) {
   const colOrder = isFound.columnOrder;
   const filteredColumns = colOrder.filter((column) => column !== columnName);
   if (filteredColumns.length === colOrder.length) {
-    return false;
+    return { error: "Column unsuccessfully removed" };
   }
   await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: filteredColumns } }
   );
 
-  return true;
+  return { status: "Column removed successfully" };
 }

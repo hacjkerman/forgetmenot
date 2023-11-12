@@ -1,32 +1,28 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function updateColumn(user, oldColumn, newColumn) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
   const isFound = await userTodos.findOne({ username: user });
   if (!isFound) {
-    await dbClose();
-    return false;
+    return { error: "User not found" };
   }
   const columnData = isFound.columnOrder;
   const foundCol = columnData.filter((column) => column === oldColumn);
   if (foundCol.length === 0) {
-    // return "Column does not exist";
-    return false;
+    return { error: "Column does not exist" };
   }
   const duplicate = columnData.filter((column) => column === newColumn);
   if (duplicate.length > 0) {
-    // return "Duplicate Storage";
-    return false;
+    return { error: "Duplicate storage" };
   }
   const columnIndex = columnData.findIndex((column) => column === oldColumn);
   columnData[columnIndex] = newColumn;
-  const insertResult = await userTodos.updateOne(
+  await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: columnData } }
   );
   await userTodos.updateOne({ username: user }, { $set: { [newColumn]: [] } });
   await userTodos.updateOne({ username: user }, { $unset: { [oldColumn]: 1 } });
-  await dbClose();
-  return insertResult;
+  return { status: "Update successful" };
 }

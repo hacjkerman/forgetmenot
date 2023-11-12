@@ -14,19 +14,16 @@ export async function updateTodoColumn(
     username: user,
   });
   if (!isFound) {
-    // USER DOES NOT EXIST
-    return false;
+    return { error: "User does not exist" };
   }
 
   const oldColFound = findColumn(isFound, oldColumn);
   if (!oldColFound) {
-    // COLUMN DOES NOT EXIST
-    return false;
+    return { error: "Old Column does not exist" };
   }
   const newColFound = findColumn(isFound, newColumn);
   if (!newColFound) {
-    // COLUMN DOES NOT EXIST
-    return false;
+    return { error: "Old Column does not exist" };
   }
 
   if (oldColFound === newColFound) {
@@ -54,5 +51,5 @@ export async function updateTodoColumn(
     { $set: { [newColumn]: newTodos } }
   );
   // SUCCESS
-  return true;
+  return { status: "Todo column successfully updated" };
 }

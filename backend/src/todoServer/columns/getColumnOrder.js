@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function getColumnOrder(user) {
   const db = await dbConnect();

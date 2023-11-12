@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import findColumn from "../columns/findColumn.js";
 
 export async function getAllTodos(user, column) {
@@ -6,14 +6,12 @@ export async function getAllTodos(user, column) {
   const userTodos = db.collection("userTodos");
   const isFound = await userTodos.findOne({ username: user });
   if (!isFound) {
-    // USER DOES NOT EXIST
-    return false;
+    return { error: "User does not exist" };
   }
 
   const foundCol = findColumn(isFound, column);
   if (!foundCol) {
-    // COLUMN DOES NOT EXIST
-    return false;
+    return { error: "Column does not exist" };
   }
 
   const colItems = isFound[foundCol];

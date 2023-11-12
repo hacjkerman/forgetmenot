@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function updateColOrder(user, srcIndex, destIndex) {
   const db = await dbConnect();
@@ -6,16 +6,14 @@ export async function updateColOrder(user, srcIndex, destIndex) {
   const userData = await userTodos.find({ username: user }).toArray();
   const columnData = userData[0].columnOrder;
   if (srcIndex > columnData.length || destIndex > columnData.length) {
-    // COLUMN INDEX DOES NOT EXIST
-    return false;
+    return { error: "Column does not exist" };
   }
   const temp = columnData[srcIndex];
   columnData.splice(srcIndex, 1);
   columnData.splice(destIndex, 0, temp);
-  const insertResult = await userTodos.updateOne(
+  await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: columnData } }
   );
-  await dbClose();
-  return insertResult;
+  return { status: "Update successful" };
 }

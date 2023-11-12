@@ -10,7 +10,7 @@ export async function storeTodo(username, column, todo, dueDate) {
   });
   if (!isFound) {
     // USER DOES NOT EXIST
-    return false;
+    return { error: "User does not exist" };
   }
   const newTodo = {
     id: isFound.todoIndex.toString(),
@@ -20,11 +20,11 @@ export async function storeTodo(username, column, todo, dueDate) {
   const foundCol = findColumn(isFound, column);
   if (!foundCol) {
     // COLUMN DOES NOT EXIST
-    return false;
+    return { error: "Column does not exist" };
   }
   await userTodos.updateOne(
     { username: username },
     { $push: { [column]: newTodo }, $inc: { todoIndex: 1 } }
   );
-  return true;
+  return { status: "Storage successful" };
 }

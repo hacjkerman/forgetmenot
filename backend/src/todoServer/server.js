@@ -15,7 +15,6 @@ import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
 import { getColumnOrder } from "./columns/getColumnOrder.js";
 import { updateColOrder } from "./columns/updateColOrder.js";
-import findColumn from "./columns/findColumn.js";
 
 const app = express();
 app.use(cors());
@@ -40,14 +39,16 @@ app.put("/column/Order", async (req, res) => {
     return;
   }
   const updateResult = await updateColOrder(username, srcIndex, destIndex);
-  if (updateResult === false) {
-    return res.json({ error: "Bad Storage" });
-  }
-  return res.json({ msg: "Update Successful" });
+  return res.json(updateResult);
 });
 app.put("/column", async (req, res) => {
   const { username, oldColumn, newColumn, token } = req.body;
-  if (!username || !oldColumn || !newColumn || token === undefined) {
+  if (
+    username === undefined ||
+    oldColumn === undefined ||
+    newColumn === undefined ||
+    token === undefined
+  ) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -55,16 +56,13 @@ app.put("/column", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const updateResult = await updateColumn(username, oldColumn, newColumn);
-  if (updateResult === false) {
-    return res.json({ error: "Duplicate Storage" });
-  }
-  return res.json({ msg: "Update Successful" });
+  return res.json(updateResult);
 });
 
 app.post("/column", async (req, res) => {
   const { username, column, token } = req.body;
 
-  if (!username || !column || token === undefined) {
+  if (username === undefined || column === undefined || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -72,16 +70,13 @@ app.post("/column", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const storeResult = await storeColumn(username, column);
-  if (storeResult === false) {
-    return res.json({ error: "Duplicate Storage" });
-  }
-  return res.json({ msg: "Update Successful" });
+  return res.json(storeResult);
 });
 
 app.get("/column", async (req, res) => {
   // CHANGE TO BODY IF BACKEND TESTING
   const { username, token } = req.query;
-  if (!username || token === undefined) {
+  if (username === undefined || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -89,14 +84,14 @@ app.get("/column", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const foundColumns = await getColumns(username);
-  if (foundColumns === null) return res.sendStatus(404);
-  res.json(foundColumns);
+  if (foundColumns === null) return res.json({ error: "No columns found" });
+  return res.json(foundColumns);
 });
 
 app.get("/column/Order", async (req, res) => {
   // CHANGE TO BODY IF BACKEND TESTING
   const { username, token } = req.query;
-  if (!username || token === undefined) {
+  if (username === undefined || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -104,13 +99,13 @@ app.get("/column/Order", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const foundColumns = await getColumnOrder(username);
-  if (foundColumns === null) return res.sendStatus(404);
-  res.json(foundColumns);
+  if (foundColumns === null) return res.json({ error: "No columns found" });
+  return res.json(foundColumns);
 });
 
 app.delete("/column", async (req, res) => {
   const { username, column, token } = req.body;
-  if (!username || !column || token === undefined) {
+  if (username === undefined || column === undefined || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }
   // TOO MANY ASYNC CALLS???
@@ -120,10 +115,7 @@ app.delete("/column", async (req, res) => {
   }
 
   const removeResult = await removeColumn(username, column);
-  if (removeResult === false) return res.sendStatus(404);
-  else {
-    res.json({ msg: "Removed Todo: " + column + ", Successfully." });
-  }
+  return res.json(removeResult);
 });
 // Todo Request Operations
 app.post("/todo", async (req, res) => {
@@ -136,16 +128,13 @@ app.post("/todo", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const storeResult = await storeTodo(username, column, todo, dueDate);
-  if (storeResult === false) {
-    return res.json({ error: "Duplicate Storage" });
-  }
-  return res.json({ msg: "Update Successful" });
+  return res.json(storeResult);
 });
 
 app.get("/todo", async (req, res) => {
   // CHANGE TO BODY IF BACKEND TESTING ELSE QUERY
   const { username, column, token } = req.query;
-  if (!username || !column || token === undefined) {
+  if (username === undefined || column === undefined || token === undefined) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -159,18 +148,14 @@ app.get("/todo", async (req, res) => {
   res.json(foundTodos);
 });
 
-// app.get("/findUser", async (req, res) => {
-//   const { username, password } = req.body;
-//   if (!username || !password) {
-//     return res.json({ error: "Missing required fields" });
-//   }
-//   const validUser = await findUser(username, password);
-//   res.json(validUser);
-// });
-
 app.put("/todo", async (req, res) => {
   const { username, column, todoId, newTodo, token } = req.body;
-  if (!username || !todoId || !newTodo || token === undefined) {
+  if (
+    username === undefined ||
+    todoId === undefined ||
+    newTodo === undefined ||
+    token === undefined
+  ) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -188,10 +173,12 @@ app.put("/todo", async (req, res) => {
     todoId,
     newTodo
   );
-  if (updatedTodo === null) return res.sendStatus(404);
+  if (updatedTodo === null) {
+    return res.json({ error: "todo update unsuccessful" });
+  }
   res.json(updatedTodo);
 });
-
+// DUPLICATE?
 app.put("/todo/Order", async (req, res) => {
   const { username, oldColumn, srcIndex, destIndex, newColumn, token } =
     req.body;
@@ -222,13 +209,18 @@ app.put("/todo/Order", async (req, res) => {
     destIndex,
     newColumn
   );
-  if (updatedTodoColumn === null) return res.sendStatus(404);
-  res.json(updatedTodoColumn);
+  return res.json(updatedTodoColumn);
 });
-
+// DUPLICATE?
 app.put("/todo/Column", async (req, res) => {
   const { username, column, todoId, newColumn, token } = req.body;
-  if (!username || !column || !todoId || !newColumn || token === undefined) {
+  if (
+    username === undefined ||
+    column === undefined ||
+    todoId === undefined ||
+    newColumn === undefined ||
+    token === undefined
+  ) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -247,13 +239,18 @@ app.put("/todo/Column", async (req, res) => {
     todoId,
     newColumn
   );
-  if (updatedTodo === null) return res.sendStatus(404);
-  res.json(updatedTodo);
+  return res.json(updatedTodo);
 });
-
+// TODO
 app.put("/todo/Date", async (req, res) => {
   const { username, column, todoId, newDate, token } = req.body;
-  if (!username || !column || !todoId || !newDate || token === undefined) {
+  if (
+    username === undefined ||
+    column === undefined ||
+    todoId === undefined ||
+    newDate === undefined ||
+    token === undefined
+  ) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -271,8 +268,7 @@ app.put("/todo/Date", async (req, res) => {
     todoId,
     newDate
   );
-  if (updatedTodo === null) return res.sendStatus(404);
-  res.json(updatedTodo);
+  return res.json(updatedTodo);
 });
 
 app.delete("/todo", async (req, res) => {
@@ -296,10 +292,7 @@ app.delete("/todo", async (req, res) => {
     return res.json({ error: "No Todos Found" });
   }
   const removeResult = await removeTodo(username, column, foundTodos, todoId);
-  if (removeResult === false) return res.sendStatus(404);
-  else {
-    res.json(`Removed Todo Num: ${todoId}, Successfully.`);
-  }
+  return res.json(removeResult);
 });
 
 app.listen(process.env.PORT1, () => {
