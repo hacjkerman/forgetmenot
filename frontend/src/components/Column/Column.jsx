@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Task from "./Task.jsx";
+import Task from "../Task/Task.jsx";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
-import NewTask from "../Todos/newTask.jsx";
+import NewTask from "../Task/newTask.jsx";
 const Container = styled.div`
   margin: 0.5rem;
   border: 1px solid lightgrey;

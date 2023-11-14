@@ -58,23 +58,24 @@ export const updateTodoOrder = async (
   console.log(response);
   return response.data;
 };
-export const updateTodoColumn = async (username, todo, newColumn) => {
-  const response = await todosApi.put(todosUrlEndpoint + "/Column", {
-    username,
-    todo,
-    newColumn,
-  });
-  return response.data;
-};
-export const updateTodoDate = async (username, column, todo, newDate) => {
+
+export const updateTodoDate = async (
+  username,
+  column,
+  todo,
+  newDate,
+  token
+) => {
   const response = await todosApi.put(todosUrlEndpoint + "/Date", {
     username,
     column,
     todo,
     newDate,
+    token,
   });
   return response.data;
 };
+
 export const removeTodo = async (username, column, todoId, token) => {
   const response = await todosApi.delete(todosUrlEndpoint, {
     headers: {

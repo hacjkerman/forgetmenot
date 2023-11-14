@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header/Header";
 import Menu from "./components/Menu/Menu";
-import Board from "./components/test-dnd/Board";
+import Board from "./components/Board/Board";
 import LoginContainer from "./components/Login/LoginContainer";
 
 function App() {

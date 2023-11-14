@@ -178,7 +178,7 @@ app.put("/todo", async (req, res) => {
   }
   res.json(updatedTodo);
 });
-// DUPLICATE?
+
 app.put("/todo/Order", async (req, res) => {
   const { username, oldColumn, srcIndex, destIndex, newColumn, token } =
     req.body;
@@ -211,37 +211,7 @@ app.put("/todo/Order", async (req, res) => {
   );
   return res.json(updatedTodoColumn);
 });
-// DUPLICATE?
-app.put("/todo/Column", async (req, res) => {
-  const { username, column, todoId, newColumn, token } = req.body;
-  if (
-    username === undefined ||
-    column === undefined ||
-    todoId === undefined ||
-    newColumn === undefined ||
-    token === undefined
-  ) {
-    return res.json({ error: "Missing required fields" });
-  }
-  const validUser = await verifyUser(username, token);
-  if (!validUser) {
-    return res.json({ error: "Invalid authorisation" });
-  }
 
-  const foundTodos = await getAllTodos(username, column);
-  if (!foundTodos) {
-    return res.json({ error: "No Todos Found" });
-  }
-  const updatedTodo = await updateTodoColumn(
-    username,
-    column,
-    foundTodos,
-    todoId,
-    newColumn
-  );
-  return res.json(updatedTodo);
-});
-// TODO
 app.put("/todo/Date", async (req, res) => {
   const { username, column, todoId, newDate, token } = req.body;
   if (
