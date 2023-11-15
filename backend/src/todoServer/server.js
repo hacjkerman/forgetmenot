@@ -15,6 +15,7 @@ import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
 import { getColumnOrder } from "./columns/getColumnOrder.js";
 import { updateColOrder } from "./columns/updateColOrder.js";
+import { updateTodoDone } from "./todos/updateTodoDone.js";
 
 const app = express();
 app.use(cors());
@@ -120,7 +121,13 @@ app.delete("/column", async (req, res) => {
 // Todo Request Operations
 app.post("/todo", async (req, res) => {
   const { username, column, todo, dueDate, token } = req.body;
-  if (!username || !column || !todo || !dueDate || token === undefined) {
+  if (
+    username === undefined ||
+    column === undefined ||
+    todo === undefined ||
+    dueDate === undefined ||
+    token === undefined
+  ) {
     return res.json({ error: "Missing required fields" });
   }
   const validUser = await verifyUser(username, token);
@@ -152,6 +159,7 @@ app.put("/todo", async (req, res) => {
   const { username, column, todoId, newTodo, token } = req.body;
   if (
     username === undefined ||
+    column === undefined ||
     todoId === undefined ||
     newTodo === undefined ||
     token === undefined
@@ -210,6 +218,37 @@ app.put("/todo/Order", async (req, res) => {
     newColumn
   );
   return res.json(updatedTodoColumn);
+});
+
+app.put("/todo/Done", async (req, res) => {
+  const { username, column, todoId, token } = req.body;
+  if (
+    username === undefined ||
+    todoId === undefined ||
+    column === undefined ||
+    token === undefined
+  ) {
+    return res.json({ error: "Missing required fields" });
+  }
+  const validUser = await verifyUser(username, token);
+  if (!validUser) {
+    return res.json({ error: "Invalid authorisation" });
+  }
+  const foundTodos = await getAllTodos(username, column);
+  if (!foundTodos) {
+    return res.json({ error: "No Todos Found" });
+  }
+  const updatedTodo = await updateTodoDone(
+    username,
+    column,
+    foundTodos,
+    todoId
+  );
+  if (updatedTodo === null) {
+    return res.json({ error: "todo update unsuccessful" });
+  }
+  console.log(updatedTodo);
+  res.json(updatedTodo);
 });
 
 app.put("/todo/Date", async (req, res) => {

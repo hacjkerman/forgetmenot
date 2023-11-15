@@ -150,9 +150,20 @@ Content-Type: application/json
 {
   "username": "dies35",
   "column": "gang",
-  # "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
+  "sessionId": "eyJhbGciOiJIUzI1NiJ9.ZGllczM0.zAuNQDZeZC7SSi9jppgDlO8TSQcNrQKE4lYZJgTwJCM",
   "todoId": 4,
   "newTodo": "Be Wonderwoman"
+}
+###
+
+PUT http://localhost:8080/todo/Done
+Content-Type: application/json
+
+{
+  "username": "helvete",
+  "column": "Habits",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAwNTg2MTgsImRhdGEiOnsidXNlciI6ImhlbHZldGUiLCJlbWFpbCI6ImFuZHJld3dhbmcxMzRAZ21haWwuY29tIn0sImlhdCI6MTcwMDA1NTAxOH0.KNzetEjz3iz4pfkz_0mZaFeLbjvY4nWXe-MbJxw78dA",
+  "todoId": "59"
 }
 ###
 

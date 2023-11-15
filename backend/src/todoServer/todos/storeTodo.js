@@ -16,6 +16,7 @@ export async function storeTodo(username, column, todo, dueDate) {
     id: isFound.todoIndex.toString(),
     todo,
     due: dueDate,
+    done: false,
   };
   const foundCol = findColumn(isFound, column);
   if (!foundCol) {

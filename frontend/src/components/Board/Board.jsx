@@ -36,6 +36,7 @@ export default function Board(props) {
   const [isTriggered, setIsTriggered] = useState(false);
   const headers = { username: user, token: token };
   const { data: columns, mutate } = useSWR([headers], getColumns);
+
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };

@@ -21,6 +21,11 @@ export default function Task(props) {
     deleteTodo(user, column, todo);
     return;
   };
+  const changeCompletion = (e) => {
+    e.preventDefault();
+    console.log("gang");
+    console.log(e.target.checked);
+  };
   return (
     <Draggable draggableId={props.task.id} index={props.index}>
       {(provided, snapshot) => (
@@ -36,6 +41,11 @@ export default function Task(props) {
               -
             </button>
           </div>
+          <input
+            type="checkbox"
+            checked={todo.done}
+            onChange={changeCompletion}
+          ></input>
           <div className={TaskCSS.lowerBox}>
             <p id={TaskCSS.dueDate}>Due Date: {props.task.due}</p>
             <p id={TaskCSS.propId}>#{props.task.id}</p>
