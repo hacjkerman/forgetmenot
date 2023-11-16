@@ -1,5 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
-import findColumn from "../columns/findColumn.js";
+import { dbConnect } from "../../database/db.js";
 import { validateColumn } from "../columns/validateColumn.js";
 
 export async function removeTodo(user, column, todos, todoId) {
@@ -18,7 +17,6 @@ export async function removeTodo(user, column, todos, todoId) {
     return { error: "Column does not exist" };
   }
   const filteredTodos = todos.filter((todoName) => todoName.id !== todoId);
-  console.log(filteredTodos);
   if (filteredTodos.length === todos.length) {
     // TODO DOES NOT EXIST
     return { error: "Todo does not exist" };

@@ -221,10 +221,10 @@ app.put("/todo/Order", async (req, res) => {
 });
 
 app.put("/todo/Done", async (req, res) => {
-  const { username, column, todoId, token } = req.body;
+  const { username, column, todo, token } = req.body;
   if (
     username === undefined ||
-    todoId === undefined ||
+    todo === undefined ||
     column === undefined ||
     token === undefined
   ) {
@@ -238,16 +238,10 @@ app.put("/todo/Done", async (req, res) => {
   if (!foundTodos) {
     return res.json({ error: "No Todos Found" });
   }
-  const updatedTodo = await updateTodoDone(
-    username,
-    column,
-    foundTodos,
-    todoId
-  );
+  const updatedTodo = await updateTodoDone(username, column, foundTodos, todo);
   if (updatedTodo === null) {
     return res.json({ error: "todo update unsuccessful" });
   }
-  console.log(updatedTodo);
   res.json(updatedTodo);
 });
 

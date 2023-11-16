@@ -12,6 +12,9 @@ export async function storeTodo(username, column, todo, dueDate) {
     // USER DOES NOT EXIST
     return { error: "User does not exist" };
   }
+  if (todo.length > 256) {
+    return { error: "Todo has to be less than 256 characters long" };
+  }
   const newTodo = {
     id: isFound.todoIndex.toString(),
     todo,
