@@ -39,6 +39,17 @@ export const updateTodo = async (username, column, todo, newTodo, token) => {
   });
   return response.data;
 };
+
+export const updateTodoDone = async (username, column, todo, token) => {
+  const response = await todosApi.put(todosUrlEndpoint + "/Done", {
+    username,
+    column,
+    todo,
+    token,
+  });
+  return response.data;
+};
+
 export const updateTodoOrder = async (
   username,
   oldColumn,

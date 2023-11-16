@@ -111,6 +111,7 @@ export default function Column(props) {
                             column={column}
                             deleteTodo={deleteTodo}
                             user={user}
+                            changeTodoDone={props.changeTodoDone}
                           />
                         );
                       })}

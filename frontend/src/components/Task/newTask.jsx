@@ -12,6 +12,11 @@ function NewTask(props) {
   const handleAddTodo = async (e) => {
     e.preventDefault();
     const todo = e.target[0].value;
+    if (todo.length > 256) {
+      console.log("Todo has to be less than 256 characters long");
+      handleClose(e);
+      return;
+    }
     const due = e.target[1].value;
 
     await addTodo(user, column, todo, due);

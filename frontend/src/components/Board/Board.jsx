@@ -10,7 +10,12 @@ import {
   storeColumn,
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
-import { removeTodo, storeTodo, updateTodoOrder } from "../../api/Todosapi.jsx";
+import {
+  removeTodo,
+  storeTodo,
+  updateTodoOrder,
+  updateTodoDone,
+} from "../../api/Todosapi.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -149,6 +154,15 @@ export default function Board(props) {
       console.log(err);
     }
   };
+
+  const changeTodoDone = async (user, column, todo) => {
+    try {
+      await updateTodoDone(user, column, todo, token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onDragEnd = (result) => {
     const { destination, source, type } = result;
     console.log(destination, source, type);
@@ -195,6 +209,7 @@ export default function Board(props) {
                     deleteColumn={deleteColumn}
                     addTodo={addTodo}
                     deleteTodo={deleteTodo}
+                    changeTodoDone={changeTodoDone}
                   />
                 );
               })}

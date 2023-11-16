@@ -14,7 +14,7 @@ function App() {
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
   useEffect(() => {
-    if (token) {
+    if (token !== undefined) {
       const decoded = jwtDecode(token.accessToken);
       const data = decoded.data;
       setUser(data.user);
@@ -24,7 +24,6 @@ function App() {
     setUser("");
     setIsLoggedIn(false);
   }, [token]);
-  useEffect(() => {}, [menu]);
   let render;
   if (user === null) {
     render = <div>Loading...</div>;

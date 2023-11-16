@@ -31,6 +31,14 @@
   margin-right: 10px;
 }
 
+.todo {
+  cursor: pointer;
+}
+
+.todo:hover {
+  text-decoration: underline;
+}
+
 .removeTaskButton {
   font-size: 25px;
   width: 25px;
@@ -42,6 +50,18 @@
 
 .removeTaskButton:hover {
   background-color: lightgrey;
+}
+
+.doneBox {
+  opacity: 0.5;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  background-color: lightgrey;
+}
+
+.doneBox:hover {
+  background-color: grey;
 }
 
 .lowerBox {
@@ -57,4 +77,12 @@
 
 #dueDate {
   padding-left: 5px;
+}
+
+.updateDate {
+  cursor: pointer;
+}
+
+.updateDate:hover {
+  text-decoration: underline;
 }
