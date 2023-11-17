@@ -80,9 +80,10 @@ PUT http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies35",
-  "oldColumn": "Habit",
-  "newColumn": "rab"
+  "username": "helvete",
+  "oldColumn": "Todo",
+  "newColumn": "g",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAyMDQ2NDksImRhdGEiOnsidXNlciI6ImhlbHZldGUiLCJlbWFpbCI6ImFuZHJld3dhbmcxMzRAZ21haWwuY29tIn0sImlhdCI6MTcwMDIwMTA0OX0.g5j-LEm9_tB9CsqiVfHgOecwdGckS5CJlrLhF5JE33A"
 }
 ###
 POST http://localhost:8080/column

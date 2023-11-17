@@ -8,7 +8,6 @@ export async function getAllTodos(user, column) {
   if (!isFound) {
     return { error: "User does not exist" };
   }
-
   const foundCol = findColumn(isFound, column);
   if (!foundCol) {
     return { error: "Column does not exist" };

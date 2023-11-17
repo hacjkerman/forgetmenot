@@ -16,13 +16,17 @@ export async function updateColumn(user, oldColumn, newColumn) {
   if (duplicate.length > 0) {
     return { error: "Duplicate storage" };
   }
+  const oldTodos = isFound[oldColumn];
   const columnIndex = columnData.findIndex((column) => column === oldColumn);
   columnData[columnIndex] = newColumn;
   await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: columnData } }
   );
-  await userTodos.updateOne({ username: user }, { $set: { [newColumn]: [] } });
+  await userTodos.updateOne(
+    { username: user },
+    { $set: { [newColumn]: oldTodos } }
+  );
   await userTodos.updateOne({ username: user }, { $unset: { [oldColumn]: 1 } });
   return { status: "Update successful" };
 }

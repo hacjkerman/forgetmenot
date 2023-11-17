@@ -66,21 +66,20 @@ export const updateTodoOrder = async (
     newColumn,
     token,
   });
-  console.log(response);
   return response.data;
 };
 
 export const updateTodoDate = async (
   username,
   column,
-  todo,
+  todoId,
   newDate,
   token
 ) => {
   const response = await todosApi.put(todosUrlEndpoint + "/Date", {
     username,
     column,
-    todo,
+    todoId,
     newDate,
     token,
   });

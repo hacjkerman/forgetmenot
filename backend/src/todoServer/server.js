@@ -235,8 +235,8 @@ app.put("/todo/Done", async (req, res) => {
     return res.json({ error: "Invalid authorisation" });
   }
   const foundTodos = await getAllTodos(username, column);
-  if (!foundTodos) {
-    return res.json({ error: "No Todos Found" });
+  if (foundTodos.error) {
+    return foundTodos;
   }
   const updatedTodo = await updateTodoDone(username, column, foundTodos, todo);
   if (updatedTodo === null) {

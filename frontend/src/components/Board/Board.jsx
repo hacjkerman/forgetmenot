@@ -8,6 +8,7 @@ import {
   getColumns,
   removeColumn,
   storeColumn,
+  updateColumn,
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
 import {
@@ -15,6 +16,8 @@ import {
   storeTodo,
   updateTodoOrder,
   updateTodoDone,
+  updateTodoDate,
+  updateTodo,
 } from "../../api/Todosapi.jsx";
 
 const Container = styled.div`
@@ -63,6 +66,22 @@ export default function Board(props) {
       newColumns.columnOrder = filteredArray;
       mutate(newColumns, false);
       await removeColumn(user, column, token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const changeColumn = async (column, newColumn) => {
+    try {
+      const newColumns = { ...columns };
+      const currCol = newColumns[column];
+      newColumns[newColumn] = currCol;
+      let colOrder = newColumns.columnOrder;
+      const index = colOrder.findIndex((item) => item === column);
+      colOrder.splice(index, 1);
+      colOrder.splice(index, 0, newColumn);
+      mutate(newColumns, false);
+      await updateColumn(user, column, newColumn, token);
     } catch (err) {
       console.log(err);
     }
@@ -155,7 +174,20 @@ export default function Board(props) {
     }
   };
 
-  const changeTodoDone = async (user, column, todo) => {
+  const changeTodo = async (column, todo, newTodo) => {
+    try {
+      const newColumns = { ...columns };
+      const currCol = newColumns[column];
+      const item = currCol.find((item) => item.id === todo);
+      item.todo = newTodo;
+      mutate(newColumns, false);
+      await updateTodo(user, column, todo, newTodo, token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const changeTodoDone = async (column, todo) => {
     try {
       await updateTodoDone(user, column, todo, token);
     } catch (err) {
@@ -163,9 +195,21 @@ export default function Board(props) {
     }
   };
 
+  const changeTodoDate = async (column, todo, newDate) => {
+    try {
+      const newColumns = { ...columns };
+      const currCol = newColumns[column];
+      const item = currCol.find((item) => item.id === todo);
+      item.due = newDate;
+      mutate(newColumns, false);
+      await updateTodoDate(user, column, todo, newDate, token);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onDragEnd = (result) => {
     const { destination, source, type } = result;
-    console.log(destination, source, type);
     if (!destination) {
       return;
     }
@@ -207,9 +251,12 @@ export default function Board(props) {
                     user={user}
                     todos={columns[column]}
                     deleteColumn={deleteColumn}
+                    changeColumn={changeColumn}
                     addTodo={addTodo}
                     deleteTodo={deleteTodo}
                     changeTodoDone={changeTodoDone}
+                    changeTodo={changeTodo}
+                    changeTodoDate={changeTodoDate}
                   />
                 );
               })}

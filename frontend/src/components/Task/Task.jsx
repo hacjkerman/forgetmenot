@@ -19,6 +19,8 @@ export default function Task(props) {
   const column = props.column;
   const todo = props.task;
   const changeTodoDone = props.changeTodoDone;
+  const changeTodo = props.changeTodo;
+  const changeTodoDate = props.changeTodoDate;
   const [isDone, setIsDone] = useState(todo.done);
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
@@ -29,19 +31,21 @@ export default function Task(props) {
   };
   const changeCompletion = () => {
     setIsDone(!isDone);
-    changeTodoDone(user, column, todo.id);
+    changeTodoDone(column, todo.id);
   };
   const changeUpdateDate = () => {
-    console.log("Hello");
     setIsUpdatingDate(!isUpdatingDate);
   };
 
   const changeUpdateTodo = () => {
-    console.log("Hello");
     setIsUpdatingTodo(!isUpdatingTodo);
   };
   return (
-    <Draggable draggableId={props.task.id} index={props.index}>
+    <Draggable
+      draggableId={props.task.id}
+      index={props.index}
+      isDragDisabled={isUpdatingDate || isUpdatingTodo}
+    >
       {(provided, snapshot) => (
         <Container
           {...provided.draggableProps}
@@ -56,6 +60,8 @@ export default function Task(props) {
                   isUpdatingTodo={isUpdatingTodo}
                   setIsUpdatingTodo={setIsUpdatingTodo}
                   task={props.task}
+                  column={props.column}
+                  changeTodo={changeTodo}
                 ></UpdateTask>
               ) : (
                 <p className={TaskCSS.todo} onClick={changeUpdateTodo}>
@@ -81,6 +87,8 @@ export default function Task(props) {
                   isUpdatingDate={isUpdatingDate}
                   setIsUpdatingDate={setIsUpdatingDate}
                   task={props.task}
+                  column={props.column}
+                  changeTodoDate={changeTodoDate}
                 ></UpdateTaskDate>
               ) : (
                 <span className={TaskCSS.updateDate} onClick={changeUpdateDate}>

@@ -5,12 +5,20 @@ function UpdateTaskDate(props) {
   const isUpdatingDate = props.isUpdatingDate;
   const setIsUpdatingDate = props.setIsUpdatingDate;
   const task = props.task;
+  const column = props.column;
+  const changeTodoDate = props.changeTodoDate;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingDate(!isUpdatingDate);
   };
 
-  const handleUpdateDate = () => {};
+  const handleUpdateDate = (e) => {
+    e.preventDefault();
+    const newDate = e.target[0].value;
+    changeTodoDate(column, task.id, newDate);
+    handleClose(e);
+    return;
+  };
   return (
     <div className={updateTaskCSS.popup}>
       <div className={updateTaskCSS.popupInner}>

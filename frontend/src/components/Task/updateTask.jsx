@@ -5,12 +5,20 @@ function UpdateTask(props) {
   const isUpdatingTodo = props.isUpdatingTodo;
   const setIsUpdatingTodo = props.setIsUpdatingTodo;
   const task = props.task;
+  const column = props.column;
+  const changeTodo = props.changeTodo;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingTodo(!isUpdatingTodo);
   };
 
-  const handleUpdateDate = () => {};
+  const handleUpdateTodo = (e) => {
+    e.preventDefault();
+    const newTodo = e.target[0].value;
+    changeTodo(column, task.id, newTodo);
+    handleClose(e);
+    console.log(newTodo);
+  };
   return (
     <div className={updateTaskCSS.popup}>
       <div className={updateTaskCSS.popupInner}>
@@ -22,15 +30,19 @@ function UpdateTask(props) {
             x
           </button>
         </div>
-        <form className={updateTaskCSS.columnForm} onSubmit={handleUpdateDate}>
+        <form className={updateTaskCSS.columnForm} onSubmit={handleUpdateTodo}>
           <div className={updateTaskCSS.upperForm}>
             <label className={updateTaskCSS.colInput}>
-              <h3>Current Due Date</h3>
-              <p>{task.due}</p>
+              <h3>Current Todo</h3>
+              <p>{task.todo}</p>
             </label>
             <label className={updateTaskCSS.colInput}>
-              <h3>Due Date</h3>
-              <input type="date" placeholder="2023" required></input>
+              <h3>New Todo</h3>
+              <input
+                type="input"
+                placeholder="Change the World"
+                required
+              ></input>
             </label>
           </div>
           <div className={updateTaskCSS.lowerFormButtons}>

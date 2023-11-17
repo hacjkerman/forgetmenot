@@ -4,6 +4,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
 import NewTask from "../Task/newTask.jsx";
+import UpdatingColumn from "./updateColumn.jsx";
 const Container = styled.div`
   margin: 0.5rem;
   border: 1px solid lightgrey;
@@ -23,7 +24,7 @@ const Title = styled.h3`
   margin: 0;
   border-bottom: solid;
   background-color: dark-grey;
-  cursor: text;
+  cursor: pointer;
 `;
 const TaskList = styled.div`
   padding: 8px;
@@ -53,18 +54,16 @@ export default function Column(props) {
   const deleteTodo = props.deleteTodo;
   const column = props.column;
   const [isTriggered, setIsTriggered] = useState(false);
+  const [isUpdatingCol, setIsUpdatingCol] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
     const deleteColumn = props.deleteColumn;
     deleteColumn(user, currCol);
     return;
   };
-  const handleUpdateColumn = (e) => {
-    console.log(e.target.textContent);
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      return;
-    }
+
+  const changeUpdateColumn = () => {
+    setIsUpdatingCol(!isUpdatingCol);
   };
 
   const handleClick = (e) => {
@@ -72,17 +71,24 @@ export default function Column(props) {
     setIsTriggered(!isTriggered);
   };
   return (
-    <Draggable draggableId={column} index={props.index}>
+    <Draggable
+      draggableId={column}
+      index={props.index}
+      isDragDisabled={isUpdatingCol}
+    >
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
           <div className={ColumnCSS.columnHeader} {...provided.dragHandleProps}>
-            <Title
-              contentEditable="true"
-              onKeyDown={handleUpdateColumn}
-              suppressContentEditableWarning="true"
-            >
-              {column}
-            </Title>
+            {isUpdatingCol ? (
+              <UpdatingColumn
+                isUpdatingCol={isUpdatingCol}
+                setIsUpdatingCol={setIsUpdatingCol}
+                column={props.column}
+                changeColumn={props.changeColumn}
+              ></UpdatingColumn>
+            ) : (
+              <Title onClick={changeUpdateColumn}>{column}</Title>
+            )}
             <button
               className={ColumnCSS.removeColButton}
               onClick={handleDeleteColumn}
@@ -112,6 +118,8 @@ export default function Column(props) {
                             deleteTodo={deleteTodo}
                             user={user}
                             changeTodoDone={props.changeTodoDone}
+                            changeTodo={props.changeTodo}
+                            changeTodoDate={props.changeTodoDate}
                           />
                         );
                       })}
