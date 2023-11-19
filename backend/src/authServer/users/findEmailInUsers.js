@@ -3,11 +3,11 @@ import { dbConnect } from "../../database/db.js";
 export async function findEmailInUsers(email) {
   const db = await dbConnect();
   const users = db.collection("users");
-  const userResult = await users.findOne({
+  const userFound = await users.findOne({
     email: email,
   });
-  if (!userResult) {
+  if (!userFound) {
     return false;
   }
-  return userResult;
+  return userFound;
 }

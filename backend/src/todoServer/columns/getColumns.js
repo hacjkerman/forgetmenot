@@ -1,18 +1,16 @@
 import { dbConnect } from "../../database/db.js";
-import { storeColumn } from "./storeColumn.js";
+import { newUserGen } from "../users/newUserGen.js";
 
 export async function getColumns(user) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  let currUser = await userTodos.find({ username: user }).toArray();
-  if (currUser.length === 0) {
-    await storeColumn(user, "Habits");
-    await storeColumn(user, "Todo");
-    await storeColumn(user, "Done");
-    currUser = await userTodos.find({ username: user }).toArray();
+  let foundUser = await userTodos.find({ username: user }).toArray();
+  if (foundUser.length === 0) {
+    await newUserGen(user);
+    foundUser = await userTodos.find({ username: user }).toArray();
   }
   // all items in object from user
-  const columns = currUser[0];
+  const columns = foundUser[0];
   const columnOrder = columns.columnOrder;
   const todoIndex = columns.todoIndex;
   // storing all object items in array

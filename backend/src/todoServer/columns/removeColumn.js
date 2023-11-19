@@ -4,14 +4,14 @@ import findColumn from "./findColumn.js";
 export async function removeColumn(user, columnName) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const isFound = await userTodos.findOne({
+  const foundUser = await userTodos.findOne({
     username: user,
   });
-  if (!isFound) {
+  if (!foundUser) {
     return { error: "User not found" };
   }
 
-  const foundCol = findColumn(isFound, columnName);
+  const foundCol = findColumn(foundUser, columnName);
   if (!foundCol) {
     return { error: "Column not found" };
   }
@@ -19,7 +19,7 @@ export async function removeColumn(user, columnName) {
     { username: user },
     { $unset: { [columnName]: 1 } }
   );
-  const colOrder = isFound.columnOrder;
+  const colOrder = foundUser.columnOrder;
   const filteredColumns = colOrder.filter((column) => column !== columnName);
   if (filteredColumns.length === colOrder.length) {
     return { error: "Column unsuccessfully removed" };

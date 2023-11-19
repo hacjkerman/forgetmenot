@@ -4,10 +4,10 @@ import findColumn from "./findColumn.js";
 export async function storeColumn(user, column) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const isFound = await userTodos.findOne({
+  const foundUser = await userTodos.findOne({
     username: user,
   });
-  if (!isFound) {
+  if (!foundUser) {
     await userTodos.insertOne({ username: user, columnOrder: [column] });
     await userTodos.updateOne(
       { username: user },
@@ -16,15 +16,14 @@ export async function storeColumn(user, column) {
     return { status: "New user" };
   }
 
-  const foundCol = findColumn(isFound, column);
+  const foundCol = findColumn(foundUser, column);
   if (foundCol) {
     return { error: "Column already exists" };
   }
 
-  await userTodos.updateOne({ username: user }, { $set: { [column]: [] } });
   await userTodos.updateOne(
     { username: user },
-    { $push: { columnOrder: column } }
+    { $set: { [column]: [] }, $push: { columnOrder: column } }
   );
 
   return { status: "Storage successful" };

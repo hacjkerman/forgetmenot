@@ -20,8 +20,8 @@ import { updateTodoDone } from "./todos/updateTodoDone.js";
 const app = express();
 app.use(cors());
 app.use(express.json());
-// Column Request Operations
 
+// Column Request Operations
 app.put("/column/Order", async (req, res) => {
   const { username, srcIndex, destIndex, token } = req.body;
   if (
@@ -42,6 +42,7 @@ app.put("/column/Order", async (req, res) => {
   const updateResult = await updateColOrder(username, srcIndex, destIndex);
   return res.json(updateResult);
 });
+
 app.put("/column", async (req, res) => {
   const { username, oldColumn, newColumn, token } = req.body;
   if (

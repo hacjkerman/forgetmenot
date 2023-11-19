@@ -4,16 +4,16 @@ import bcrypt from "bcrypt";
 export async function validateUser(user, password) {
   const db = await dbConnect();
   const users = db.collection("users");
-  const userResult = await users.findOne({
+  const userFound = await users.findOne({
     username: user,
   });
-  if (!userResult) {
+  if (!userFound) {
     // USER DOES NOT EXIST
     return false;
   }
-  const result = await bcrypt.compare(password, userResult.password);
+  const result = await bcrypt.compare(password, userFound.password);
   if (result) {
-    return userResult.username;
+    return userFound.username;
   }
   // INVALID PASSWORD
   return false;

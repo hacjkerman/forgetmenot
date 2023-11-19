@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import findColumn from "../columns/findColumn.js";
 
 export async function storeTodo(username, column, todo, dueDate) {

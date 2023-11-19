@@ -10,24 +10,24 @@ export async function updateTodoColumn(
 ) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const isFound = await userTodos.findOne({
+  const foundUser = await userTodos.findOne({
     username: user,
   });
-  if (!isFound) {
+  if (!foundUser) {
     return { error: "User does not exist" };
   }
 
-  const oldColFound = findColumn(isFound, oldColumn);
+  const oldColFound = findColumn(foundUser, oldColumn);
   if (!oldColFound) {
     return { error: "Old Column does not exist" };
   }
-  const newColFound = findColumn(isFound, newColumn);
+  const newColFound = findColumn(foundUser, newColumn);
   if (!newColFound) {
     return { error: "Old Column does not exist" };
   }
 
   if (oldColFound === newColFound) {
-    const currCol = isFound[oldColFound];
+    const currCol = foundUser[oldColFound];
     const temp = currCol[srcIndex];
     currCol.splice(srcIndex, 1);
     currCol.splice(destIndex, 0, temp);
@@ -37,10 +37,10 @@ export async function updateTodoColumn(
     );
     return;
   }
-  const oldTodos = isFound[oldColumn];
+  const oldTodos = foundUser[oldColumn];
   const temp = oldTodos[srcIndex];
   oldTodos.splice(srcIndex, 1);
-  const newTodos = isFound[newColumn];
+  const newTodos = foundUser[newColumn];
   newTodos.splice(destIndex, 0, temp);
   await userTodos.updateOne(
     { username: user },

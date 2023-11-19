@@ -4,15 +4,15 @@ import findColumn from "../columns/findColumn.js";
 export async function getAllTodos(user, column) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const isFound = await userTodos.findOne({ username: user });
-  if (!isFound) {
+  const foundUser = await userTodos.findOne({ username: user });
+  if (!foundUser) {
     return { error: "User does not exist" };
   }
-  const foundCol = findColumn(isFound, column);
+  const foundCol = findColumn(foundUser, column);
   if (!foundCol) {
     return { error: "Column does not exist" };
   }
 
-  const colItems = isFound[foundCol];
+  const colItems = foundUser[foundCol];
   return colItems;
 }

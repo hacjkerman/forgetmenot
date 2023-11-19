@@ -1,4 +1,4 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 
 export async function storeRefreshToken(userId, token) {
   const db = await dbConnect();
@@ -8,6 +8,5 @@ export async function storeRefreshToken(userId, token) {
     { _id: userId },
     { $set: { refreshToken: token } }
   );
-  await dbClose();
   return;
 }

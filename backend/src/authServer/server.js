@@ -68,7 +68,7 @@ app.post("/login", async (req, res) => {
   // Check if user is already logged in
   const userExists = await findUserInTokens(username);
   if (userExists) {
-    res.json({ error: "User is already logged in" });
+    res.json({ accessToken: userExists });
     return;
   }
   const accessToken = await generateAccessToken(username, isFound.email);

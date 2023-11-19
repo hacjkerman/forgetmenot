@@ -5,9 +5,9 @@ export async function removeTodo(user, column, todos, todoId) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
 
-  const isFound = await userTodos.findOne({ username: user });
+  const foundUser = await userTodos.findOne({ username: user });
 
-  if (!isFound) {
+  if (!foundUser) {
     // USER DOES NOT EXIST
     return { error: "User does not exist" };
   }

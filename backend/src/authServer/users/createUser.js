@@ -1,15 +1,15 @@
-import { dbClose, dbConnect } from "../../database/db.js";
+import { dbConnect } from "../../database/db.js";
 import bcrypt from "bcrypt";
 
 export async function createUser(user) {
   const db = await dbConnect();
   const users = db.collection("users");
   // ISSUE - WILL INSERT DUPLICATE USERS. FIX FOR LATER
-  const foundCursor = users.find({
+  const userFound = users.find({
     $or: [{ username: user.username }, { email: user.email }],
   });
   const newUser = user;
-  const foundArray = await foundCursor.toArray();
+  const foundArray = await userFound.toArray();
   const saltRounds = 10;
 
   if (foundArray.length === 0) {
