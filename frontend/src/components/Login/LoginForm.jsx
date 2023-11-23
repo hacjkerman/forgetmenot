@@ -4,12 +4,13 @@ import LoginCSS from "./Login.module.css";
 import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
 import { login } from "../../api/Loginapi.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm(props) {
   const setUser = props.setUser;
   const setIsLoggedIn = props.setIsLoggedIn;
-  const setPage = props.setPage;
   const cookies = props.cookies;
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const {
     register,
@@ -35,6 +36,7 @@ export default function LoginForm(props) {
     cookies.set("jwt_auth", response, { expires: now });
     setUser(data.username);
     setIsLoggedIn(true);
+    navigate("/board");
   };
 
   const loginUser = async (user, password) => {
@@ -48,7 +50,7 @@ export default function LoginForm(props) {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    setPage("Sign Up");
+    navigate("/register");
     return;
   };
 

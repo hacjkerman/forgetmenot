@@ -2,6 +2,7 @@ import React from "react";
 import MenuCSS from "./Menu.module.css";
 import exitIcon from "./Assets/exit_icon.png";
 import { logout } from "../../api/Loginapi";
+import { useNavigate } from "react-router-dom";
 
 function Menu(props) {
   const cookies = props.cookies;
@@ -11,6 +12,7 @@ function Menu(props) {
   const setIsLoggedIn = props.setIsLoggedIn;
   const user = props.user;
   const setUser = props.setUser;
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setMenu(!menu);
   };
@@ -28,6 +30,7 @@ function Menu(props) {
     if (cookies.get("jwt_auth") !== undefined) {
       cookies.remove("jwt_auth");
     }
+    navigate("/login");
   };
 
   return (

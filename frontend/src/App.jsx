@@ -5,7 +5,9 @@ import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header/Header";
 import Menu from "./components/Menu/Menu";
 import Board from "./components/Board/Board";
-import LoginContainer from "./components/Login/LoginContainer";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginForm from "./components/Login/LoginForm";
+import RegisterForm from "./components/Login/RegisterForm";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,49 +23,53 @@ function App() {
       setIsLoggedIn(true);
       return;
     }
+
     setUser("");
     setIsLoggedIn(false);
   }, [token]);
-  let render;
-  if (user === null) {
-    render = <div>Loading...</div>;
-  }
-  if (isLoggedIn && user !== null) {
-    render = (
-      <div className={AppCSS.container}>
-        {" "}
-        <Board user={user} token={token} />
-      </div>
-    );
-  } else {
-    render = (
-      <>
-        <LoginContainer
-          setUser={setUser}
-          setIsLoggedIn={setIsLoggedIn}
-          cookies={cookies}
-        />
-      </>
-    );
-  }
+
   return (
     <div className={AppCSS.main}>
       <Header setMenu={setMenu} menu={menu} />
-      {menu ? (
-        <Menu
-          cookies={cookies}
-          setMenu={setMenu}
-          menu={menu}
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
-          user={user}
-          setUser={setUser}
-        />
-      ) : (
-        ""
-      )}
 
-      {render}
+      <BrowserRouter>
+        <Routes>
+          <Route exact path="/" element={<Navigate to="/login" />}></Route>
+          <Route
+            path="/login"
+            element={
+              <LoginForm
+                setUser={setUser}
+                setIsLoggedIn={setIsLoggedIn}
+                cookies={cookies}
+              />
+            }
+          />
+          <Route path="/register" element={<RegisterForm />} />
+          <Route
+            path="/board"
+            element={
+              <div className={AppCSS.container}>
+                <Board user={user} token={token} />
+              </div>
+            }
+          />
+          <Route path="*" element={<div>Loading...</div>} />
+        </Routes>
+        {menu ? (
+          <Menu
+            cookies={cookies}
+            setMenu={setMenu}
+            menu={menu}
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+            user={user}
+            setUser={setUser}
+          />
+        ) : (
+          ""
+        )}
+      </BrowserRouter>
     </div>
   );
 }

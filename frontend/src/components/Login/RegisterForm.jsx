@@ -5,9 +5,10 @@ import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
 import person_icon from "./Assets/person.png";
 import { signUp } from "../../api/Loginapi.jsx";
+import { useNavigate } from "react-router-dom";
 
-export default function RegisterForm(props) {
-  const setPage = props.setPage;
+export default function RegisterForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,7 +19,6 @@ export default function RegisterForm(props) {
     if (errors) {
       console.log(errors);
     }
-    console.log(data);
     const response = await registerUser(
       data.username,
       data.email,
@@ -30,12 +30,12 @@ export default function RegisterForm(props) {
       console.log(response.error);
       return;
     }
-    setPage("Login");
+    navigate("/login");
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    setPage("Login");
+    navigate("/login");
     return;
   };
 
