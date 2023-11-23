@@ -6,6 +6,9 @@ import password_icon from "./Assets/password.png";
 import person_icon from "./Assets/person.png";
 import { signUp } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
+const notify = (message) => toast(message);
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -16,8 +19,8 @@ export default function RegisterForm() {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    if (errors) {
-      console.log(errors);
+    if (Object.keys(errors).length !== 0) {
+      notify(errors);
     }
     const response = await registerUser(
       data.username,
@@ -27,7 +30,7 @@ export default function RegisterForm() {
     if (response.error) {
       // POP UP FOR LOGGING IN ERRORS
       // MAYBE ADD LOADING SCREEN
-      console.log(response.error);
+      notify(response.error);
       return;
     }
     navigate("/login");
@@ -44,11 +47,12 @@ export default function RegisterForm() {
       const response = await signUp(user, email, password);
       return response;
     } catch (err) {
-      console.log(err);
+      notify(err);
     }
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={RegisterCSS.container}>
+      <Toaster />
       <div className={RegisterCSS.header}>
         <div className={RegisterCSS.text}>Register</div>
         <div className={RegisterCSS.underline}></div>

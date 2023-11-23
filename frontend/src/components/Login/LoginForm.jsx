@@ -5,6 +5,9 @@ import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
 import { login } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
+const notify = (message) => toast(message);
 
 export default function LoginForm(props) {
   const setUser = props.setUser;
@@ -19,6 +22,7 @@ export default function LoginForm(props) {
   } = useForm();
   const onSubmit = async (data) => {
     if (Object.keys(errors).length !== 0) {
+      notify(errors);
       console.log(errors);
       return;
     }
@@ -26,7 +30,7 @@ export default function LoginForm(props) {
     if (response.error) {
       // POP UP FOR LOGGING IN ERRORS
       // MAYBE ADD LOADING SCREEN
-      console.log(response.error);
+      notify(response.error);
       return;
     }
     const now = new Date();
@@ -44,7 +48,7 @@ export default function LoginForm(props) {
       const response = await login(user, password);
       return response;
     } catch (err) {
-      console.log(err);
+      notify(err);
     }
   };
 
@@ -62,6 +66,7 @@ export default function LoginForm(props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={LoginCSS.container}>
+      <Toaster />
       <div className={LoginCSS.header}>
         <div className={LoginCSS.text}>Login</div>
         <div className={LoginCSS.underline}></div>
