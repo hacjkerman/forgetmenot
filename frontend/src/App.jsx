@@ -8,6 +8,7 @@ import Board from "./components/Board/Board";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./components/Login/LoginForm";
 import RegisterForm from "./components/Login/RegisterForm";
+import Profile from "./components/Profile/Profile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,7 +27,7 @@ function App() {
 
     setUser("");
     setIsLoggedIn(false);
-  }, [token]);
+  }, [isLoggedIn]);
 
   return (
     <div className={AppCSS.main}>
@@ -34,24 +35,38 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Navigate to="/login" />}></Route>
+          <Route exact path="/" element={<Navigate to="/board" />}></Route>
+
+          <Route
+            exact
+            path="/profile"
+            element={<Profile user={user} />}
+          ></Route>
           <Route
             path="/login"
             element={
-              <LoginForm
-                setUser={setUser}
-                setIsLoggedIn={setIsLoggedIn}
-                cookies={cookies}
-              />
+              token ? (
+                <Navigate to="/board" />
+              ) : (
+                <LoginForm
+                  setUser={setUser}
+                  setIsLoggedIn={setIsLoggedIn}
+                  cookies={cookies}
+                />
+              )
             }
           />
           <Route path="/register" element={<RegisterForm />} />
           <Route
             path="/board"
             element={
-              <div className={AppCSS.container}>
-                <Board user={user} token={token} />
-              </div>
+              token ? (
+                <div className={AppCSS.container}>
+                  <Board user={user} token={token} />
+                </div>
+              ) : (
+                <Navigate to="/login" />
+              )
             }
           />
           <Route path="*" element={<div>Loading...</div>} />
