@@ -14,6 +14,7 @@ import { findEmailInUsers } from "./users/findEmailInUsers.js";
 import { findUserInUsers } from "./users/findUserInUsers.js";
 import { updateEmail } from "./users/updateEmail.js";
 import { updatePhone } from "./users/updatePhone.js";
+import { getEmail } from "./users/getEmail.js";
 
 const app = express();
 app.use(cors());
@@ -29,7 +30,16 @@ function inputValidator(fn, inputs) {
     return fn(req, res);
   };
 }
-
+function getInputsValidator(fn, inputs) {
+  return function (req, res) {
+    for (let i = 0; i < inputs.length; i++) {
+      if (req.query[inputs[i]] === undefined) {
+        return res.json({ error: "Missing required fields" });
+      }
+    }
+    return fn(req, res);
+  };
+}
 app.delete(
   "/logout",
   inputValidator(
@@ -59,7 +69,7 @@ app.get(
     async (req, res) => {
       const { username, token } = req.body;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
         res.json({ error: "Invalid user or token" });
         return;
       }
@@ -157,6 +167,24 @@ app.delete(
       res.json(returnVal);
     },
     ["username", "password", "token"]
+  )
+);
+
+app.get(
+  "/email",
+  getInputsValidator(
+    async (req, res) => {
+      const { username, token } = req.query;
+      console.log(username, token);
+      const isValidUser = await verifyUser(username, token);
+      if (!isValidUser) {
+        res.json({ error: "Invalid user or token" });
+        return;
+      }
+      const returnVal = await getEmail(username);
+      res.json(returnVal);
+    },
+    ["username", "token"]
   )
 );
 

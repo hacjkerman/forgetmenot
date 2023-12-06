@@ -16,9 +16,10 @@ function App() {
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
+  const newToken = token.accessToken;
   useEffect(() => {
-    if (token !== undefined) {
-      const decoded = jwtDecode(token.accessToken);
+    if (newToken !== undefined) {
+      const decoded = jwtDecode(newToken);
       const data = decoded.data;
       setUser(data.user);
       setIsLoggedIn(true);
@@ -40,12 +41,12 @@ function App() {
           <Route
             exact
             path="/profile"
-            element={<Profile user={user} />}
+            element={<Profile user={user} token={newToken} />}
           ></Route>
           <Route
             path="/login"
             element={
-              token ? (
+              newToken ? (
                 <Navigate to="/board" />
               ) : (
                 <LoginForm
@@ -60,9 +61,9 @@ function App() {
           <Route
             path="/board"
             element={
-              token ? (
+              newToken ? (
                 <div className={AppCSS.container}>
-                  <Board user={user} token={token} />
+                  <Board user={user} token={newToken} />
                 </div>
               ) : (
                 <Navigate to="/login" />

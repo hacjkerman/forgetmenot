@@ -33,6 +33,14 @@ function Menu(props) {
     navigate("/login");
   };
 
+  const handleBoard = () => {
+    navigate("/board");
+  };
+
+  const handleProfile = () => {
+    navigate("/profile");
+  };
+
   return (
     <div className={MenuCSS.main}>
       <div className={MenuCSS.links}>
@@ -40,7 +48,10 @@ function Menu(props) {
 
         {isLoggedIn ? (
           <>
-            <button>
+            <button onClick={handleBoard}>
+              <h2>Board</h2>
+            </button>
+            <button onClick={handleProfile}>
               <h2>Profile</h2>
             </button>
             <button onClick={handleLogout}>

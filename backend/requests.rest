@@ -24,7 +24,8 @@ DELETE http://localhost:4000/logout
 Content-Type: application/json 
 
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTc0NDk1ODAsImRhdGEiOnsidXNlciI6ImRpZXMzNCIsImVtYWlsIjoiYW5kcmV3d2FuZzEzM0BnbWFpbC5jb20ifSwiaWF0IjoxNjk3NDQ1OTgwfQ.drJrSOqADnnxrs1R3N302fitmsU2HUnZRd8qthUdbzU"}
+  
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDEzNDI2MzIsImRhdGEiOnsidXNlciI6ImhlbHZldGUiLCJlbWFpbCI6ImFuZHJld3dhbmcxMjNAZ21haWwuY29tIn0sImlhdCI6MTcwMTMzOTAzMn0._mNlJo7pRlhMe3Vay21xDHEzut38b-vs2G1J_ijrkbA"}
 
 
 

@@ -1,0 +1,31 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+}
+
+.basic {
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.profileContainer {
+  border: 1px solid;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  flex: 1 1 0;
+}
+
+.profileContainer div {
+  margin: 4px;
+}
+
+.profile {
+  border-radius: 2%;
+  height: 100px;
+}

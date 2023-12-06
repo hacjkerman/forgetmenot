@@ -19,6 +19,7 @@ import {
   updateTodoDate,
   updateTodo,
 } from "../../api/Todosapi.jsx";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +42,9 @@ const Button = styled.button`
 export default function Board(props) {
   const user = props.user;
   const token = props.token;
+  const navigate = useNavigate();
   const [isTriggered, setIsTriggered] = useState(false);
+
   const headers = { username: user, token: token };
   const { data: columns, mutate } = useSWR([headers], getColumns);
 
