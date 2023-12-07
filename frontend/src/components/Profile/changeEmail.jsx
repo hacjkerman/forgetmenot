@@ -18,25 +18,14 @@ function ChangeEmail(props) {
     e.preventDefault();
     props.setTrigger(!props.trigger);
   };
-  const handleDuplicate = (e) => {
-    // ADD POPUP
-    e.preventDefault();
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const column = e.target[0].value;
-    const columnOrder = props.columnOrder;
-    if (columnOrder.find((columnName) => columnName === column)) {
-      handleDuplicate(e);
-      handleClose(e);
-      return { error: "Duplicate Column" };
-    } else {
-      const addColumn = props.addColumn;
-      const user = props.user;
-      await updateEmail(user, column);
-      handleClose(e);
-    }
+    const newEmail = e.target.value;
+    console.log(newEmail);
+    const user = props.user;
+    await updateEmail(user, email);
+    handleClose(e);
   };
   return props.trigger ? (
     <div className={changeEmailCSS.popup}>
@@ -55,7 +44,11 @@ function ChangeEmail(props) {
             </label>
             <label className={changeEmailCSS.colInput}>
               <h3>New Email</h3>
-              <input type="text" placeholder="Habits" required></input>
+              <input
+                type="text"
+                placeholder="example@gmail.com"
+                required
+              ></input>
             </label>
           </div>
           <div className={changeEmailCSS.lowerFormButtons}>
@@ -70,7 +63,7 @@ function ChangeEmail(props) {
               type="submit"
               className={`${changeEmailCSS.createButton} ${changeEmailCSS.button}`}
             >
-              Create
+              Update
             </button>
           </div>
         </form>

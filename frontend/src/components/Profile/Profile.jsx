@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import profile from "./Assets/profile.png";
 import ProfileCSS from "./Profile.module.css";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import ChangeEmail from "./changeEmail";
@@ -14,11 +13,6 @@ function Profile(props) {
   const user = props.user;
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
-  useEffect(() => {
-    if (user === null) {
-      navigate("/login");
-    }
-  }, [user]);
 
   const handleEmailChange = (e) => {
     e.preventDefault();
@@ -60,9 +54,18 @@ function Profile(props) {
           )}
         </div>
         <div>
-          <button type="submit" onClick={handleNumberChange}>
-            Change/Add Number
-          </button>
+          {isUpdatingPhone ? (
+            <ChangePhone
+              user={props.user}
+              token={props.token}
+              trigger={isUpdatingPhone}
+              setTrigger={setIsUpdatingPhone}
+            />
+          ) : (
+            <button type="submit" onClick={handleNumberChange}>
+              Change/Add Number
+            </button>
+          )}
         </div>
       </div>
     </div>

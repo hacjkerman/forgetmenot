@@ -16,16 +16,18 @@ function App() {
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
-  const newToken = token.accessToken;
+  let newToken;
+  if (token != undefined) {
+    newToken = token.accessToken;
+  }
   useEffect(() => {
-    if (newToken !== undefined) {
+    if (token != undefined) {
       const decoded = jwtDecode(newToken);
       const data = decoded.data;
       setUser(data.user);
       setIsLoggedIn(true);
       return;
     }
-
     setUser("");
     setIsLoggedIn(false);
   }, [isLoggedIn]);
@@ -36,7 +38,7 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Navigate to="/board" />}></Route>
+          <Route exact path="/" element={<Navigate to="/login" />}></Route>
 
           <Route
             exact
@@ -46,7 +48,7 @@ function App() {
           <Route
             path="/login"
             element={
-              newToken ? (
+              token ? (
                 <Navigate to="/board" />
               ) : (
                 <LoginForm

@@ -17,6 +17,14 @@ Content-Type: application/json
   "username": "helvete",
   "password": "Andrew1"
 }
+###
+GET http://localhost:4000/email
+Content-Type: application/json
+
+{
+  "username": "helvete",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDE4NjIzNzksImRhdGEiOnsidXNlciI6ImhlbHZldGUiLCJlbWFpbCI6ImFuZHJld3dhbmcxMjNAZ21haWwuY29tIn0sImlhdCI6MTcwMTg1ODc3OX0.LZvf2o9hi4XhFu6JpVUWyWxDmadhkb9UOMeXAyj2Hwk"
+}
 
 ###
 

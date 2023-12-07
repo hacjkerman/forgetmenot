@@ -61,6 +61,19 @@ export const updateEmail = async (username, email, token) => {
   return response.data;
 };
 
+export const getPhone = async (username, token) => {
+  const response = await todosApi.get("/phone", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    params: {
+      username,
+      token,
+    },
+  });
+  return response.data;
+};
+
 export const updatePhone = async (username, phone, token) => {
   const response = await todosApi.update("/updatePhone", {
     headers: {

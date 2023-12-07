@@ -1,36 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import changePhoneCSS from "./changePhone.module.css";
+import { updatePhone, getPhone } from "../../api/Loginapi";
 
-function changePhone(props) {
+function ChangePhone(props) {
+  const user = props.user;
+  const token = props.token;
+  const [phone, setPhone] = useState("");
+  useEffect(() => {
+    async function getReq() {
+      const request = await getPhone(user, token);
+      console.log(request);
+      setPhone(request.phone);
+    }
+    getReq();
+  }, []);
   const handleClose = (e) => {
     e.preventDefault();
     props.setTrigger(!props.trigger);
   };
-  const handleDuplicate = (e) => {
-    // ADD POPUP
-    e.preventDefault();
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const column = e.target[0].value;
-    const columnOrder = props.columnOrder;
-    if (columnOrder.find((columnName) => columnName === column)) {
-      handleDuplicate(e);
-      handleClose(e);
-      return { error: "Duplicate Column" };
-    } else {
-      const addColumn = props.addColumn;
-      const user = props.user;
-      await addColumn(user, column);
-      handleClose(e);
-    }
+    const newNumber = e.target.value;
+    console.log(newNumber);
+    const user = props.user;
+    await updatePhone(user, newNumber);
+    handleClose(e);
   };
   return props.trigger ? (
     <div className={changePhoneCSS.popup}>
       <div className={changePhoneCSS.popupInner}>
         <div className={changePhoneCSS.popupHeader}>
-          <h3 className={changePhoneCSS.headerText}>New Column</h3>
+          <h3 className={changePhoneCSS.headerText}>Change Number</h3>
           <button className={changePhoneCSS.closeBtn} onClick={handleClose}>
             x
           </button>
@@ -38,8 +39,12 @@ function changePhone(props) {
         <form className={changePhoneCSS.columnForm} onSubmit={handleSubmit}>
           <div className={changePhoneCSS.upperForm}>
             <label className={changePhoneCSS.colInput}>
-              <h3>Column Name</h3>
-              <input type="text" placeholder="Habits" required></input>
+              <h3>Current Number</h3>
+              <p>{phone}</p>
+            </label>
+            <label className={changePhoneCSS.colInput}>
+              <h3>New Number</h3>
+              <input type="number" placeholder="04040404040" required></input>
             </label>
           </div>
           <div className={changePhoneCSS.lowerFormButtons}>
@@ -54,7 +59,7 @@ function changePhone(props) {
               type="submit"
               className={`${changePhoneCSS.createButton} ${changePhoneCSS.button}`}
             >
-              Create
+              Update
             </button>
           </div>
         </form>
@@ -67,4 +72,4 @@ function changePhone(props) {
   );
 }
 
-export default changePhone;
+export default ChangePhone;

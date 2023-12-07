@@ -15,6 +15,7 @@ import { findUserInUsers } from "./users/findUserInUsers.js";
 import { updateEmail } from "./users/updateEmail.js";
 import { updatePhone } from "./users/updatePhone.js";
 import { getEmail } from "./users/getEmail.js";
+import { getPhone } from "./users/getPhone.js";
 
 const app = express();
 app.use(cors());
@@ -175,7 +176,6 @@ app.get(
   getInputsValidator(
     async (req, res) => {
       const { username, token } = req.query;
-      console.log(username, token);
       const isValidUser = await verifyUser(username, token);
       if (!isValidUser) {
         res.json({ error: "Invalid user or token" });
@@ -202,6 +202,23 @@ app.put(
       res.json(returnVal);
     },
     ["username", "email", "token"]
+  )
+);
+
+app.get(
+  "/phone",
+  getInputsValidator(
+    async (req, res) => {
+      const { username, token } = req.query;
+      const isValidUser = await verifyUser(username, token);
+      if (!isValidUser) {
+        res.json({ error: "Invalid user or token" });
+        return;
+      }
+      const returnVal = await getPhone(username);
+      res.json(returnVal);
+    },
+    ["username", "token"]
   )
 );
 
