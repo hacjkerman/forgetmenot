@@ -21,10 +21,9 @@ function ChangePhone(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newNumber = e.target.value;
-    console.log(newNumber);
+    const newNumber = e.target[0].value;
     const user = props.user;
-    await updatePhone(user, newNumber);
+    await updatePhone(user, newNumber, token);
     handleClose(e);
   };
   return props.trigger ? (

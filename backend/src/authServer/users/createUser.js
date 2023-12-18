@@ -8,6 +8,7 @@ export async function createUser(user) {
   const userFound = users.find({
     $or: [{ username: user.username }, { email: user.email }],
   });
+  user.number = null;
   const newUser = user;
   const foundArray = await userFound.toArray();
   const saltRounds = 10;

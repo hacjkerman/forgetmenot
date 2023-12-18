@@ -5,14 +5,19 @@ import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import ChangeEmail from "./changeEmail";
 import ChangePhone from "./changePhone";
+import useSWR from "swr";
+import { getProfile } from "../../api/Loginapi";
 
 const notify = (message) => toast(message);
 
 function Profile(props) {
   const navigate = useNavigate();
   const user = props.user;
+  const token = props.token;
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
+  const headers = { username: user, token: token };
+  const { data: columns, mutate } = useSWR([headers], getProfile);
 
   const handleEmailChange = (e) => {
     e.preventDefault();

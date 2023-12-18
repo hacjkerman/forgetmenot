@@ -16,6 +16,7 @@ import { updateEmail } from "./users/updateEmail.js";
 import { updatePhone } from "./users/updatePhone.js";
 import { getEmail } from "./users/getEmail.js";
 import { getPhone } from "./users/getPhone.js";
+import { getProfile } from "./users/getProfile.js";
 
 const app = express();
 app.use(cors());
@@ -28,6 +29,7 @@ function inputValidator(fn, inputs) {
         return res.json({ error: "Missing required fields" });
       }
     }
+
     return fn(req, res);
   };
 }
@@ -85,6 +87,7 @@ app.post(
   inputValidator(
     async (req, res) => {
       const { username, password } = req.body;
+      console.log(req.body);
       // Check if user exists
       const isFound = await findUserInUsers(username);
       if (!isFound) {
@@ -168,6 +171,23 @@ app.delete(
       res.json(returnVal);
     },
     ["username", "password", "token"]
+  )
+);
+
+app.get(
+  "/userProfile",
+  getInputsValidator(
+    async (req, res) => {
+      const { username, token } = req.query;
+      const isValidUser = await verifyUser(username, token);
+      if (!isValidUser) {
+        res.json({ error: "Invalid user or token" });
+        return;
+      }
+      const returnVal = await getProfile(username);
+      res.json(returnVal);
+    },
+    ["username", "token"]
   )
 );
 

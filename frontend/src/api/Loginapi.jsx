@@ -23,22 +23,14 @@ export const signUp = async (username, email, password) => {
 
 export const logout = async (username, token) => {
   const response = await todosApi.delete("/logout", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      username,
-      token,
-    },
+    username,
+    token,
   });
   return response.data;
 };
 
 export const getEmail = async (username, token) => {
   const response = await todosApi.get("/email", {
-    headers: {
-      "Content-Type": "application/json",
-    },
     params: {
       username,
       token,
@@ -48,14 +40,20 @@ export const getEmail = async (username, token) => {
 };
 
 export const updateEmail = async (username, email, token) => {
-  const response = await todosApi.update("/updateEmail", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      username,
-      email,
-      token,
+  const response = await todosApi.put("/updateEmail", {
+    username,
+    email,
+    token,
+  });
+  return response.data;
+};
+
+export const getProfile = async (params) => {
+  const [headers] = params;
+  const response = await todosApi.get("/userProfile", {
+    params: {
+      username: headers.username,
+      token: headers.token,
     },
   });
   return response.data;
@@ -63,9 +61,6 @@ export const updateEmail = async (username, email, token) => {
 
 export const getPhone = async (username, token) => {
   const response = await todosApi.get("/phone", {
-    headers: {
-      "Content-Type": "application/json",
-    },
     params: {
       username,
       token,
@@ -75,29 +70,20 @@ export const getPhone = async (username, token) => {
 };
 
 export const updatePhone = async (username, phone, token) => {
-  const response = await todosApi.update("/updatePhone", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      username,
-      phone,
-      token,
-    },
+  console.log(username, phone, token);
+  const response = await todosApi.put("/updatePhone", {
+    username,
+    phone,
+    token,
   });
   return response.data;
 };
 
 export const removeUser = async (username, password, token) => {
   const response = await todosApi.delete("/removeUser", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      username,
-      password,
-      token,
-    },
+    username,
+    password,
+    token,
   });
   return response.data;
 };

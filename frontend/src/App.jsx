@@ -43,7 +43,13 @@ function App() {
           <Route
             exact
             path="/profile"
-            element={<Profile user={user} token={newToken} />}
+            element={
+              newToken ? (
+                <Profile user={user} token={newToken} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           ></Route>
           <Route
             path="/login"

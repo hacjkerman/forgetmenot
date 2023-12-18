@@ -18,8 +18,9 @@ function NewTask(props) {
       return;
     }
     const due = e.target[1].value;
-
-    await addTodo(user, column, todo, due);
+    for (let i = 0; i < 100; i++) {
+      await addTodo(user, column, todo, due);
+    }
     handleClose(e);
     return;
   };
