@@ -19,6 +19,7 @@ function Menu(props) {
 
   const handleLogout = async () => {
     const token = cookies.get("jwt_auth");
+    console.log(token.accessToken)
     const logoutRes = await logout(user, token.accessToken);
     if (logoutRes.error) {
       console.log(logoutRes.error);

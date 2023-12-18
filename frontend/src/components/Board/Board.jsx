@@ -35,6 +35,7 @@ const Button = styled.button`
   width: 38px;
   height: 38px;
   cursor: pointer;
+  display: flex;
   font-size: 200%;
   margin-top: 0.5rem;
 `;
@@ -45,7 +46,7 @@ export default function Board(props) {
   const navigate = useNavigate();
   const [isTriggered, setIsTriggered] = useState(false);
 
-  const headers = { username: user, token: token };
+  const headers = { username: user, token: token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
 
   const addColumn = async (user, column) => {
@@ -238,6 +239,30 @@ export default function Board(props) {
     e.preventDefault();
     setIsTriggered(!isTriggered);
   };
+  // let render;
+  // if (token && columns) {
+  //   render = columns.columnOrder.map((column, index) => {
+  //     return (
+  //       <Column
+  //         className=""
+  //         key={column}
+  //         column={column}
+  //         index={index}
+  //         user={user}
+  //         todos={columns[column]}
+  //         deleteColumn={deleteColumn}
+  //         changeColumn={changeColumn}
+  //         addTodo={addTodo}
+  //         deleteTodo={deleteTodo}
+  //         changeTodoDone={changeTodoDone}
+  //         changeTodo={changeTodo}
+  //         changeTodoDate={changeTodoDate}
+  //       />
+  //     );
+  //   });
+  // } else {
+  //   render = <>Loading...</>;
+  // }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">

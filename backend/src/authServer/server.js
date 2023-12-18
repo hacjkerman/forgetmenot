@@ -24,6 +24,7 @@ app.use(express.json());
 
 function inputValidator(fn, inputs) {
   return function (req, res) {
+    console.log(req.body);
     for (let i = 0; i < inputs.length; i++) {
       if (req.body[inputs[i]] === undefined) {
         return res.json({ error: "Missing required fields" });
@@ -87,7 +88,6 @@ app.post(
   inputValidator(
     async (req, res) => {
       const { username, password } = req.body;
-      console.log(req.body);
       // Check if user exists
       const isFound = await findUserInUsers(username);
       if (!isFound) {

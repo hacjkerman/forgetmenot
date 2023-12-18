@@ -9,5 +9,5 @@ export async function findUserInUsers(user) {
   if (!userFound) {
     return false;
   }
-  return userFound;
+  return userFound._id;
 }

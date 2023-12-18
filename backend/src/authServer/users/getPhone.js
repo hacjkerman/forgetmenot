@@ -9,5 +9,5 @@ export async function getPhone(user) {
   if (!userFound) {
     return false;
   }
-  return { phone: userFound.phone };
+  return { phone: userFound.number };
 }

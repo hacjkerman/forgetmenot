@@ -23,8 +23,13 @@ export const signUp = async (username, email, password) => {
 
 export const logout = async (username, token) => {
   const response = await todosApi.delete("/logout", {
-    username,
-    token,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      username,
+      token,
+    },
   });
   return response.data;
 };
@@ -81,9 +86,10 @@ export const updatePhone = async (username, phone, token) => {
 
 export const removeUser = async (username, password, token) => {
   const response = await todosApi.delete("/removeUser", {
-    username,
-    password,
-    token,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: { username, password, token },
   });
   return response.data;
 };

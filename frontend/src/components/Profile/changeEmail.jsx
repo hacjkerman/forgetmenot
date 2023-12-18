@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import changeEmailCSS from "./changeEmail.module.css";
-import { updateEmail, getEmail } from "../../api/Loginapi";
+import { updateEmail } from "../../api/Loginapi";
 
 function ChangeEmail(props) {
   const user = props.user;
   const token = props.token;
-  const [email, setEmail] = useState("");
-  useEffect(() => {
-    async function getReq() {
-      const request = await getEmail(user, token);
-      console.log(request);
-      setEmail(request.email);
-    }
-    getReq();
-  }, []);
+  const email = props.email;
   const handleClose = (e) => {
     e.preventDefault();
     props.setTrigger(!props.trigger);
