@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import profile from "./Assets/profile.png";
 import ProfileCSS from "./Profile.module.css";
 import toast, { Toaster } from "react-hot-toast";
+import ChangeUser from "./changeUser";
 import ChangeEmail from "./changeEmail";
 import ChangePhone from "./changePhone";
 import useSWR from "swr";
@@ -14,8 +15,14 @@ function Profile(props) {
   const token = props.token;
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const headers = { username: user, token: token, type: "profile" };
   const { data: profile, mutate } = useSWR([headers], getProfile);
+  console.log(profile);
+  const handleUserChange = (e) => {
+    e.preventDefault();
+    setIsUpdatingUser(true);
+  };
   const handleEmailChange = (e) => {
     e.preventDefault();
     setIsUpdatingEmail(true);
@@ -36,35 +43,46 @@ function Profile(props) {
           <div>Add a profile picture to personalise your account</div>
           <img src={profile} alt="" className={ProfileCSS.profile} />
         </div> */}
-
-        <div>
-          <div>Username</div>
-          <div>{user}</div>
-        </div>
-        <div>
-          <div>
+        <div className={ProfileCSS.changeContainers}>
+          <div className={ProfileCSS.changeContainer}>
+            <div>User</div>
+            {profile ? <div>{profile.username}</div> : <></>}
+            {isUpdatingUser ? (
+              <ChangeUser
+                user={props.user}
+                token={props.token}
+                trigger={isUpdatingUser}
+                setTrigger={setIsUpdatingUser}
+              />
+            ) : (
+              <>
+                <button type="submit" onClick={handleUserChange}>
+                  Change User
+                </button>
+              </>
+            )}
+          </div>
+          <div className={ProfileCSS.changeContainer}>
+            <div>Email</div>
+            {profile ? <div>{profile.email}</div> : <></>}
             {isUpdatingEmail ? (
               <ChangeEmail
                 user={props.user}
                 token={props.token}
-                email={profile.email}
                 trigger={isUpdatingEmail}
                 setTrigger={setIsUpdatingEmail}
               />
             ) : (
               <>
-                <div>Email</div>
-                {profile ? <div>{profile.email}</div> : <></>}
-
                 <button type="submit" onClick={handleEmailChange}>
                   Change Email
                 </button>
               </>
             )}
           </div>
-        </div>
-        <div>
-          <div>
+          <div className={ProfileCSS.changeContainer}>
+            <div>Phone Number</div>
+            {profile ? <div>{profile.number}</div> : <></>}
             {isUpdatingPhone ? (
               <ChangePhone
                 user={props.user}
@@ -74,8 +92,6 @@ function Profile(props) {
               />
             ) : (
               <>
-                <div>Phone Number</div>
-                {profile ? <div>{profile.number}</div> : <></>}
                 <button type="submit" onClick={handleNumberChange}>
                   Change/Add Number
                 </button>

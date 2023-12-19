@@ -239,30 +239,6 @@ export default function Board(props) {
     e.preventDefault();
     setIsTriggered(!isTriggered);
   };
-  // let render;
-  // if (token && columns) {
-  //   render = columns.columnOrder.map((column, index) => {
-  //     return (
-  //       <Column
-  //         className=""
-  //         key={column}
-  //         column={column}
-  //         index={index}
-  //         user={user}
-  //         todos={columns[column]}
-  //         deleteColumn={deleteColumn}
-  //         changeColumn={changeColumn}
-  //         addTodo={addTodo}
-  //         deleteTodo={deleteTodo}
-  //         changeTodoDone={changeTodoDone}
-  //         changeTodo={changeTodo}
-  //         changeTodoDate={changeTodoDate}
-  //       />
-  //     );
-  //   });
-  // } else {
-  //   render = <>Loading...</>;
-  // }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">

@@ -3,16 +3,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
+  background-color: rgb(235, 236, 240);
+  width: 25vw;
+  border: 1px solid lightgrey;
+  border-radius: 2px;
 }
 
 .basic {
-  border: 1px solid;
-  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .profileContainer {
-  border: 1px solid;
   border-radius: 4px;
   display: flex;
   justify-content: space-between;
@@ -28,4 +32,21 @@
 .profile {
   border-radius: 2%;
   height: 100px;
+}
+
+.changeContainers {
+  display: flex;
+  justify-content: space-between;
+}
+
+.changeContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgrey;
+  background-color: white;
+  width: 100%;
+  height: 10vh;
+  border-radius: 5px;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }

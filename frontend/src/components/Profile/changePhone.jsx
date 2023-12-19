@@ -9,7 +9,6 @@ function ChangePhone(props) {
   useEffect(() => {
     async function getReq() {
       const request = await getPhone(user, token);
-      console.log(request);
       setPhone(request.phone);
     }
     getReq();

@@ -34,6 +34,14 @@ export const logout = async (username, token) => {
   return response.data;
 };
 
+export const updateUser = async (username, token) => {
+  const response = await todosApi.put("/updateUser", {
+    username,
+    token,
+  });
+  return response.data;
+};
+
 export const getEmail = async (username, token) => {
   const response = await todosApi.get("/email", {
     params: {

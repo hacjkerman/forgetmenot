@@ -20,6 +20,19 @@ function App() {
   if (token != undefined) {
     newToken = token.accessToken;
   }
+  console.log(token);
+  useEffect(() => {
+    if (token === undefined) {
+      setUser("");
+      setIsLoggedIn(false);
+    } else {
+      const decoded = jwtDecode(newToken);
+      const data = decoded.data;
+      setUser(data.user);
+      setIsLoggedIn(true);
+      return;
+    }
+  }, [token]);
   useEffect(() => {
     if (token != undefined) {
       const decoded = jwtDecode(newToken);
