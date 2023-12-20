@@ -5,14 +5,7 @@ import { updatePhone, getPhone } from "../../api/Loginapi";
 function ChangePhone(props) {
   const user = props.user;
   const token = props.token;
-  const [phone, setPhone] = useState("");
-  useEffect(() => {
-    async function getReq() {
-      const request = await getPhone(user, token);
-      setPhone(request.phone);
-    }
-    getReq();
-  }, []);
+  const phone = props.phone;
   const handleClose = (e) => {
     e.preventDefault();
     props.setTrigger(!props.trigger);

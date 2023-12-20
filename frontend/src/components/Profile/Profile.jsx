@@ -15,14 +15,13 @@ function Profile(props) {
   const token = props.token;
   const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [isUpdatingPhone, setIsUpdatingPhone] = useState(false);
-  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+  // const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const headers = { username: user, token: token, type: "profile" };
   const { data: profile, mutate } = useSWR([headers], getProfile);
-  console.log(profile);
-  const handleUserChange = (e) => {
-    e.preventDefault();
-    setIsUpdatingUser(true);
-  };
+  // const handleUserChange = (e) => {
+  //   e.preventDefault();
+  //   setIsUpdatingUser(true);
+  // };
   const handleEmailChange = (e) => {
     e.preventDefault();
     setIsUpdatingEmail(true);
@@ -44,7 +43,7 @@ function Profile(props) {
           <img src={profile} alt="" className={ProfileCSS.profile} />
         </div> */}
         <div className={ProfileCSS.changeContainers}>
-          <div className={ProfileCSS.changeContainer}>
+          {/* <div className={ProfileCSS.changeContainer}>
             <div>User</div>
             {profile ? <div>{profile.username}</div> : <></>}
             {isUpdatingUser ? (
@@ -61,7 +60,7 @@ function Profile(props) {
                 </button>
               </>
             )}
-          </div>
+          </div> */}
           <div className={ProfileCSS.changeContainer}>
             <div>Email</div>
             {profile ? <div>{profile.email}</div> : <></>}
@@ -70,6 +69,7 @@ function Profile(props) {
                 user={props.user}
                 token={props.token}
                 trigger={isUpdatingEmail}
+                email={profile.email}
                 setTrigger={setIsUpdatingEmail}
               />
             ) : (
@@ -87,6 +87,7 @@ function Profile(props) {
               <ChangePhone
                 user={props.user}
                 token={props.token}
+                phone={profile.number}
                 trigger={isUpdatingPhone}
                 setTrigger={setIsUpdatingPhone}
               />

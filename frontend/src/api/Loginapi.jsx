@@ -83,7 +83,6 @@ export const getPhone = async (username, token) => {
 };
 
 export const updatePhone = async (username, phone, token) => {
-  console.log(username, phone, token);
   const response = await todosApi.put("/updatePhone", {
     username,
     phone,

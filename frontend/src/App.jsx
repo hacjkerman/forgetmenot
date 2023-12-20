@@ -17,7 +17,7 @@ function App() {
   const cookies = new Cookies();
   const token = cookies.get("jwt_auth");
   let newToken;
-  if (token != undefined) {
+  if (token !== undefined) {
     newToken = token.accessToken;
   }
   console.log(token);
@@ -25,6 +25,7 @@ function App() {
     if (token === undefined) {
       setUser("");
       setIsLoggedIn(false);
+      return;
     } else {
       const decoded = jwtDecode(newToken);
       const data = decoded.data;
@@ -33,17 +34,6 @@ function App() {
       return;
     }
   }, [token]);
-  useEffect(() => {
-    if (token != undefined) {
-      const decoded = jwtDecode(newToken);
-      const data = decoded.data;
-      setUser(data.user);
-      setIsLoggedIn(true);
-      return;
-    }
-    setUser("");
-    setIsLoggedIn(false);
-  }, [isLoggedIn]);
 
   return (
     <div className={AppCSS.main}>

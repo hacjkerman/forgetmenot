@@ -24,7 +24,6 @@ app.use(express.json());
 
 function inputValidator(fn, inputs) {
   return function (req, res) {
-    console.log(req.body);
     for (let i = 0; i < inputs.length; i++) {
       if (req.body[inputs[i]] === undefined) {
         return res.json({ error: "Missing required fields" });
@@ -213,6 +212,14 @@ app.put(
   inputValidator(
     async (req, res) => {
       const { username, email, token } = req.body;
+      if (!validator.validate(email)) {
+        return res.json({ error: "Invalid Email" });
+      }
+      const isValidEmail = await findEmailInUsers(email);
+      if (isValidEmail) {
+        res.json({ error: "Email is already registered" });
+        return;
+      }
       const isValidUser = await verifyUser(username, token);
       if (!isValidUser) {
         res.json({ error: "Invalid user or token" });

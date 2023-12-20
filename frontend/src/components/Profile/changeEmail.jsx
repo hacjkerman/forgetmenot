@@ -5,6 +5,7 @@ import { updateEmail } from "../../api/Loginapi";
 function ChangeEmail(props) {
   const user = props.user;
   const token = props.token;
+  const email = props.email;
   const handleClose = (e) => {
     e.preventDefault();
     props.setTrigger(!props.trigger);
@@ -12,7 +13,8 @@ function ChangeEmail(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newEmail = e.target.value;
+    const newEmail = e.target[0].value;
+    console.log(newEmail);
     await updateEmail(user, newEmail, token);
     handleClose(e);
   };
@@ -29,6 +31,7 @@ function ChangeEmail(props) {
           <div className={changeEmailCSS.upperForm}>
             <label className={changeEmailCSS.colInput}>
               <h3>Current Email</h3>
+              <p>{email}</p>
             </label>
             <label className={changeEmailCSS.colInput}>
               <h3>New Email</h3>
