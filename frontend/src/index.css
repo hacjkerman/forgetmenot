@@ -1,5 +1,13 @@
-html {
-  background-color: aqua;
+@import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@700&family=Titillium+Web:wght@400;600;700&display=swap");
+
+body {
+  background: linear-gradient(#2a00b7, #42006c);
+  height: 100vh;
+  margin: 0;
   display: flex;
   justify-content: center;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-family: "Titillium Web", sans-serif;
+  font-weight: 600;
 }

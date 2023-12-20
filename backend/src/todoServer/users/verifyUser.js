@@ -1,14 +1,13 @@
 import axios from "axios";
 
-export async function verifyUser(username, sessionId) {
+export async function verifyUser(username, token) {
   const userId = await axios({
     method: "get",
     url: "http://localhost:4000/verifyUser",
     data: {
       username: username,
-      token: sessionId,
+      token: token,
     },
   });
-
   return userId.data;
 }

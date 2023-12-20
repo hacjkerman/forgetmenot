@@ -1,19 +1,20 @@
-import { MongoClient } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbConnect } from "../../database/db.js";
+import bcrypt from "bcrypt";
 
 export async function validateUser(user, password) {
-  await client.connect();
-  const db = client.db(dbName);
-  const Users = db.collection("users");
-  const userResult = await Users.findOne({
+  const db = await dbConnect();
+  const users = db.collection("users");
+  const userFound = await users.findOne({
     username: user,
-    password: password,
   });
-  if (!userResult) {
+  if (!userFound) {
+    // USER DOES NOT EXIST
     return false;
   }
-  return userResult._id;
+  const result = await bcrypt.compare(password, userFound.password);
+  if (result) {
+    return userFound.username;
+  }
+  // INVALID PASSWORD
+  return false;
 }

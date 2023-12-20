@@ -1,4 +1,19 @@
 .main h1 {
   display: flex;
   justify-content: center;
+  cursor: default;
+}
+
+.menuIcon {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  right: 1%;
+  cursor: pointer;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

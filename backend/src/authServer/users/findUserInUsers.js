@@ -1,21 +1,13 @@
-import { MongoClient } from "mongodb";
-import axios from "axios";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbConnect } from "../../database/db.js";
 
 export async function findUserInUsers(user) {
-  await client.connect();
-  const db = client.db(dbName);
-  const Users = db.collection("users");
-  const userResult = await Users.findOne({
+  const db = await dbConnect();
+  const users = db.collection("users");
+  const userFound = await users.findOne({
     username: user,
   });
-  if (!userResult) {
+  if (!userFound) {
     return false;
   }
-  return userResult;
+  return userFound._id;
 }
-
-findUserInUsers("dies34");

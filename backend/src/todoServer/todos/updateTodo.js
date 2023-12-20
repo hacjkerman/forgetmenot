@@ -1,22 +1,14 @@
-import { MongoClient } from "mongodb";
-import { getAllTodos } from "./getAllTodos.js";
+import { dbConnect } from "../../database/db.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
-
-export async function updateTodo(user, Todos, todo, newTodo) {
-  await client.connect();
-  const db = client.db(dbName);
-  const collection = db.collection("userTodos");
-  const todoIndex = Todos.findIndex((todoList) => todoList.todo === todo);
-  Todos[todoIndex].todo = newTodo;
-  console.log(Todos[todoIndex]);
-  console.log(Todos);
-  const insertResult = await collection.updateOne(
-    { username: user },
-    { $set: { todo: Todos } }
-  );
-  console.log("All Todos documents =>", insertResult);
-  return insertResult;
+export async function updateTodo(user, column, todos, todoId, newTodo) {
+  const db = await dbConnect();
+  const userTodos = db.collection("userTodos");
+  const todoIndex = todos.findIndex((todoList) => todoList.id === todoId);
+  if (todoIndex < 0) {
+    // INDEX DOES NOT EXIST
+    return { error: "Todo does not exist" };
+  }
+  todos[todoIndex].todo = newTodo;
+  await userTodos.updateOne({ username: user }, { $set: { [column]: todos } });
+  return { status: "Todo successfully updated" };
 }

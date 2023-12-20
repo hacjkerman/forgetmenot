@@ -1,35 +1,24 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
-
-const client = new MongoClient("mongodb://localhost:27017", {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
-
-const dbName = "mydb";
+import { dbConnect } from "../../database/db.js";
+import bcrypt from "bcrypt";
 
 export async function createUser(user) {
-  await client.connect();
-  const newUser = {
-    name: user.name,
-    email: user.email,
-    username: user.username,
-    password: user.password,
-  };
-  const db = client.db(dbName);
-  const collection = db.collection("users");
+  const db = await dbConnect();
+  const users = db.collection("users");
   // ISSUE - WILL INSERT DUPLICATE USERS. FIX FOR LATER
-  const foundCursor = collection.find({
-    $or: [{ username: newUser.username }, { email: newUser.email }],
+  const userFound = users.find({
+    $or: [{ username: user.username }, { email: user.email }],
   });
-  const foundArray = await foundCursor.toArray();
+  user.number = null;
+  const newUser = user;
+  const foundArray = await userFound.toArray();
+  const saltRounds = 10;
+
   if (foundArray.length === 0) {
-    const insertResult = await collection.insertOne(newUser);
-    console.log("Created user =>", insertResult);
-    await client.close();
-    return insertResult.insertedId;
+    bcrypt.hash(user.password, saltRounds, async function (err, hash) {
+      newUser.password = hash;
+      const insertResult = await users.insertOne(newUser);
+    });
+    return { status: "Success" };
   }
   return undefined;
 }

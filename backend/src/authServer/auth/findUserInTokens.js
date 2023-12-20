@@ -1,17 +1,12 @@
-import { MongoClient } from "mongodb";
 import "dotenv/config";
-
-const client = new MongoClient("mongodb://localhost:27017");
-
-const dbName = "mydb";
+import { dbConnect } from "../../database/db.js";
 
 export async function findUserInTokens(user) {
-  await client.connect();
-  const db = client.db(dbName);
+  const db = await dbConnect();
   const collection = db.collection("activeTokens");
-  const isFound = await collection.findOne({ username: user });
-  if (!isFound) {
+  const userFound = await collection.findOne({ username: user });
+  if (!userFound) {
     return false;
   }
-  return true;
+  return userFound.token;
 }

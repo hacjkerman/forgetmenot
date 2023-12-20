@@ -1,15 +1,18 @@
-import { MongoClient } from "mongodb";
+import { dbConnect } from "../../database/db.js";
+import findColumn from "../columns/findColumn.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
+export async function getAllTodos(user, column) {
+  const db = await dbConnect();
+  const userTodos = db.collection("userTodos");
+  const foundUser = await userTodos.findOne({ username: user });
+  if (!foundUser) {
+    return { error: "User does not exist" };
+  }
+  const foundCol = findColumn(foundUser, column);
+  if (!foundCol) {
+    return { error: "Column does not exist" };
+  }
 
-const dbName = "mydb";
-
-export async function getAllTodos(user) {
-  await client.connect();
-  const db = client.db(dbName);
-  const collection = db.collection("userTodos");
-  const insertResult = await collection.find({ username: user }).toArray();
-  console.log("All Todos documents =>", insertResult);
-  console.log(insertResult[0].todo);
-  return insertResult[0].todo;
+  const colItems = foundUser[foundCol];
+  return colItems;
 }

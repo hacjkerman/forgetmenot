@@ -1,34 +1,106 @@
-import React from "react";
-import image from "./images.jfif";
-import "./Task.css";
+import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import TaskCSS from "./Task.module.css";
+import UpdateTaskDate from "./updateTaskDate";
+import UpdateTask from "./updateTask";
+
+const Container = styled.div`
+  border: 1px solid lightgrey;
+  border-radius: 2px;
+  paddig: 8px;
+  margin-bottom: 8px;
+  background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+`;
 
 export default function Task(props) {
+  const deleteTodo = props.deleteTodo;
+  const user = props.user;
+  const column = props.column;
+  const todo = props.task;
+  const changeTodoDone = props.changeTodoDone;
+  const changeTodo = props.changeTodo;
+  const changeTodoDate = props.changeTodoDate;
+  const [isDone, setIsDone] = useState(todo.done);
+  const [isUpdatingDate, setIsUpdatingDate] = useState(false);
+  const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
+  const removeTask = (e) => {
+    e.preventDefault();
+    deleteTodo(user, column, todo);
+    return;
+  };
+  const changeCompletion = () => {
+    setIsDone(!isDone);
+    changeTodoDone(column, todo.id);
+  };
+  const changeUpdateDate = () => {
+    setIsUpdatingDate(!isUpdatingDate);
+  };
+
+  const changeUpdateTodo = () => {
+    setIsUpdatingTodo(!isUpdatingTodo);
+  };
   return (
     <Draggable
-      key={props.id}
-      draggableId={"draggable-" + props.id}
+      draggableId={props.task.id}
       index={props.index}
+      isDragDisabled={isUpdatingDate || isUpdatingTodo}
     >
-      {(provided) => {
-        return (
-          <div
-            ref={provided.innerRef}
-            {...provided.dragHandleProps}
-            {...provided.draggableProps}
-            className="wrapper"
-          >
-            <div className="upper-box">
-              <img src={image} alt="pfp" id="pfp" />
-              <p>{props.todo}</p>
+      {(provided, snapshot) => (
+        <Container
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+          $isDragging={snapshot.isDragging}
+        >
+          <div className={TaskCSS.upperBox}>
+            <div>
+              {isUpdatingTodo ? (
+                <UpdateTask
+                  isUpdatingTodo={isUpdatingTodo}
+                  setIsUpdatingTodo={setIsUpdatingTodo}
+                  task={props.task}
+                  column={props.column}
+                  changeTodo={changeTodo}
+                ></UpdateTask>
+              ) : (
+                <p className={TaskCSS.todo} onClick={changeUpdateTodo}>
+                  {props.task.todo}
+                </p>
+              )}
             </div>
-            <div className="lower-box">
-              <p id="dueDate">Due Date: {props.due}</p>
-              <p id="propId">#{props.id}</p>
-            </div>
+            <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
+              -
+            </button>
           </div>
-        );
-      }}
+          <input
+            type="checkbox"
+            checked={isDone}
+            onChange={changeCompletion}
+            className={TaskCSS.doneBox}
+          ></input>
+          <div className={TaskCSS.lowerBox}>
+            <p id={TaskCSS.dueDate}>
+              Due Date:{" "}
+              {isUpdatingDate ? (
+                <UpdateTaskDate
+                  isUpdatingDate={isUpdatingDate}
+                  setIsUpdatingDate={setIsUpdatingDate}
+                  task={props.task}
+                  column={props.column}
+                  changeTodoDate={changeTodoDate}
+                ></UpdateTaskDate>
+              ) : (
+                <span className={TaskCSS.updateDate} onClick={changeUpdateDate}>
+                  {props.task.due}
+                </span>
+              )}
+            </p>
+
+            <p id={TaskCSS.propId}>#{props.task.id}</p>
+          </div>
+        </Container>
+      )}
     </Draggable>
   );
 }

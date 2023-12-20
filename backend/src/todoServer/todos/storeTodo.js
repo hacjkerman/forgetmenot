@@ -1,22 +1,34 @@
-import { MongoClient } from "mongodb";
-import { getAllTodos } from "./getAllTodos.js";
+import { dbConnect } from "../../database/db.js";
+import findColumn from "../columns/findColumn.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
+export async function storeTodo(username, column, todo, dueDate) {
+  const db = await dbConnect();
+  const userTodos = db.collection("userTodos");
 
-const dbName = "mydb";
-
-export async function storeTodo(user, Todos, todo, dueDate) {
-  await client.connect();
-  const db = client.db(dbName);
-  const Users = db.collection("userTodos");
-  const newTodo = {
-    todo: todo,
-    dueDate: dueDate,
-  };
-  const isFound = Todos.filter((todoName) => todoName.todo === todo);
-  if (isFound.length === 0) {
-    Users.updateOne({ username: user }, { $push: { todo: newTodo } });
-    return true;
+  const isFound = await userTodos.findOne({
+    username: username,
+  });
+  if (!isFound) {
+    // USER DOES NOT EXIST
+    return { error: "User does not exist" };
   }
-  return false;
+  if (todo.length > 256) {
+    return { error: "Todo has to be less than 256 characters long" };
+  }
+  const newTodo = {
+    id: isFound.todoIndex.toString(),
+    todo,
+    due: dueDate,
+    done: false,
+  };
+  const foundCol = findColumn(isFound, column);
+  if (!foundCol) {
+    // COLUMN DOES NOT EXIST
+    return { error: "Column does not exist" };
+  }
+  await userTodos.updateOne(
+    { username: username },
+    { $push: { [column]: newTodo }, $inc: { todoIndex: 1 } }
+  );
+  return { status: "Storage successful" };
 }

@@ -1,103 +1,325 @@
 import express from "express";
 import "dotenv/config";
-import { storeTodo } from "./todos/storeTodo.js";
 import { getAllTodos } from "./todos/getAllTodos.js";
 import { removeTodo } from "./todos/removeTodo.js";
 import { updateTodo } from "./todos/updateTodo.js";
 import { verifyUser } from "./users/verifyUser.js";
-import { createUserTodo } from "./todos/createUserTodo.js";
+import { updateTodoColumn } from "./todos/updateTodoColumn.js";
+import { updateTodoDate } from "./todos/updateTodoDate.js";
+import { updateColumn } from "./columns/updateColumn.js";
+import { storeColumn } from "./columns/storeColumn.js";
+import { getColumns } from "./columns/getColumns.js";
+import { removeColumn } from "./columns/removeColumn.js";
+import { storeTodo } from "./todos/storeTodo.js";
+import cors from "cors";
+import { validateColumn } from "./columns/validateColumn.js";
+import { getColumnOrder } from "./columns/getColumnOrder.js";
+import { updateColOrder } from "./columns/updateColOrder.js";
+import { updateTodoDone } from "./todos/updateTodoDone.js";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
+function inputValidator(fn, inputs) {
+  return function (req, res) {
+    for (let i = 0; i < inputs.length; i++) {
+      if (req.body[inputs[i]] === undefined) {
+        return res.json({ error: "Missing required fields" });
+      }
+    }
+    return fn(req, res);
+  };
+}
+function getInputsValidator(fn, inputs) {
+  return function (req, res) {
+    for (let i = 0; i < inputs.length; i++) {
+      if (req.query[inputs[i]] === undefined) {
+        return res.json({ error: "Missing required fields" });
+      }
+    }
+    return fn(req, res);
+  };
+}
+// Column Request Operations
+app.put(
+  "/column/Order",
+  inputValidator(
+    async (req, res) => {
+      const { username, srcIndex, destIndex, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      if (srcIndex === destIndex) {
+        return;
+      }
+      const updateResult = await updateColOrder(username, srcIndex, destIndex);
+      return res.json(updateResult);
+    },
+    ["username", "srcIndex", "destIndex", "token"]
+  )
+);
+
+app.put(
+  "/column",
+  inputValidator(
+    async (req, res) => {
+      const { username, oldColumn, newColumn, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const updateResult = await updateColumn(username, oldColumn, newColumn);
+      return res.json(updateResult);
+    },
+    ["username", "oldColumn", "newColumn", "token"]
+  )
+);
+
+app.post(
+  "/column",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const storeResult = await storeColumn(username, column);
+      return res.json(storeResult);
+    },
+    ["username", "column", "token"]
+  )
+);
+
+app.get(
+  "/column",
+  getInputsValidator(
+    async (req, res) => {
+      // CHANGE TO BODY IF BACKEND TESTING
+      const { username, token } = req.query;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundColumns = await getColumns(username);
+      if (foundColumns === null) return res.json({ error: "No columns found" });
+      return res.json(foundColumns);
+    },
+    ["username", "token"]
+  )
+);
+
+app.get(
+  "/column/Order",
+  getInputsValidator(
+    async (req, res) => {
+      // CHANGE TO BODY IF BACKEND TESTING
+      const { username, token } = req.query;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundColumns = await getColumnOrder(username);
+      if (foundColumns === null) return res.json({ error: "No columns found" });
+      return res.json(foundColumns);
+    },
+    ["username", "token"]
+  )
+);
+
+app.delete(
+  "/column",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+
+      const removeResult = await removeColumn(username, column);
+      return res.json(removeResult);
+    },
+    ["username", "column", "token"]
+  )
+);
 // Todo Request Operations
-app.post("/createUserTodo", async (req, res) => {
-  const { username, sessionId, todo, dueDate } = req.body;
-  if (!username || !todo || !dueDate) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  const validUser = await verifyUser(username, sessionId);
-  if (!validUser) {
-    return res.json("Invalid authorisation");
-  }
-  const storeResult = await createUserTodo(username, todo, dueDate);
-  if (storeResult === false) {
-    return res.status(400).json({ error: "Duplicate Storage" });
-  }
-  return res.json("Update Successful");
-});
-app.post("/storeTodo", async (req, res) => {
-  const { username, sessionId, todo, dueDate } = req.body;
-  if (!username || !sessionId || !todo || !dueDate) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  const validUser = await verifyUser(username, sessionId);
-  if (!validUser) {
-    return res.json("Invalid authorisation");
-  }
-  const foundTodos = await getAllTodos(username);
-  const storeResult = await storeTodo(username, foundTodos, todo, dueDate);
-  if (storeResult === false) {
-    return res.status(400).json({ error: "Duplicate Storage" });
-  }
-  return res.json("Update Successful");
-});
+app.post(
+  "/todo",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todo, dueDate, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const storeResult = await storeTodo(username, column, todo, dueDate);
+      return res.json(storeResult);
+    },
+    ["username", "column", "todo", "dueDate", "token"]
+  )
+);
 
-app.get("/getAllTodos", async (req, res) => {
-  const { username, sessionId } = req.body;
-  if (!username || !sessionId) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  const validUser = await verifyUser(username, sessionId);
-  if (!validUser) {
-    return res.json("Invalid authorisation");
-  }
-  const foundTodos = await getAllTodos(username);
-  if (foundTodos === null) return res.sendStatus(404);
-  res.json(foundTodos);
-});
+app.get(
+  "/todo",
+  getInputsValidator(
+    async (req, res) => {
+      // CHANGE TO BODY IF BACKEND TESTING ELSE QUERY
+      const { username, column, token } = req.query;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundTodos = await getAllTodos(username, column);
+      if (!foundTodos) {
+        return res.json({ error: "No Todos Found" });
+      }
+      return res.json(foundTodos);
+    },
+    ["username", "column", "token"]
+  )
+);
 
-// app.get("/findUser", async (req, res) => {
-//   const { username, password } = req.body;
-//   if (!username || !password) {
-//     return res.status(400).json({ error: "Missing required fields" });
-//   }
-//   const validUser = await findUser(username, password);
-//   res.json(validUser);
-// });
+app.put(
+  "/todo",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todoId, newTodo, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundTodos = await getAllTodos(username, column);
+      if (!foundTodos) {
+        return res.json({ error: "No Todos Found" });
+      }
+      const updatedTodo = await updateTodo(
+        username,
+        column,
+        foundTodos,
+        todoId,
+        newTodo
+      );
+      if (updatedTodo === null) {
+        return res.json({ error: "todo update unsuccessful" });
+      }
+      return res.json(updatedTodo);
+    },
+    ["username", "column", "todoId", "newTodo", "token"]
+  )
+);
 
-app.put("/updateTodo", async (req, res) => {
-  const { username, sessionId, todo, newTodo } = req.body;
-  if (!username || !sessionId || !todo || !newTodo) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  const validUser = await verifyUser(username, sessionId);
-  if (!validUser) {
-    return res.json("Invalid authorisation");
-  }
-  const foundTodos = await getAllTodos(username);
-  const updatedTodo = await updateTodo(username, foundTodos, todo, newTodo);
-  if (updatedTodo === null) return res.sendStatus(404);
-  res.json(updatedTodo);
-});
+app.put(
+  "/todo/Order",
+  inputValidator(
+    async (req, res) => {
+      const { username, oldColumn, srcIndex, destIndex, newColumn, token } =
+        req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      if (
+        !validateColumn(username, oldColumn) ||
+        !validateColumn(username, newColumn)
+      ) {
+        return res.json({ error: "Column invalid" });
+      }
+      const updatedTodoColumn = await updateTodoColumn(
+        username,
+        oldColumn,
+        srcIndex,
+        destIndex,
+        newColumn
+      );
+      return res.json(updatedTodoColumn);
+    },
+    ["username", "oldColumn", "srcIndex", "destIndex", "newColumn", "token"]
+  )
+);
 
-app.delete("/removeTodo", async (req, res) => {
-  const { username, sessionId, todo } = req.body;
-  if (!username || !sessionId || !todo) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-  // TOO MANY ASYNC CALLS???
-  const validUser = await verifyUser(username, sessionId);
-  if (!validUser) {
-    return res.json("Invalid authorisation");
-  }
-  const foundTodos = await getAllTodos(username);
-  const removeResult = await removeTodo(username, foundTodos, todo);
-  if (removeResult === false) return res.sendStatus(404);
-  else {
-    res.json(`Removed Todo: ${todo}, Successfully.`);
-  }
-});
+app.put(
+  "/todo/Done",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todo, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundTodos = await getAllTodos(username, column);
+      if (foundTodos.error) {
+        return foundTodos;
+      }
+      const updatedTodo = await updateTodoDone(
+        username,
+        column,
+        foundTodos,
+        todo
+      );
+      if (updatedTodo === null) {
+        return res.json({ error: "todo update unsuccessful" });
+      }
+      return res.json(updatedTodo);
+    },
+    ["username", "todo", "column", "token"]
+  )
+);
+
+app.put(
+  "/todo/Date",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todoId, newDate, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundTodos = await getAllTodos(username, column);
+      if (!foundTodos) {
+        return res.json({ error: "No Todos Found" });
+      }
+      const updatedTodo = await updateTodoDate(
+        username,
+        column,
+        foundTodos,
+        todoId,
+        newDate
+      );
+      return res.json(updatedTodo);
+    },
+    ["username", "column", "todoId", "newDate", "token"]
+  )
+);
+
+app.delete(
+  "/todo",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todoId, token } = req.body;
+      // TOO MANY ASYNC CALLS???
+      const validUser = await verifyUser(username, token);
+      if (!validUser) {
+        return res.json({ error: "Invalid authorisation" });
+      }
+
+      const foundTodos = await getAllTodos(username, column);
+      if (!foundTodos) {
+        return res.json({ error: "No Todos Found" });
+      }
+      const removeResult = await removeTodo(
+        username,
+        column,
+        foundTodos,
+        todoId
+      );
+      return res.json(removeResult);
+    },
+    ["username", "column", "todoId", "token"]
+  )
+);
 
 app.listen(process.env.PORT1, () => {
   console.log(`Server is listening on http://localhost:${process.env.PORT1}`);

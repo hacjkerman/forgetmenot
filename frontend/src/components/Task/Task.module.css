@@ -18,19 +18,53 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
-.upper-box {
+.upperBox {
   display: flex;
+  justify-content: space-between;
   padding: 5px;
 }
 
-.upper-box p {
+.upperBox p {
   margin: 0;
 }
-.upper-box img {
+.upperBox img {
   margin-right: 10px;
 }
 
-.lower-box {
+.todo {
+  cursor: pointer;
+}
+
+.todo:hover {
+  text-decoration: underline;
+}
+
+.removeTaskButton {
+  font-size: 25px;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+}
+
+.removeTaskButton:hover {
+  background-color: lightgrey;
+}
+
+.doneBox {
+  opacity: 0.5;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+  background-color: lightgrey;
+}
+
+.doneBox:hover {
+  background-color: grey;
+}
+
+.lowerBox {
   display: flex;
   justify-content: space-between;
   padding-left: 3px;
@@ -43,4 +77,12 @@
 
 #dueDate {
   padding-left: 5px;
+}
+
+.updateDate {
+  cursor: pointer;
+}
+
+.updateDate:hover {
+  text-decoration: underline;
 }

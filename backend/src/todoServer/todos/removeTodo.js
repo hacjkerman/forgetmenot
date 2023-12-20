@@ -1,21 +1,30 @@
-import { MongoClient } from "mongodb";
+import { dbConnect } from "../../database/db.js";
+import { validateColumn } from "../columns/validateColumn.js";
 
-const client = new MongoClient("mongodb://localhost:27017");
+export async function removeTodo(user, column, todos, todoId) {
+  const db = await dbConnect();
+  const userTodos = db.collection("userTodos");
 
-const dbName = "mydb";
+  const foundUser = await userTodos.findOne({ username: user });
 
-export async function removeTodo(user, Todos, todo) {
-  await client.connect();
-  const db = client.db(dbName);
-  const collection = db.collection("userTodos");
-  const filteredTodos = Todos.filter((todoName) => todoName.todo !== todo);
-  if (filteredTodos.length === Todos.length) {
-    return false;
+  if (!foundUser) {
+    // USER DOES NOT EXIST
+    return { error: "User does not exist" };
   }
-  const insertResult = await collection.updateOne(
+  const foundCol = validateColumn(user, column);
+  if (!foundCol) {
+    // COLUMN DOES NOT EXIST
+    return { error: "Column does not exist" };
+  }
+  const filteredTodos = todos.filter((todoName) => todoName.id !== todoId);
+  if (filteredTodos.length === todos.length) {
+    // TODO DOES NOT EXIST
+    return { error: "Todo does not exist" };
+  }
+
+  await userTodos.updateOne(
     { username: user },
-    { $set: { todo: filteredTodos } }
+    { $set: { [column]: filteredTodos } }
   );
-  console.log("Removed documents =>", insertResult);
-  return true;
+  return { status: "Todo successfully removed" };
 }
