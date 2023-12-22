@@ -20,7 +20,6 @@ function App() {
   if (token !== undefined) {
     newToken = token.accessToken;
   }
-  console.log(token);
   useEffect(() => {
     if (token === undefined) {
       setUser("");
