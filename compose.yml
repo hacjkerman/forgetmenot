@@ -17,6 +17,7 @@ services:
       - ./todoServer/.env
     links:
       - "mongodb"
+      - "auth"
   mongodb:
     image: mongo:latest
     container_name: mongodb
