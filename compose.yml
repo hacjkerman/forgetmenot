@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  auth:
+    build: ./authServer
+    ports:
+      - 4000:4000
+    env_file:
+      - ./authServer/.env
+    links:
+      - "mongodb"
+  todo:
+    build: ./todoServer
+    ports:
+      - 8080:8080
+    env_file:
+      - ./todoServer/.env
+    links:
+      - "mongodb"
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"

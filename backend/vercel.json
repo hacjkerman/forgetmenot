@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "/authServer/server.js", "use": "@vercel/node" },
-    { "src": "/todoServer/server.js", "use": "@vercel/node" }
-  ],
-  "routes": [{ "src": "/.(.*)", "dest": "/" }]
-}
