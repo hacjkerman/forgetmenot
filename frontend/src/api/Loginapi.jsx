@@ -1,7 +1,8 @@
 import axios from "axios";
+import "dotenv/config";
 
 const todosApi = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: process.env.AUTHSERVER,
 });
 
 export const login = async (username, password) => {

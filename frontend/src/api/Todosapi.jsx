@@ -1,7 +1,8 @@
 import axios from "axios";
+import "dotenv/config";
 
 const todosApi = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.TODOSERVER,
 });
 
 export const todosUrlEndpoint = "/todo";
