@@ -1,8 +1,7 @@
 import axios from "axios";
-import "dotenv/config";
 
 const todosApi = axios.create({
-  baseURL: process.env.AUTHSERVER,
+  baseURL: process.env.REACT_APP_AUTHSERVER,
 });
 
 export const login = async (username, password) => {

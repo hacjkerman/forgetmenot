@@ -1,9 +1,5 @@
-import axios from "axios";
-import "dotenv/config";
+import { todosApi } from "./todoServerApi";
 
-const todosApi = axios.create({
-  baseURL: process.env.TODOSERVER,
-});
 export const todosUrlEndpoint = "/column";
 
 export const getColumnOrder = async (params) => {

@@ -1,9 +1,4 @@
-import axios from "axios";
-import "dotenv/config";
-
-const todosApi = axios.create({
-  baseURL: process.env.TODOSERVER,
-});
+import { todosApi } from "./todoServerApi";
 
 export const todosUrlEndpoint = "/todo";
 
