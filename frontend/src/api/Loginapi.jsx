@@ -6,8 +6,19 @@ const todosApi = axios.create({
 
 export const login = async (username, password) => {
   const response = await todosApi.post("/login", {
-    username,
-    password,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Headers":
+        "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+      "Access-Control-Allow-Methods": "OPTIONS,POST",
+      "Access-Control-Allow-Credentials": true,
+      "Access-Control-Allow-Origin": "*",
+      "X-Requested-With": "*",
+    },
+    data: {
+      username,
+      password,
+    },
   });
   return response.data;
 };
