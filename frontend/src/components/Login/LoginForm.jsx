@@ -32,15 +32,16 @@ export default function LoginForm(props) {
       // MAYBE ADD LOADING SCREEN
       notify(response.error);
       return;
-    }
-    const now = new Date();
-    now.getTime();
+    } else {
+      const now = new Date();
+      now.getTime();
 
-    now.setHours(now.getHours() + 1);
-    cookies.set("jwt_auth", response, { expires: now });
-    setUser(data.username);
-    setIsLoggedIn(true);
-    navigate("/board");
+      now.setHours(now.getHours() + 1);
+      cookies.set("jwt_auth", response, { expires: now });
+      setUser(data.username);
+      setIsLoggedIn(true);
+      navigate("/board");
+    }
   };
 
   const loginUser = async (user, password) => {

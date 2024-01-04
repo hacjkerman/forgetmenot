@@ -7,6 +7,8 @@ services:
       - 4000:4000
     env_file:
       - ./authServer/.env
+    depends_on:
+      - mongodb
     links:
       - "mongodb"
   todo:
@@ -15,6 +17,8 @@ services:
       - 8080:8080
     env_file:
       - ./todoServer/.env
+    depends_on:
+      - mongodb
     links:
       - "mongodb"
       - "auth"
@@ -23,3 +27,23 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
+    volumes:
+      - "./data:/data/db"
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    depends_on:
+      - auth
+      - todo
+    links:
+      - auth
+      - todo
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    ports:
+      - 4040:4040
