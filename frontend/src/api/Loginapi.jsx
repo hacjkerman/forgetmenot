@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const todosApi = axios.create({
-  baseURL: process.env.REACT_APP_AUTHSERVER,
+  baseURL: process.env.REACT_APP_AUTHDEVSERVER,
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Headers": "Content-Type",
