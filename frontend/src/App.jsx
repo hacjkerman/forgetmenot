@@ -21,11 +21,13 @@ function App() {
     newToken = token.accessToken;
   }
   useEffect(() => {
-    if (token === undefined) {
-      setUser("");
-      setIsLoggedIn(false);
-      return;
-    } else {
+    setInterval(() => {
+      if (token === undefined) {
+        setUser("");
+        setIsLoggedIn(false);
+      }
+    }, 1000);
+    if (token !== undefined) {
       const decoded = jwtDecode(newToken);
       const data = decoded.data;
       setUser(data.user);

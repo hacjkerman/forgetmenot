@@ -54,8 +54,8 @@ export default function Board(props) {
       const newColumns = { ...columns };
 
       newColumns.columnOrder.push(column);
+      const response = await storeColumn(user, column, token);
       mutate(newColumns, false);
-      await storeColumn(user, column, token);
     } catch (err) {
       console.log(err);
     }
