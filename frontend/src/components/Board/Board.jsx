@@ -5,9 +5,13 @@ import NewColumn from "../Column/newColumn.jsx";
 import styled from "styled-components";
 import useSWR from "swr";
 import {
+  addColMutation as storeColumn,
+  addColOptions,
+} from "../../helpers/columnsMutations.jsx";
+import {
   getColumns,
   removeColumn,
-  storeColumn,
+  // storeColumn,
   updateColumn,
   updateColumnOrder,
 } from "../../api/Columnapi.jsx";
@@ -48,14 +52,17 @@ export default function Board(props) {
 
   const headers = { username: user, token: token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
-
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
+      await mutate(
+        storeColumn(user, column, token, newColumns),
+        addColOptions(column, newColumns)
+      );
 
-      newColumns.columnOrder.push(column);
-      const response = await storeColumn(user, column, token);
-      mutate(newColumns, false);
+      // newColumns.columnOrder.push(column);
+      // const response = await storeColumn(user, column, token);
+      // mutate(newColumns, false);
     } catch (err) {
       console.log(err);
     }
