@@ -25,6 +25,7 @@ export const signUp = async (username, email, password) => {
     email,
     password,
   });
+  console.log(response);
   return response.data;
 };
 
