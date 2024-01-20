@@ -23,6 +23,7 @@ export const addColMutation = async (user, newColumn, token, columns) => {
 
 export const addColOptions = (newColumn, columns) => {
   columns.columnOrder.push(newColumn);
+  columns[newColumn] = [];
   return {
     optimisticData: columns,
     rollbackOnError: true,
