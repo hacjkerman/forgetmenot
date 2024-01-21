@@ -69,5 +69,5 @@ export const removeColumn = (username, column, token) => {
       token,
     },
   });
-  return response.data;
+  return response;
 };
