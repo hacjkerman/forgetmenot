@@ -77,6 +77,7 @@ export default function Task(props) {
             checked={isDone}
             onChange={changeCompletion}
             className={TaskCSS.doneBox}
+            name="doneBox"
           ></input>
           <div className={TaskCSS.lowerBox}>
             <p id={TaskCSS.dueDate}>
