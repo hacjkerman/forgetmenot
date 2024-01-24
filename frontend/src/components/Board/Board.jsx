@@ -7,13 +7,19 @@ import useSWR from "swr";
 import {
   addColMutation as storeColumn,
   addColOptions,
+  delColMutation as removeColumn,
+  delColOptions,
+  updateColMutation as updateColumn,
+  updateColOptions,
+  updateColOrderMutation as updateColumnOrder,
+  updateColOrderOptions,
 } from "../../helpers/columnsMutations.jsx";
 import {
   getColumns,
-  removeColumn,
+  // removeColumn,
   // storeColumn,
-  updateColumn,
-  updateColumnOrder,
+  // updateColumn,
+  // updateColumnOrder,
 } from "../../api/Columnapi.jsx";
 import {
   removeTodo,
@@ -24,6 +30,7 @@ import {
   updateTodo,
 } from "../../api/Todosapi.jsx";
 import { useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const Container = styled.div`
   display: flex;
@@ -71,12 +78,10 @@ export default function Board(props) {
   const deleteColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
-      const filteredArray = newColumns.columnOrder.filter(
-        (columnName) => columnName !== column
+      await mutate(
+        removeColumn(user, column, newColumns, token),
+        delColOptions(column, newColumns)
       );
-      newColumns.columnOrder = filteredArray;
-      mutate(newColumns, false);
-      await removeColumn(user, column, token);
     } catch (err) {
       console.log(err);
     }
@@ -85,14 +90,10 @@ export default function Board(props) {
   const changeColumn = async (column, newColumn) => {
     try {
       const newColumns = { ...columns };
-      const currCol = newColumns[column];
-      newColumns[newColumn] = currCol;
-      let colOrder = newColumns.columnOrder;
-      const index = colOrder.findIndex((item) => item === column);
-      colOrder.splice(index, 1);
-      colOrder.splice(index, 0, newColumn);
-      mutate(newColumns, false);
-      await updateColumn(user, column, newColumn, token);
+      await mutate(
+        updateColumn(user, column, newColumn, newColumns, token),
+        updateColOptions(column, newColumn, newColumns)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -101,13 +102,10 @@ export default function Board(props) {
   const updateColOrder = async (user, srcIndex, destIndex) => {
     try {
       const newColumns = { ...columns };
-      const newColumnOrder = Array.from(newColumns.columnOrder);
-      const temp = newColumnOrder[srcIndex];
-      newColumnOrder.splice(srcIndex, 1);
-      newColumnOrder.splice(destIndex, 0, temp);
-      newColumns.columnOrder = newColumnOrder;
-      mutate(newColumns, false);
-      await updateColumnOrder(user, srcIndex, destIndex, token);
+      await mutate(
+        updateColumnOrder(user, srcIndex, destIndex, newColumns, token),
+        updateColOrderOptions(srcIndex, destIndex, newColumns)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -247,46 +245,53 @@ export default function Board(props) {
     setIsTriggered(!isTriggered);
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="all-columns" direction="horizontal" type="column">
-        {(provided) => (
-          <Container {...provided.droppableProps} ref={provided.innerRef}>
-            {columns &&
-              columns.columnOrder.map((column, index) => {
-                return (
-                  <Column
-                    className=""
-                    key={column}
-                    column={column}
-                    index={index}
-                    user={user}
-                    todos={columns[column]}
-                    deleteColumn={deleteColumn}
-                    changeColumn={changeColumn}
-                    addTodo={addTodo}
-                    deleteTodo={deleteTodo}
-                    changeTodoDone={changeTodoDone}
-                    changeTodo={changeTodo}
-                    changeTodoDate={changeTodoDate}
-                  />
-                );
-              })}
-            {provided.placeholder}
+    <>
+      <Toaster />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {(provided) => (
+            <Container {...provided.droppableProps} ref={provided.innerRef}>
+              {columns &&
+                columns.columnOrder.map((column, index) => {
+                  return (
+                    <Column
+                      className=""
+                      key={column}
+                      column={column}
+                      index={index}
+                      user={user}
+                      todos={columns[column]}
+                      deleteColumn={deleteColumn}
+                      changeColumn={changeColumn}
+                      addTodo={addTodo}
+                      deleteTodo={deleteTodo}
+                      changeTodoDone={changeTodoDone}
+                      changeTodo={changeTodo}
+                      changeTodoDate={changeTodoDate}
+                    />
+                  );
+                })}
+              {provided.placeholder}
 
-            {isTriggered ? (
-              <NewColumn
-                trigger={isTriggered}
-                setTrigger={setIsTriggered}
-                addColumn={addColumn}
-                user={user}
-                columnOrder={columns.columnOrder}
-              ></NewColumn>
-            ) : (
-              <Button onClick={handleClick}>+</Button>
-            )}
-          </Container>
-        )}
-      </Droppable>
-    </DragDropContext>
+              {isTriggered ? (
+                <NewColumn
+                  trigger={isTriggered}
+                  setTrigger={setIsTriggered}
+                  addColumn={addColumn}
+                  user={user}
+                  columnOrder={columns.columnOrder}
+                ></NewColumn>
+              ) : (
+                <Button onClick={handleClick}>+</Button>
+              )}
+            </Container>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
   );
 }

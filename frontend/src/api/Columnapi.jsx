@@ -33,7 +33,7 @@ export const storeColumn = (user, column, token) => {
     column,
     token,
   });
-  return response.data;
+  return response;
 };
 export const updateColumn = async (username, oldColumn, newColumn, token) => {
   const response = await todosApi.put(todosUrlEndpoint, {
@@ -69,5 +69,5 @@ export const removeColumn = (username, column, token) => {
       token,
     },
   });
-  return response.data;
+  return response;
 };
