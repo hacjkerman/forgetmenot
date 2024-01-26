@@ -15,13 +15,14 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
-  const token = cookies.get("jwt_auth");
+  let token = cookies.get("jwt_auth");
   let newToken;
   if (token !== undefined) {
     newToken = token.accessToken;
   }
   useEffect(() => {
     setInterval(() => {
+      token = cookies.get("jwt_auth");
       if (token === undefined) {
         setUser("");
         setIsLoggedIn(false);
@@ -75,7 +76,12 @@ function App() {
             element={
               newToken ? (
                 <div className={AppCSS.container}>
-                  <Board user={user} token={newToken} />
+                  <Board
+                    user={user}
+                    token={newToken}
+                    setUser={setUser}
+                    setIsLoggedIn={setIsLoggedIn}
+                  />
                 </div>
               ) : (
                 <Navigate to="/login" />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Column from "../Column/Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import NewColumn from "../Column/newColumn.jsx";
@@ -29,7 +29,6 @@ import {
   updateTodoDate,
   updateTodo,
 } from "../../api/Todosapi.jsx";
-import { useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 const Container = styled.div`
@@ -54,7 +53,7 @@ const Button = styled.button`
 export default function Board(props) {
   const user = props.user;
   const token = props.token;
-  const navigate = useNavigate();
+
   const [isTriggered, setIsTriggered] = useState(false);
 
   const headers = { username: user, token: token, type: "column" };
