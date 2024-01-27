@@ -15,15 +15,15 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
-  let token = cookies.get("jwt_auth");
+  const token = cookies.get("jwt_auth");
   let newToken;
   if (token !== undefined) {
     newToken = token.accessToken;
   }
   useEffect(() => {
     setInterval(() => {
-      token = cookies.get("jwt_auth");
-      if (token === undefined) {
+      let authCookie = cookies.get("jwt_auth");
+      if (authCookie === undefined) {
         setUser("");
         setIsLoggedIn(false);
       }
