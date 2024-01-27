@@ -23,7 +23,7 @@ export async function updateTodoColumn(
   }
   const newColFound = findColumn(foundUser, newColumn);
   if (!newColFound) {
-    return { error: "Old Column does not exist" };
+    return { error: "New Column does not exist" };
   }
 
   if (oldColFound === newColFound) {

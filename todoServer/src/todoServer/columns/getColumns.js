@@ -5,7 +5,9 @@ export async function getColumns(user) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
   let foundUser = await userTodos.find({ username: user }).toArray();
+  console.log(foundUser);
   if (foundUser.length === 0) {
+    console.log("enters");
     await newUserGen(user);
     foundUser = await userTodos.find({ username: user }).toArray();
   }
