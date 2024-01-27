@@ -22,8 +22,8 @@ function App() {
   }
   useEffect(() => {
     setInterval(() => {
-      token = cookies.get("jwt_auth");
-      if (token === undefined) {
+      let authCookie = cookies.get("jwt_auth");
+      if (authCookie === undefined) {
         setUser("");
         setIsLoggedIn(false);
       }

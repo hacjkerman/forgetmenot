@@ -15,19 +15,23 @@ import {
   updateColOrderOptions,
 } from "../../helpers/columnsMutations.jsx";
 import {
-  getColumns,
-  // removeColumn,
-  // storeColumn,
-  // updateColumn,
-  // updateColumnOrder,
-} from "../../api/Columnapi.jsx";
+  addTodoMutation as storeTodo,
+  addTodoOptions,
+  delTodoMutation as removeTodo,
+  delTodoOptions,
+  updateTodoMutation as updateTodo,
+  updateTodoOptions,
+  updateTodoOrderMutation as updateTodoOrder,
+  updateTodoOrderOptions,
+} from "../../helpers/todosMutations.jsx";
+import { getColumns } from "../../api/Columnapi.jsx";
 import {
-  removeTodo,
-  storeTodo,
-  updateTodoOrder,
+  // removeTodo,
+  // storeTodo,
+  // updateTodoOrder,
   updateTodoDone,
   updateTodoDate,
-  updateTodo,
+  // updateTodo,
 } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 
@@ -58,6 +62,7 @@ export default function Board(props) {
 
   const headers = { username: user, token: token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
+  // COLUMN API CALLS
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
@@ -109,14 +114,15 @@ export default function Board(props) {
       console.log(err);
     }
   };
-
+  // TODO API CALLS
   const addTodo = async (user, column, todo, due) => {
     try {
       const newColumns = { ...columns };
       const newTodo = { id: columns.todoIndex.toString(), todo, due };
-      newColumns[column].push(newTodo);
-      mutate(newColumns, false);
-      await storeTodo(user, column, todo, due, token);
+      await mutate(
+        storeTodo(user, column, todo, due, token, newColumns),
+        addTodoOptions(newTodo, column, newColumns)
+      );
     } catch (err) {
       console.log(err);
     }
@@ -125,12 +131,10 @@ export default function Board(props) {
   const deleteTodo = async (user, column, todo) => {
     try {
       const newColumns = { ...columns };
-      const filteredColumn = newColumns[column].filter(
-        (items) => items.id !== todo.id
+      await mutate(
+        removeTodo(user, column, todo, newColumns, token),
+        delTodoOptions(column, todo, newColumns)
       );
-      newColumns[column] = filteredColumn;
-      mutate(newColumns, false);
-      await removeTodo(user, column, todo.id, token);
     } catch (err) {
       console.log(err);
     }
@@ -145,37 +149,23 @@ export default function Board(props) {
   ) => {
     try {
       const newColumns = { ...columns };
-      const srcItem = newColumns[oldColumn];
-      if (oldColumn === newColumn) {
-        const temp = srcItem[srcIndex];
-        srcItem.splice(srcIndex, 1);
-        srcItem.splice(destIndex, 0, temp);
-        newColumns[oldColumn] = srcItem;
-        mutate(newColumns, false);
-        await updateTodoOrder(
+      await mutate(
+        updateTodoOrder(
           user,
           oldColumn,
+          newColumn,
+          srcIndex,
+          destIndex,
+          newColumns,
+          token
+        ),
+        updateTodoOrderOptions(
           srcIndex,
           destIndex,
           oldColumn,
-          token
-        );
-        return;
-      }
-      const destItem = newColumns[newColumn];
-      const temp = srcItem[srcIndex];
-      srcItem.splice(srcIndex, 1);
-      destItem.splice(destIndex, 0, temp);
-      newColumns[newColumn] = destItem;
-      newColumns[oldColumn] = srcItem;
-      mutate(newColumns, false);
-      await updateTodoOrder(
-        user,
-        oldColumn,
-        srcIndex,
-        destIndex,
-        newColumn,
-        token
+          newColumn,
+          newColumns
+        )
       );
     } catch (err) {
       console.log(err);
@@ -185,11 +175,10 @@ export default function Board(props) {
   const changeTodo = async (column, todo, newTodo) => {
     try {
       const newColumns = { ...columns };
-      const currCol = newColumns[column];
-      const item = currCol.find((item) => item.id === todo);
-      item.todo = newTodo;
-      mutate(newColumns, false);
-      await updateTodo(user, column, todo, newTodo, token);
+      await mutate(
+        updateTodo(user, column, todo, newTodo, newColumns, token),
+        updateTodoOptions(column, todo, newTodo, newColumns)
+      );
     } catch (err) {
       console.log(err);
     }

@@ -25,7 +25,9 @@ function inputValidator(fn, inputs) {
   return function (req, res) {
     for (let i = 0; i < inputs.length; i++) {
       if (req.body[inputs[i]] === undefined) {
-        return res.json({ error: "Missing required fields" });
+        return res.json({
+          error: "Missing required fields: ",
+        });
       }
     }
     return fn(req, res);
@@ -48,7 +50,7 @@ app.put(
     async (req, res) => {
       const { username, srcIndex, destIndex, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       if (srcIndex === destIndex) {
@@ -67,7 +69,7 @@ app.put(
     async (req, res) => {
       const { username, oldColumn, newColumn, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const updateResult = await updateColumn(username, oldColumn, newColumn);
@@ -83,7 +85,7 @@ app.post(
     async (req, res) => {
       const { username, column, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const storeResult = await storeColumn(username, column);
@@ -100,7 +102,7 @@ app.get(
       // CHANGE TO BODY IF BACKEND TESTING
       const { username, token } = req.query;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const foundColumns = await getColumns(username);
@@ -118,7 +120,7 @@ app.get(
       // CHANGE TO BODY IF BACKEND TESTING
       const { username, token } = req.query;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const foundColumns = await getColumnOrder(username);
@@ -135,7 +137,7 @@ app.delete(
     async (req, res) => {
       const { username, column, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
 
@@ -152,7 +154,7 @@ app.post(
     async (req, res) => {
       const { username, column, todo, dueDate, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const storeResult = await storeTodo(username, column, todo, dueDate);
@@ -169,7 +171,7 @@ app.get(
       // CHANGE TO BODY IF BACKEND TESTING ELSE QUERY
       const { username, column, token } = req.query;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const foundTodos = await getAllTodos(username, column);
@@ -186,20 +188,23 @@ app.put(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todoId, newTodo, token } = req.body;
+      const { username, column, todo, newTodo, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
+        console.log("Invalid authorisation");
         return res.json({ error: "Invalid authorisation" });
       }
       const foundTodos = await getAllTodos(username, column);
       if (!foundTodos) {
+        console.log("No Todos Found");
         return res.json({ error: "No Todos Found" });
       }
+      console.log("update todo");
       const updatedTodo = await updateTodo(
         username,
         column,
         foundTodos,
-        todoId,
+        todo,
         newTodo
       );
       if (updatedTodo === null) {
@@ -207,7 +212,7 @@ app.put(
       }
       return res.json(updatedTodo);
     },
-    ["username", "column", "todoId", "newTodo", "token"]
+    ["username", "column", "todo", "newTodo", "token"]
   )
 );
 
@@ -218,7 +223,7 @@ app.put(
       const { username, oldColumn, srcIndex, destIndex, newColumn, token } =
         req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       if (
@@ -246,7 +251,7 @@ app.put(
     async (req, res) => {
       const { username, column, todo, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const foundTodos = await getAllTodos(username, column);
@@ -274,7 +279,7 @@ app.put(
     async (req, res) => {
       const { username, column, todoId, newDate, token } = req.body;
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
       const foundTodos = await getAllTodos(username, column);
@@ -301,7 +306,7 @@ app.delete(
       const { username, column, todoId, token } = req.body;
       // TOO MANY ASYNC CALLS???
       const validUser = await verifyUser(username, token);
-      if (!validUser) {
+      if (validUser.error) {
         return res.json({ error: "Invalid authorisation" });
       }
 
