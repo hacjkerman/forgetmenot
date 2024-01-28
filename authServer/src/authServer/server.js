@@ -17,6 +17,7 @@ import { updatePhone } from "./users/updatePhone.js";
 import { getEmail } from "./users/getEmail.js";
 import { getPhone } from "./users/getPhone.js";
 import { getProfile } from "./users/getProfile.js";
+import { logger } from "./logger/logger.js";
 
 const app = express();
 app.use(cors());
@@ -26,7 +27,11 @@ function inputValidator(fn, inputs) {
   return function (req, res) {
     for (let i = 0; i < inputs.length; i++) {
       if (req.body[inputs[i]] === undefined) {
-        return res.json({ error: "Missing required fields" });
+        logger.log({
+          level: "error",
+          message: "Missing required fields" + inputs[i],
+        });
+        return res.json({ error: "Missing required fields" + inputs[i] });
       }
     }
 
@@ -37,7 +42,11 @@ function getInputsValidator(fn, inputs) {
   return function (req, res) {
     for (let i = 0; i < inputs.length; i++) {
       if (req.query[inputs[i]] === undefined) {
-        return res.json({ error: "Missing required fields" });
+        logger.log({
+          level: "error",
+          message: "Missing required fields" + inputs[i],
+        });
+        return res.json({ error: "Missing required fields" + inputs[i] });
       }
     }
     return fn(req, res);
@@ -49,16 +58,32 @@ app.delete(
     async (req, res) => {
       const { username, token } = req.body;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid User",
+        });
         res.json({ error: "Invalid User" });
         return;
       }
       const deleteResponse = await removeActiveToken(token);
       if (deleteResponse) {
-        return res.json({ status: "Success" });
+        logger.log({
+          level: "info",
+          message: "sucessful deletion",
+        });
+        return res.json({ status: "Successful deletion" });
       } else if (!deleteResponse) {
+        logger.log({
+          level: "error",
+          message: "Failed deletion",
+        });
         return res.json({ error: "Failed deletion" });
       } else {
+        logger.log({
+          level: "error",
+          message: "Something is wrong",
+        });
         return res.json({ error: "Something is wrong" });
       }
     },
@@ -73,9 +98,17 @@ app.get(
       const { username, token } = req.body;
       const isValidUser = await verifyUser(username, token);
       if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
+      logger.log({
+        level: "info",
+        message: "User found",
+      });
       return res.json({ status: "User found" });
     },
     ["username", "token"]
@@ -90,20 +123,36 @@ app.post(
       // Check if user exists
       const isFound = await findUserInUsers(username);
       if (!isFound) {
+        logger.log({
+          level: "error",
+          message: "User not found",
+        });
         return res.json({ error: "User not found" });
       }
       const isValid = await validateUser(username, password);
       if (!isValid) {
+        logger.log({
+          level: "error",
+          message: "Invalid password",
+        });
         return res.json({ error: "Invalid password" });
       }
       // Check if user is already logged in
       const userExists = await findUserInTokens(username);
       if (userExists) {
+        logger.log({
+          level: "info",
+          message: "user already logged in",
+        });
         res.json({ accessToken: userExists });
         return;
       }
       const accessToken = await generateAccessToken(username, isFound.email);
       await storeActiveToken(username, isFound.email, accessToken);
+      logger.log({
+        level: "info",
+        message: "generated ant stored active token",
+      });
       return res.json({ accessToken: accessToken });
     },
     ["username", "password"]
@@ -117,27 +166,59 @@ app.post(
     async (req, res) => {
       const { email, username, password } = req.body;
       if (!validator.validate(email)) {
+        logger.log({
+          level: "error",
+          message: "Invalid Email",
+        });
         return res.json({ error: "Invalid Email" });
       }
 
       const emailIsFound = await findEmailInUsers(email);
       if (emailIsFound) {
+        logger.log({
+          level: "error",
+          message: "Email already exists",
+        });
         return res.json({ error: "Email already exists" });
       }
       if (username.length < 6 || username.length > 100) {
-        return res.json({ error: "Invalid Username" });
+        logger.log({
+          level: "error",
+          message: "Invalid Username",
+        });
+        return res.json({
+          error: "Username has to be between 6 and 100 characters",
+        });
       }
       if (password.length < 6 || password.length > 100) {
-        return res.json({ error: "Invalid Password" });
+        logger.log({
+          level: "error",
+          message: "Invalid Password",
+        });
+        return res.json({
+          error: "Password has to be between 6 and 100 characters",
+        });
       }
       const userIsFound = await findUserInUsers(username);
       if (userIsFound) {
+        logger.log({
+          level: "error",
+          message: "User already exists",
+        });
         return res.json({ error: "User already exists" });
       }
       if (!/[A-Z]/.test(password)) {
+        logger.log({
+          level: "error",
+          message: "Password does not contain uppercase",
+        });
         return res.json({ error: "Password does not contain uppercase" });
       }
       if (!/\d/.test(password)) {
+        logger.log({
+          level: "error",
+          message: "Password does not contain number",
+        });
         return res.json({ error: "Password does not contain number" });
       }
       const userId = await createUser({
@@ -145,7 +226,14 @@ app.post(
         username,
         password,
       });
-      if (userId === undefined) return res.json({ error: "Duplicate User" });
+
+      if (userId === undefined) {
+        logger.log({
+          level: "error",
+          message: "Duplicate User",
+        });
+        return res.json({ error: "Duplicate User" });
+      }
       res.json(userId);
     },
     ["email", "username", "password"]
@@ -158,15 +246,27 @@ app.delete(
     async (req, res) => {
       const { username, password, token } = req.body;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
       const userId = await validateUser(username, password);
       if (!userId) {
+        logger.log({
+          level: "error",
+          message: "Invalid password",
+        });
         return res.json({ error: "Invalid password" });
       }
       const returnVal = await removeUser(userId._id);
+      logger.log({
+        level: "info",
+        message: "removed user",
+      });
       res.json(returnVal);
     },
     ["username", "password", "token"]
@@ -179,11 +279,19 @@ app.get(
     async (req, res) => {
       const { username, token } = req.query;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
       const returnVal = await getProfile(username);
+      logger.log({
+        level: "info",
+        message: "received profile",
+      });
       res.json(returnVal);
     },
     ["username", "token"]
@@ -196,11 +304,19 @@ app.get(
     async (req, res) => {
       const { username, token } = req.query;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
       const returnVal = await getEmail(username);
+      logger.log({
+        level: "info",
+        message: "Email found",
+      });
       res.json(returnVal);
     },
     ["username", "token"]
@@ -213,19 +329,35 @@ app.put(
     async (req, res) => {
       const { username, email, token } = req.body;
       if (!validator.validate(email)) {
+        logger.log({
+          level: "error",
+          message: "Invalid email",
+        });
         return res.json({ error: "Invalid Email" });
       }
       const isValidEmail = await findEmailInUsers(email);
       if (isValidEmail) {
+        logger.log({
+          level: "error",
+          message: "Email is already registered",
+        });
         res.json({ error: "Email is already registered" });
         return;
       }
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
       const returnVal = await updateEmail(username, email);
+      logger.log({
+        level: "info",
+        message: "email updated",
+      });
       res.json(returnVal);
     },
     ["username", "email", "token"]
@@ -238,11 +370,19 @@ app.get(
     async (req, res) => {
       const { username, token } = req.query;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
         res.json({ error: "Invalid user or token" });
         return;
       }
       const returnVal = await getPhone(username);
+      logger.log({
+        level: "info",
+        message: "received phone",
+      });
       res.json(returnVal);
     },
     ["username", "token"]
@@ -255,7 +395,7 @@ app.put(
     async (req, res) => {
       const { username, phone, token } = req.body;
       const isValidUser = await verifyUser(username, token);
-      if (!isValidUser) {
+      if (isValidUser === null) {
         res.json({ error: "Invalid user or token" });
         return;
       }
