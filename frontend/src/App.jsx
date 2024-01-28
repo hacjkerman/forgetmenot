@@ -15,7 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [menu, setMenu] = useState(false);
   const cookies = new Cookies();
-  const token = cookies.get("jwt_auth");
+  let token = cookies.get("jwt_auth");
   let newToken;
   if (token !== undefined) {
     newToken = token.accessToken;
