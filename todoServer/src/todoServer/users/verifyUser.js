@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logger } from "../logger/logger";
 
 export async function verifyUser(username, token) {
   const userId = await axios({
@@ -9,5 +10,23 @@ export async function verifyUser(username, token) {
       token: token,
     },
   });
-  return userId.data;
+  if (userId.error) {
+    logger.log({
+      level: "error",
+      message: userId.error,
+    });
+    return userId.error;
+  } else if (userId.status) {
+    logger.log({
+      level: "info",
+      message: userId.data,
+    });
+    return userId.data;
+  } else {
+    logger.log({
+      level: "error",
+      message: "connection could not be established",
+    });
+    return null;
+  }
 }
