@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logger } from "../logger/logger";
+import { logger } from "../logger/logger.js";
 
 export async function verifyUser(username, token) {
   const userId = await axios({
