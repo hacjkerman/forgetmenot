@@ -23,16 +23,11 @@ import {
   updateTodoOptions,
   updateTodoOrderMutation as updateTodoOrder,
   updateTodoOrderOptions,
+  updateTodoDateMutation as updateTodoDate,
+  updateTodoDateOptions,
 } from "../../helpers/todosMutations.jsx";
 import { getColumns } from "../../api/Columnapi.jsx";
-import {
-  // removeTodo,
-  // storeTodo,
-  // updateTodoOrder,
-  updateTodoDone,
-  updateTodoDate,
-  // updateTodo,
-} from "../../api/Todosapi.jsx";
+import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 
 const Container = styled.div`
@@ -195,10 +190,10 @@ export default function Board(props) {
   const changeTodoDate = async (column, todo, newDate) => {
     try {
       const newColumns = { ...columns };
-      const currCol = newColumns[column];
-      const item = currCol.find((item) => item.id === todo);
-      item.due = newDate;
-      mutate(newColumns, false);
+      await mutate(
+        updateTodoDate(user, column, todo, newDate, newColumns, token),
+        updateTodoDateOptions(column, todo, newDate, token)
+      );
       await updateTodoDate(user, column, todo, newDate, token);
     } catch (err) {
       console.log(err);

@@ -81,7 +81,7 @@ export const updateTodoDate = async (
     newDate,
     token,
   });
-  return response.data;
+  return response;
 };
 
 export const removeTodo = async (username, column, todoId, token) => {
