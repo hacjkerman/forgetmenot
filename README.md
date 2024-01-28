@@ -1,6 +1,6 @@
-# forgetmenot
+# Forgetmenot
 
-### *Forgetmenot*
+### *A Todo App for Procrastinators who like a bit of fun*
 
 ## 📄 Description
 A task tracking web application that provides email and phone notifications to remind users of crucial to-dos.
@@ -11,7 +11,7 @@ Ensure you have the following software:
 * git
 * Node.js (v18 or later)
 nvm is recommended to easily manage and install versions of node
-* (Optional) Docker and Docker-compose
+* Docker and Docker-compose
 
 
 ## 🎮 Running Forgetmenot locally
