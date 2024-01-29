@@ -22,8 +22,8 @@ function App() {
   }
   useEffect(() => {
     setInterval(() => {
-      let authCookie = cookies.get("jwt_auth");
-      if (authCookie === undefined) {
+      let token = cookies.get("jwt_auth");
+      if (token === undefined) {
         setUser("");
         setIsLoggedIn(false);
       }
@@ -35,6 +35,7 @@ function App() {
       setIsLoggedIn(true);
       return;
     }
+    // eslint-disable-next-line
   }, [token]);
 
   return (
