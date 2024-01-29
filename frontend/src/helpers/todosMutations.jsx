@@ -32,17 +32,22 @@ export const addTodoMutation = async (
 };
 
 export const addTodoOptions = (newTodo, column, columns) => {
-  columns.todoIndex++;
+  console.log(columns[column]);
   columns[column].push(newTodo);
+  console.log(columns);
+  columns.todoIndex++;
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
 export const delTodoMutation = async (user, column, todo, columns, token) => {
+  if (!columns[column].find((items) => items.id === todo.id)) {
+    return false;
+  }
   const added = await removeTodo(user, column, todo.id, token);
   if (added.status) {
     console.log(added.status);
@@ -60,13 +65,15 @@ export const delTodoMutation = async (user, column, todo, columns, token) => {
 };
 
 export const delTodoOptions = (column, todo, columns) => {
+  console.log(columns[column]);
   const filteredArray = columns[column].filter((items) => items.id !== todo.id);
   columns[column] = filteredArray;
+  console.log(columns);
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
