@@ -1,6 +1,6 @@
 import { dbConnect } from "./db.js";
 
-export default async function todoInsertion(newTodo) {
+export default async function todoInsertion(newTodo, user) {
   const db = await dbConnect();
   const todoNotifs = db.collection("todoNotifs");
   const date = new Date(newTodo.due);

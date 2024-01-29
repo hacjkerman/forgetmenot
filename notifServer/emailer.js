@@ -1,10 +1,25 @@
+import { Resend } from "resend";
+import "dotenv/config";
 // STEP 1 STORE ALL DATES FOR TODOS ON DATABASE AND PUT IN AN ARRAY
+const resend = new Resend(process.env.RESEND_APIKEY);
 
-function notification(todos) {
-  // STEP 2 ORGANISE THE ARRAY SO THAT INSERTION OF NEW TODOS WILL BE ORDERED FROM EARLIEST TO LATEST
+function notification(todos, user) {
+  (async function () {
+    const { data, error } = await resend.emails.send({
+      from: "notifications@forgetmenot.lol",
+      to: "andrewwang134@gmail.com",
+      subject: "Hello World",
+      html: "<p>Congrats on sending your <strong>first email</strong>!</p>",
+    });
+    if (error) {
+      return console.error({ error });
+    }
+    console.log({ data });
+  })();
+  // STEP 2 ORGANISE THE ARRAY SO THAT INSERTION OF NEW TODOS WILL BE ORDERED FROM LATEST TO EARLIEST
   // DO PROPER INSERTION TO ENSURE TODOS ARE SORTED BEFORE BEING PASSED INTO THIS FUNCTION
   const sortedTodos = todos.sort(function (a, b) {
-    return new Date(a.due) - new Date(b.due);
+    return new Date(b.due) - new Date(a.due);
   });
   // STEP 3 ONLY POP THE TODO THAT WILL HAPPEN SOONEST SO FAST
   // STEP 4 SEND OUT POPPED TODO FROM ARRAY TO USERS EMAIL AND PHONE NUMBER
