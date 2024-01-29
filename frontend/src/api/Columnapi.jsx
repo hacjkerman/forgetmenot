@@ -14,7 +14,6 @@ export const getColumnOrder = async (params) => {
 
 export const getColumns = async (params) => {
   const [headers] = params;
-  console.log("hi");
   const response = await todosApi.get(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",
@@ -25,7 +24,6 @@ export const getColumns = async (params) => {
       // sessionId: sessionId,
     },
   });
-  console.log(response);
   return response.data;
 };
 
