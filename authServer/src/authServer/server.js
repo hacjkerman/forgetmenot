@@ -18,10 +18,13 @@ import { getEmail } from "./users/getEmail.js";
 import { getPhone } from "./users/getPhone.js";
 import { getProfile } from "./users/getProfile.js";
 import { logger } from "./logger/logger.js";
+import { OAuth2Client } from "google-auth-library";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
 
 function inputValidator(fn, inputs) {
   return function (req, res) {
@@ -112,6 +115,25 @@ app.get(
       return res.json({ status: "User found" });
     },
     ["username", "token"]
+  )
+);
+
+app.post(
+  "/googleLogin",
+  inputValidator(
+    async (req, res) => {
+      logger.log({
+        level: "info",
+        message: "req body info: " + req.body.credentials,
+      });
+      const tokens = await client.verifyIdToken({
+        idToken: req.body.credentials,
+        audience: process.env.GOOGLE_CLIENTID,
+      });
+      console.log(tokens);
+      res.json(tokens);
+    },
+    ["credentials"]
   )
 );
 
