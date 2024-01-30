@@ -38,11 +38,7 @@ function UpdateTask(props) {
             </label>
             <label className={updateTaskCSS.colInput}>
               <h3>New Todo</h3>
-              <input
-                type="input"
-                placeholder="Change the World"
-                required
-              ></input>
+              <input type="input" placeholder={task.todo} required></input>
             </label>
           </div>
           <div className={updateTaskCSS.lowerFormButtons}>

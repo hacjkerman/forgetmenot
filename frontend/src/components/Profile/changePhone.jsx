@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import changePhoneCSS from "./changePhone.module.css";
-import { updatePhone, getPhone } from "../../api/Loginapi";
+import { updatePhone } from "../../api/Loginapi";
 
 function ChangePhone(props) {
-  const user = props.user;
   const token = props.token;
   const phone = props.phone;
   const handleClose = (e) => {

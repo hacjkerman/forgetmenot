@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import LoginCSS from "./Login.module.css";
 import email_icon from "./Assets/email.png";
 import password_icon from "./Assets/password.png";
-import { login } from "../../api/Loginapi.jsx";
+import { googleLogin, login } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -52,8 +52,10 @@ export default function LoginForm(props) {
     }
   };
 
-  const handleGoogleLogin = (credentialResponse) => {
-    console.log(credentialResponse);
+  const handleGoogleLogin = async (credentials) => {
+    console.log(credentials);
+    const tokens = await googleLogin(credentials);
+    console.log(tokens);
   };
 
   const loginUser = async (user, password) => {
