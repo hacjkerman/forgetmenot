@@ -19,7 +19,6 @@ function Menu(props) {
 
   const handleLogout = async () => {
     const token = cookies.get("jwt_auth");
-    console.log(token.accessToken);
     const logoutRes = await logout(user, token.accessToken);
     if (logoutRes.error) {
       console.log(logoutRes.error);
@@ -61,7 +60,7 @@ function Menu(props) {
           </>
         ) : (
           <>
-            <h1>Nothing here at the moment.</h1>
+            <h2>Nothing here at the moment.</h2>
             <h2>Please log in</h2>
           </>
         )}

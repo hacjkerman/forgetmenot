@@ -18,6 +18,12 @@ export const login = async (username, password) => {
   });
   return response.data;
 };
+export const googleLogin = async (credentials) => {
+  const response = await todosApi.post("/googleLogin", {
+    credentials: credentials.credential,
+  });
+  return response.data;
+};
 
 export const signUp = async (username, email, password) => {
   const response = await todosApi.post("/register", {
