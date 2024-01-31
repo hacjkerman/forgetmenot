@@ -22,11 +22,16 @@ Running the app with Docker
 cd into the project root directory
 Run docker-compose up --build. The auth server should be accesible at localhost:4000. The todo server should be accessible at localhost:8080.
 
-To run the frontend locally
+For everything to run smoothly, first follow the instructions listed out in .env.example files in authServer, frontend, and todoServer. 
+Once completed, change the names of .env.example to .env and run
+
+Then, to run the frontend locally
 cd into the frontend directory
 run npm install
-then run npm run start
+then run npm run start.
 The frontend should be accessible at localhost:3000.
+
+
 
 ## ⚖️ License
 
