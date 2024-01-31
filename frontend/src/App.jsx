@@ -8,7 +8,7 @@ import Board from "./components/Board/Board";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./components/Login/LoginForm";
 import RegisterForm from "./components/Login/RegisterForm";
-import Profile from "./components/Profile/Profile";
+// import Profile from "./components/Profile/Profile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -46,7 +46,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Navigate to="/login" />}></Route>
 
-          <Route
+          {/* <Route
             exact
             path="/profile"
             element={
@@ -56,7 +56,7 @@ function App() {
                 <Navigate to="/login" />
               )
             }
-          ></Route>
+          ></Route> */}
           <Route
             path="/login"
             element={

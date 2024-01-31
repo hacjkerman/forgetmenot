@@ -4,7 +4,6 @@
 
 .container {
   overflow: hidden;
-  overflow-x: scroll;
   background-color: black;
   padding: 5px;
 }
