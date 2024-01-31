@@ -18,10 +18,14 @@ import { getEmail } from "./users/getEmail.js";
 import { getPhone } from "./users/getPhone.js";
 import { getProfile } from "./users/getProfile.js";
 import { logger } from "./logger/logger.js";
+import { OAuth2Client } from "google-auth-library";
+import { createGoogleUser } from "./users/createGoogleUser.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
 
 function inputValidator(fn, inputs) {
   return function (req, res) {
@@ -116,6 +120,66 @@ app.get(
 );
 
 app.post(
+  "/googleLogin",
+  inputValidator(
+    async (req, res) => {
+      logger.log({
+        level: "info",
+        message: "req body info: " + req.body.credentials,
+      });
+      const tokens = await client.verifyIdToken({
+        idToken: req.body.credentials,
+        audience: process.env.GOOGLE_CLIENTID,
+      });
+      const email = tokens.payload.email;
+      const username = tokens.payload.name;
+      const emailIsFound = await findEmailInUsers(email);
+      let newName = username;
+      if (!emailIsFound) {
+        for (let i = 0; i <= 1000; i++) {
+          let isFound = await findUserInUsers(newName);
+          if (isFound) {
+            newName = username + i;
+            logger.log({
+              level: "info",
+              message: "new username" + newName,
+            });
+            continue;
+          } else {
+            break;
+          }
+        }
+        // CREATE NEW GOOGLE USER
+        const userId = await createGoogleUser({
+          email,
+          newName,
+        });
+        if (userId === undefined) {
+          logger.log({
+            level: "error",
+            message: "Duplicate User",
+          });
+          return res.json({ error: "Duplicate User" });
+        }
+      }
+      const userExists = await findUserInTokens(newName);
+      if (userExists) {
+        logger.log({
+          level: "info",
+          message: "user already logged in",
+        });
+        res.json({ accessToken: userExists });
+        return;
+      }
+      const accessToken = await generateAccessToken(newName, email);
+      await storeActiveToken(newName, email, accessToken);
+      res.json({ accessToken, username: newName });
+    },
+    ["credentials"]
+  )
+);
+
+app.post(
   "/login",
   inputValidator(
     async (req, res) => {
@@ -153,7 +217,7 @@ app.post(
         level: "info",
         message: "generated ant stored active token",
       });
-      return res.json({ accessToken: accessToken });
+      return res.json({ accessToken });
     },
     ["username", "password"]
   )
