@@ -3,6 +3,8 @@
 }
 
 .container {
+  width: 100vw;
+  height: 80vh;
   overflow: hidden;
   overflow-x: scroll;
   background-color: black;
