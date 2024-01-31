@@ -19,6 +19,7 @@ import { getPhone } from "./users/getPhone.js";
 import { getProfile } from "./users/getProfile.js";
 import { logger } from "./logger/logger.js";
 import { OAuth2Client } from "google-auth-library";
+import { createGoogleUser } from "./users/createGoogleUser.js";
 
 const app = express();
 app.use(cors());
@@ -130,8 +131,49 @@ app.post(
         idToken: req.body.credentials,
         audience: process.env.GOOGLE_CLIENTID,
       });
-      console.log(tokens);
-      res.json(tokens);
+      const email = tokens.payload.email;
+      const username = tokens.payload.name;
+      const emailIsFound = await findEmailInUsers(email);
+      let newName = username;
+      if (!emailIsFound) {
+        for (let i = 0; i <= 1000; i++) {
+          let isFound = await findUserInUsers(newName);
+          if (isFound) {
+            newName = username + i;
+            logger.log({
+              level: "info",
+              message: "new username" + newName,
+            });
+            continue;
+          } else {
+            break;
+          }
+        }
+        // CREATE NEW GOOGLE USER
+        const userId = await createGoogleUser({
+          email,
+          newName,
+        });
+        if (userId === undefined) {
+          logger.log({
+            level: "error",
+            message: "Duplicate User",
+          });
+          return res.json({ error: "Duplicate User" });
+        }
+      }
+      const userExists = await findUserInTokens(newName);
+      if (userExists) {
+        logger.log({
+          level: "info",
+          message: "user already logged in",
+        });
+        res.json({ accessToken: userExists });
+        return;
+      }
+      const accessToken = await generateAccessToken(newName, email);
+      await storeActiveToken(newName, email, accessToken);
+      res.json({ accessToken, username: newName });
     },
     ["credentials"]
   )
@@ -175,7 +217,7 @@ app.post(
         level: "info",
         message: "generated ant stored active token",
       });
-      return res.json({ accessToken: accessToken });
+      return res.json({ accessToken });
     },
     ["username", "password"]
   )

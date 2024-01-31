@@ -29,6 +29,7 @@ export default function LoginForm(props) {
       return;
     }
     const response = await loginUser(data.username, data.password);
+    console.log(response);
     if (!response) {
       console.log("no response");
       // POP UP FOR LOGGING IN ERRORS
@@ -53,9 +54,28 @@ export default function LoginForm(props) {
   };
 
   const handleGoogleLogin = async (credentials) => {
-    console.log(credentials);
     const tokens = await googleLogin(credentials);
-    console.log(tokens);
+    const access = tokens.accessToken;
+    const username = tokens.username;
+    if (!access) {
+      console.log("no response");
+      notify("Could not connect to server");
+      return;
+    } else if (access.error) {
+      console.log("response sent an error");
+      notify(access.error);
+      return;
+    } else {
+      console.log("response succeeded");
+      const now = new Date();
+      now.getTime();
+
+      now.setHours(now.getHours() + 1);
+      cookies.set("jwt_auth", tokens, { expires: now });
+      setUser(username);
+      setIsLoggedIn(true);
+      navigate("/board");
+    }
   };
 
   const loginUser = async (user, password) => {
