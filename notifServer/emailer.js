@@ -15,7 +15,7 @@ export async function dailyDigest() {
   const month = dateObj.getUTCMonth() + 1; // months from 1-12
   const day = dateObj.getUTCDate();
   const year = dateObj.getUTCFullYear();
-  const currDate = year + "/" + month + "/" + day;
+  const currDate = day + "/" + month + "/" + year;
   console.log(currDate);
   Promise.all(
     allUsers.map(async (values) => {
@@ -28,7 +28,10 @@ export async function dailyDigest() {
         from: "notifications@forgetmenot.lol",
         to: email,
         subject:
-          username + "'s todo list for " + currDate + " and the coming week(s)",
+          username +
+          "'s todo list for " +
+          currDate +
+          " and the coming week(s)!",
         html: emailHtml,
       });
       if (error) {

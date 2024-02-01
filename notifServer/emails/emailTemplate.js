@@ -8,7 +8,7 @@ export function emailTemplate(username, todos, date) {
     const month = todoDate.getUTCMonth() + 1; // months from 1-12
     const day = todoDate.getUTCDate();
     const year = todoDate.getUTCFullYear();
-    const currTodoDate = year + "/" + month + "/" + day;
+    const currTodoDate = day + "/" + month + "/" + year;
     if (todo.done === true) {
       let li = `<li class="completed">`;
       li = li + "Todo: " + todo.todo + " has been completed. Well Done!!</li>";
@@ -41,7 +41,7 @@ export function emailTemplate(username, todos, date) {
 <head>\
   <meta charset="UTF-8">\
   <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-  <title>Your Daily ToDo Digest for ${date} - ${username}</title>\
+  <title>Your Daily To-Do Digest for ${date} - ${username}</title>\
   <style>\
     body {\
       font-family: Arial, sans-serif;\
@@ -82,7 +82,7 @@ export function emailTemplate(username, todos, date) {
 </head>\
 \
 <body>\
-  <h2>Your Daily ToDo Digest for ${date} - ${username}</h2>\
+  <h2>Your Daily To-Do Digest for ${date} - ${username}</h2>\
 \
   <div class="task-list">\
     <h3>Late Tasks:</h3>\
