@@ -152,7 +152,7 @@ app.post(
         // CREATE NEW GOOGLE USER
         const userId = await createGoogleUser({
           email,
-          newName,
+          username: newName,
         });
         if (userId === undefined) {
           logger.log({
