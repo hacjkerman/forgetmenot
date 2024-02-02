@@ -147,13 +147,16 @@ export default function LoginForm(props) {
 
             <div className={LoginCSS.submit_container}>
               <input type="submit" value="Login" className={LoginCSS.submit} />
-              <GoogleLogin
-                className={LoginCSS.googleLogin}
-                onSuccess={handleGoogleLogin}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-              />
+
+              <div className={LoginCSS.googleLogin}>
+                <GoogleLogin
+                  onSuccess={handleGoogleLogin}
+                  onError={() => {
+                    console.log("Login Failed");
+                  }}
+                />
+              </div>
+
               <button className={LoginCSS.register} onClick={handleRegister}>
                 Sign Up?
               </button>

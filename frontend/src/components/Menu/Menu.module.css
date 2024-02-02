@@ -21,7 +21,7 @@
 .links {
   display: flex;
   flex-direction: column;
-  margin-top: 40%;
+  margin-top: 0%;
 }
 
 .links button {
@@ -30,13 +30,18 @@
   cursor: pointer;
 }
 
+@media only screen and (max-width: 1080px) {
+  .links {
+    margin-top: 40%;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .main {
     width: 17%;
   }
   .exitIcon {
     right: 30%;
-    top: 4%;
     width: 25px;
     height: 25px;
   }
