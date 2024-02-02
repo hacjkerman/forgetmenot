@@ -95,6 +95,9 @@
   cursor: pointer;
   margin: 0;
 }
+.googleLogin {
+  width: 100%;
+}
 
 .submit_gray {
   display: flex;
@@ -148,6 +151,10 @@
     margin-top: 25px;
     display: flex;
     flex-direction: column;
+  }
+
+  .googleLogin {
+    width: 100px;
   }
 
   .input {
