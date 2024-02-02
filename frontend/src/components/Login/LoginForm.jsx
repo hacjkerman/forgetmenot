@@ -29,7 +29,6 @@ export default function LoginForm(props) {
       return;
     }
     const response = await loginUser(data.username, data.password);
-    console.log(response);
     if (!response) {
       console.log("no response");
       // POP UP FOR LOGGING IN ERRORS
