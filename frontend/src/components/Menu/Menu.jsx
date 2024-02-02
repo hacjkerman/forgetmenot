@@ -44,7 +44,7 @@ function Menu(props) {
   return (
     <div className={MenuCSS.main}>
       <div className={MenuCSS.links}>
-        <h1>Menu</h1>
+        <h2>Menu</h2>
 
         {isLoggedIn ? (
           <>
