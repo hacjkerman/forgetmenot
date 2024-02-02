@@ -45,7 +45,7 @@ function Menu(props) {
   return (
     <div className={MenuCSS.main}>
       <div className={MenuCSS.links}>
-        <h1>Menu</h1>
+        <h2>Menu</h2>
 
         {isLoggedIn ? (
           <>
@@ -61,7 +61,7 @@ function Menu(props) {
           </>
         ) : (
           <>
-            <h1>Nothing here at the moment.</h1>
+            <h2>Nothing here at the moment.</h2>
             <h2>Please log in</h2>
           </>
         )}
