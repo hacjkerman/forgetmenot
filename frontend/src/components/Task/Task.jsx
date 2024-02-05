@@ -81,7 +81,7 @@ export default function Task(props) {
             name="doneBox"
           ></input>
           <div className={TaskCSS.lowerBox}>
-            <p id={TaskCSS.dueDate}>
+            <div id={TaskCSS.dueDate}>
               Due Date:{" "}
               {isUpdatingDate ? (
                 <UpdateTaskDate
@@ -96,7 +96,7 @@ export default function Task(props) {
                   {props.task.due}
                 </span>
               )}
-            </p>
+            </div>
           </div>
         </Container>
       )}

@@ -67,8 +67,6 @@
 }
 
 .lowerBox {
-  display: flex;
-  justify-content: space-between;
   padding-left: 3px;
   padding-right: 3px;
 }
@@ -84,4 +82,32 @@
 
 .updateDate:hover {
   text-decoration: underline;
+}
+
+@media only screen and (max-width: 600px) {
+  .todo {
+    font-size: 12px;
+  }
+
+  .upperBox {
+    padding: 3px;
+  }
+
+  .lowerBox {
+    font-size: 12px;
+  }
+
+  .removeTaskButton {
+    width: 20px;
+    height: 20px;
+  }
+
+  #dueDate {
+    padding: 3px;
+  }
+
+  .doneBox {
+    height: 17px;
+    width: 17px;
+  }
 }
