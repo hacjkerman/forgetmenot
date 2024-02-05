@@ -33,6 +33,8 @@
 
 .todo {
   cursor: pointer;
+  display: flex;
+  word-break: break-word;
 }
 
 .todo:hover {

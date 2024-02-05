@@ -56,21 +56,19 @@ export default function Task(props) {
           $isDragging={snapshot.isDragging}
         >
           <div className={TaskCSS.upperBox}>
-            <div>
-              {isUpdatingTodo ? (
-                <UpdateTask
-                  isUpdatingTodo={isUpdatingTodo}
-                  setIsUpdatingTodo={setIsUpdatingTodo}
-                  task={props.task}
-                  column={props.column}
-                  changeTodo={changeTodo}
-                ></UpdateTask>
-              ) : (
-                <p className={TaskCSS.todo} onClick={changeUpdateTodo}>
-                  {props.task.todo}
-                </p>
-              )}
-            </div>
+            {isUpdatingTodo ? (
+              <UpdateTask
+                isUpdatingTodo={isUpdatingTodo}
+                setIsUpdatingTodo={setIsUpdatingTodo}
+                task={props.task}
+                column={props.column}
+                changeTodo={changeTodo}
+              ></UpdateTask>
+            ) : (
+              <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
+                {props.task.todo}
+              </div>
+            )}
             <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
               -
             </button>
