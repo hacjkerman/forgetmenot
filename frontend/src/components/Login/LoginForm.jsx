@@ -29,7 +29,6 @@ export default function LoginForm(props) {
       return;
     }
     const response = await loginUser(data.username, data.password);
-    console.log(response);
     if (!response) {
       console.log("no response");
       // POP UP FOR LOGGING IN ERRORS
@@ -149,7 +148,6 @@ export default function LoginForm(props) {
               <input type="submit" value="Login" className={LoginCSS.submit} />
               <div className={LoginCSS.google_container}>
                 <GoogleLogin
-                  size="medium"
                   onSuccess={handleGoogleLogin}
                   onError={() => {
                     console.log("Login Failed");
