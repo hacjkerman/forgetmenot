@@ -81,6 +81,10 @@
   flex-direction: column;
 }
 
+.google_container {
+  width: 100%;
+}
+
 .submit {
   display: flex;
   justify-content: center;
@@ -133,6 +137,10 @@
   .container {
     width: 75%;
     padding-bottom: 20px;
+  }
+
+  .google_container {
+    width: 100px;
   }
 
   .header {

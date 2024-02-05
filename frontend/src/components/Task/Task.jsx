@@ -10,6 +10,9 @@ const Container = styled.div`
   border-radius: 2px;
   margin-bottom: 8px;
   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+  @media (max-width: 600px) {
+    font-size: 15px;
+  }
 `;
 
 export default function Task(props) {

@@ -11,13 +11,15 @@ const Container = styled.div`
   border-radius: 2px;
   width: 20rem;
   overflow-y: hidden;
-  min-width: 20rem;
   display: flex;
   flex-direction: column;
   background-color: rgb(235, 236, 240);
   padding: 0.5rem;
   height: 100%;
   border-radius: 6px;
+  @media (max-width: 600px) {
+    width: 15rem;
+  }
 `;
 const Title = styled.h3`
   padding: 8px;
@@ -25,6 +27,9 @@ const Title = styled.h3`
   border-bottom: solid;
   background-color: dark-grey;
   cursor: pointer;
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 const TaskList = styled.div`
   padding: 8px;
