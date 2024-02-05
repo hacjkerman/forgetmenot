@@ -7,9 +7,12 @@ import UpdateTask from "./updateTask";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
-  border-radius: 2px;
+  border-radius: 12px;
   margin-bottom: 8px;
   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+  @media (max-width: 600px) {
+    border-radius: 6px;
+  }
 `;
 
 export default function Task(props) {
@@ -53,21 +56,19 @@ export default function Task(props) {
           $isDragging={snapshot.isDragging}
         >
           <div className={TaskCSS.upperBox}>
-            <div>
-              {isUpdatingTodo ? (
-                <UpdateTask
-                  isUpdatingTodo={isUpdatingTodo}
-                  setIsUpdatingTodo={setIsUpdatingTodo}
-                  task={props.task}
-                  column={props.column}
-                  changeTodo={changeTodo}
-                ></UpdateTask>
-              ) : (
-                <p className={TaskCSS.todo} onClick={changeUpdateTodo}>
-                  {props.task.todo}
-                </p>
-              )}
-            </div>
+            {isUpdatingTodo ? (
+              <UpdateTask
+                isUpdatingTodo={isUpdatingTodo}
+                setIsUpdatingTodo={setIsUpdatingTodo}
+                task={props.task}
+                column={props.column}
+                changeTodo={changeTodo}
+              ></UpdateTask>
+            ) : (
+              <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
+                {props.task.todo}
+              </div>
+            )}
             <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
               -
             </button>
@@ -80,7 +81,7 @@ export default function Task(props) {
             name="doneBox"
           ></input>
           <div className={TaskCSS.lowerBox}>
-            <p id={TaskCSS.dueDate}>
+            <div id={TaskCSS.dueDate}>
               Due Date:{" "}
               {isUpdatingDate ? (
                 <UpdateTaskDate
@@ -95,7 +96,7 @@ export default function Task(props) {
                   {props.task.due}
                 </span>
               )}
-            </p>
+            </div>
           </div>
         </Container>
       )}
