@@ -23,7 +23,6 @@ export async function dailyDigest() {
       const username = values.username;
       const todos = await getAllTodos(username);
       const emailHtml = emailTemplate(username, todos, currDate);
-      console.log(emailHtml);
       const { data, error } = await resend.emails.send({
         from: "notifications@forgetmenot.lol",
         to: email,

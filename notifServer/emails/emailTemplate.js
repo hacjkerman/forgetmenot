@@ -3,6 +3,7 @@ export function emailTemplate(username, todos, date) {
   const lateTodos = [];
   const doneTodos = [];
   const upcomingTodos = [];
+  console.log(todos);
   todos.forEach((todo) => {
     const todoDate = new Date(todo.due);
     const month = todoDate.getUTCMonth() + 1; // months from 1-12

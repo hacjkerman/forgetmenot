@@ -8,6 +8,8 @@ export async function getAllUsers() {
     return false;
   }
   const foundArray = await userFound.toArray();
+  console.log(foundArray);
+
   const allUsers = [];
   for (let i = 0; i < foundArray.length; i++) {
     const user = {
