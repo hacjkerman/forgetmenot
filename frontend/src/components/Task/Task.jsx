@@ -96,8 +96,6 @@ export default function Task(props) {
                 </span>
               )}
             </p>
-
-            <p id={TaskCSS.propId}>#{props.task.id}</p>
           </div>
         </Container>
       )}
