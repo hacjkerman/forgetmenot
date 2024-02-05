@@ -7,9 +7,12 @@ import UpdateTask from "./updateTask";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
-  border-radius: 2px;
+  border-radius: 12px;
   margin-bottom: 8px;
   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+  @media (max-width: 600px) {
+    border-radius: 6px;
+  }
 `;
 
 export default function Task(props) {
