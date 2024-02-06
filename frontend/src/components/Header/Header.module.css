@@ -17,3 +17,21 @@
   justify-content: center;
   align-items: center;
 }
+
+@media only screen and (max-width: 600px) {
+  .main h1 {
+    font-size: 25px;
+  }
+  .exitIcon {
+    width: 25px;
+    height: 25px;
+  }
+  .links h2 {
+    font-size: 10px;
+  }
+  .menuIcon {
+    width: 30px;
+    height: 30px;
+    right: 5%;
+  }
+}

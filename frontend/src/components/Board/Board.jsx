@@ -58,6 +58,7 @@ export default function Board(props) {
   const headers = { username: user, token: token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
+  console.log(columns);
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };

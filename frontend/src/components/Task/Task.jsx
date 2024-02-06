@@ -11,7 +11,9 @@ const Container = styled.div`
   margin-bottom: 8px;
   background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
   @media (max-width: 600px) {
+    font-size: 15px;
     border-radius: 6px;
+    margin-bottom: 3px;
   }
 `;
 
