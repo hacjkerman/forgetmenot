@@ -18,9 +18,9 @@ export const login = async (username, password) => {
   });
   return response.data;
 };
-export const googleLogin = async (credentials) => {
+export const googleLogin = async (code) => {
   const response = await todosApi.post("/googleLogin", {
-    credentials: credentials.credential,
+    code,
   });
   return response.data;
 };

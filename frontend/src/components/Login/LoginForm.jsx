@@ -6,8 +6,7 @@ import password_icon from "./Assets/password.png";
 import { googleLogin, login } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const notify = (message) => toast(message);
 
@@ -53,8 +52,17 @@ export default function LoginForm(props) {
     }
   };
 
-  const handleGoogleLogin = async (credentials) => {
-    const tokens = await googleLogin(credentials);
+  const googleLog = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (codeResponse) => {
+      console.log(codeResponse);
+      const tokens = await handleGoogleLogin(codeResponse.code);
+      console.log(tokens);
+    },
+  });
+
+  const handleGoogleLogin = async (code) => {
+    const tokens = await googleLogin(code);
     const access = tokens.accessToken;
     const username = tokens.username;
     if (!access) {
@@ -76,6 +84,7 @@ export default function LoginForm(props) {
       setIsLoggedIn(true);
       navigate("/board");
     }
+    return tokens;
   };
 
   const loginUser = async (user, password) => {
@@ -103,63 +112,60 @@ export default function LoginForm(props) {
     <>
       <Toaster />
       <form onSubmit={handleSubmit(onSubmit)} className={LoginCSS.container}>
-        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
-          <div className={LoginCSS.header}>
-            <div className={LoginCSS.text}>Login</div>
-            <div className={LoginCSS.underline}></div>
-          </div>
-          <div className={LoginCSS.inputs}>
-            <div className={LoginCSS.input}>
-              <img src={email_icon} alt="" />
+        <div className={LoginCSS.header}>
+          <div className={LoginCSS.text}>Login</div>
+          <div className={LoginCSS.underline}></div>
+        </div>
+        <div className={LoginCSS.inputs}>
+          <div className={LoginCSS.input}>
+            <img src={email_icon} alt="" />
 
+            <input
+              type="text"
+              placeholder="Username"
+              {...register("username", { required: true, maxLength: 100 })}
+            />
+          </div>
+          {showPassword ? (
+            <div className={LoginCSS.input}>
+              <img src={password_icon} alt="" />
               <input
                 type="text"
-                placeholder="Username"
-                {...register("username", { required: true, maxLength: 100 })}
+                placeholder="Password"
+                id="password"
+                {...register("password", { required: true, maxLength: 100 })}
               />
             </div>
-            {showPassword ? (
-              <div className={LoginCSS.input}>
-                <img src={password_icon} alt="" />
-                <input
-                  type="text"
-                  placeholder="Password"
-                  id="password"
-                  {...register("password", { required: true, maxLength: 100 })}
-                />
-              </div>
-            ) : (
-              <div className={LoginCSS.input}>
-                <img src={password_icon} alt="" />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  id="password"
-                  {...register("password", { required: true, maxLength: 100 })}
-                />
-              </div>
-            )}
-
-            <div className={LoginCSS.password_button}>
-              <input type="checkbox" onClick={toggleShowPassword} />
-              <p>Show Password</p>
-            </div>
-
-            <div className={LoginCSS.submit_container}>
-              <input type="submit" value="Login" className={LoginCSS.submit} />
-              <GoogleLogin
-                className={LoginCSS.googleLogin}
-                onSuccess={handleGoogleLogin}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
+          ) : (
+            <div className={LoginCSS.input}>
+              <img src={password_icon} alt="" />
+              <input
+                type="password"
+                placeholder="Password"
+                id="password"
+                {...register("password", { required: true, maxLength: 100 })}
               />
-              <button className={LoginCSS.register} onClick={handleRegister}>
-                Sign Up?
-              </button>
             </div>
+          )}
+
+          <div className={LoginCSS.password_button}>
+            <input type="checkbox" onClick={toggleShowPassword} />
+            <p>Show Password</p>
           </div>
-        </GoogleOAuthProvider>
+
+          <div className={LoginCSS.submit_container}>
+            <input type="submit" value="Login" className={LoginCSS.submit} />
+            <button
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              onClick={() => googleLog()}
+            >
+              Google
+            </button>
+            <button className={LoginCSS.register} onClick={handleRegister}>
+              Sign Up?
+            </button>
+          </div>
+        </div>
       </form>
     </>
   );
