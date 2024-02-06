@@ -8,7 +8,7 @@ import Board from "./components/Board/Board";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./components/Login/LoginForm";
 import RegisterForm from "./components/Login/RegisterForm";
-// import Profile from "./components/Profile/Profile";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,12 +41,12 @@ function App() {
   return (
     <div className={AppCSS.main}>
       <Header setMenu={setMenu} menu={menu} />
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<Navigate to="/login" />}></Route>
 
-      <BrowserRouter>
-        <Routes>
-          <Route exact path="/" element={<Navigate to="/login" />}></Route>
-
-          {/* <Route
+            {/* <Route
             exact
             path="/profile"
             element={
@@ -57,54 +57,55 @@ function App() {
               )
             }
           ></Route> */}
-          <Route
-            path="/login"
-            element={
-              token ? (
-                <Navigate to="/board" />
-              ) : (
-                <LoginForm
-                  setUser={setUser}
-                  setIsLoggedIn={setIsLoggedIn}
-                  cookies={cookies}
-                />
-              )
-            }
-          />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route
-            path="/board"
-            element={
-              newToken ? (
-                <div className={AppCSS.container}>
-                  <Board
-                    user={user}
-                    token={newToken}
+            <Route
+              path="/login"
+              element={
+                token ? (
+                  <Navigate to="/board" />
+                ) : (
+                  <LoginForm
                     setUser={setUser}
                     setIsLoggedIn={setIsLoggedIn}
+                    cookies={cookies}
                   />
-                </div>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
-          <Route path="*" element={<div>Loading...</div>} />
-        </Routes>
-        {menu ? (
-          <Menu
-            cookies={cookies}
-            setMenu={setMenu}
-            menu={menu}
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-            user={user}
-            setUser={setUser}
-          />
-        ) : (
-          ""
-        )}
-      </BrowserRouter>
+                )
+              }
+            />
+            <Route path="/register" element={<RegisterForm />} />
+            <Route
+              path="/board"
+              element={
+                newToken ? (
+                  <div className={AppCSS.container}>
+                    <Board
+                      user={user}
+                      token={newToken}
+                      setUser={setUser}
+                      setIsLoggedIn={setIsLoggedIn}
+                    />
+                  </div>
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
+            <Route path="*" element={<div>Loading...</div>} />
+          </Routes>
+          {menu ? (
+            <Menu
+              cookies={cookies}
+              setMenu={setMenu}
+              menu={menu}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              user={user}
+              setUser={setUser}
+            />
+          ) : (
+            ""
+          )}
+        </BrowserRouter>
+      </GoogleOAuthProvider>
     </div>
   );
 }

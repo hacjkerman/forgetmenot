@@ -25,7 +25,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENTID,
+  process.env.GOOGLE_CLIENTSECRET,
+  "postmessage"
+);
 
 function inputValidator(fn, inputs) {
   return function (req, res) {
@@ -33,9 +37,9 @@ function inputValidator(fn, inputs) {
       if (req.body[inputs[i]] === undefined) {
         logger.log({
           level: "error",
-          message: "Missing required fields" + inputs[i],
+          message: "Missing required fields " + inputs[i],
         });
-        return res.json({ error: "Missing required fields" + inputs[i] });
+        return res.json({ error: "Missing required fields " + inputs[i] });
       }
     }
 
@@ -48,9 +52,9 @@ function getInputsValidator(fn, inputs) {
       if (req.query[inputs[i]] === undefined) {
         logger.log({
           level: "error",
-          message: "Missing required fields" + inputs[i],
+          message: "Missing required fields " + inputs[i],
         });
-        return res.json({ error: "Missing required fields" + inputs[i] });
+        return res.json({ error: "Missing required fields " + inputs[i] });
       }
     }
     return fn(req, res);
@@ -123,16 +127,13 @@ app.post(
   "/googleLogin",
   inputValidator(
     async (req, res) => {
-      logger.log({
-        level: "info",
-        message: "req body info: " + req.body.credentials,
-      });
-      const tokens = await client.verifyIdToken({
-        idToken: req.body.credentials,
+      const tokens = await client.getToken(req.body.code);
+      const user = await client.verifyIdToken({
+        idToken: tokens.tokens.id_token,
         audience: process.env.GOOGLE_CLIENTID,
       });
-      const email = tokens.payload.email;
-      const username = tokens.payload.name;
+      const email = user.payload.email;
+      const username = user.payload.name;
       const emailIsFound = await findEmailInUsers(email);
       let newName = username;
       if (!emailIsFound) {
@@ -168,14 +169,14 @@ app.post(
           level: "info",
           message: "user already logged in",
         });
-        res.json({ accessToken: userExists });
+        res.json({ accessToken: userExists, username: newName });
         return;
       }
       const accessToken = await generateAccessToken(newName, email);
       await storeActiveToken(newName, email, accessToken);
       res.json({ accessToken, username: newName });
     },
-    ["credentials"]
+    ["code"]
   )
 );
 
