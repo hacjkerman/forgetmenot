@@ -156,10 +156,10 @@ export default function LoginForm(props) {
           <div className={LoginCSS.submit_container}>
             <input type="submit" value="Login" className={LoginCSS.submit} />
             <button
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              className={LoginCSS.google_login}
               onClick={() => googleLog()}
             >
-              Google
+              Sign in with Google 🚀
             </button>
             <button className={LoginCSS.register} onClick={handleRegister}>
               Sign Up?

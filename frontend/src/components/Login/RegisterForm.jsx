@@ -109,13 +109,13 @@ export default function RegisterForm() {
             />
           </div>
           <div className={RegisterCSS.submit_container}>
-            <button className={RegisterCSS.submit_gray} onClick={handleLogin}>
+            <button className={RegisterCSS.submit} onClick={handleLogin}>
               Login
             </button>
             <input
               type="submit"
               value="Sign Up"
-              className={RegisterCSS.submit}
+              className={RegisterCSS.submit_gray}
             />
           </div>
         </div>

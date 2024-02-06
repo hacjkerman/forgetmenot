@@ -18,7 +18,7 @@ export const addTodoMutation = async (
   const added = await storeTodo(user, column, newTodo, due, token);
   if (added.status) {
     console.log(added.status);
-    toast.success(added.status + " Successfully added todo: " + newTodo);
+    toast.success("Successfully added todo: " + newTodo);
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -51,7 +51,7 @@ export const delTodoMutation = async (user, column, todo, columns, token) => {
   const added = await removeTodo(user, column, todo.id, token);
   if (added.status) {
     console.log(added.status);
-    toast.success(added.status + " Successfully removed todo: " + todo.todo);
+    toast.success("Successfully removed todo: " + todo.todo);
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -89,7 +89,7 @@ export const updateTodoMutation = async (
   console.log(added);
   if (added.status) {
     console.log(added.status);
-    toast.success("200 " + added.status);
+    toast.success(added.status);
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -133,7 +133,7 @@ export const updateTodoOrderMutation = async (
   );
   if (added.status) {
     console.log(added.status);
-    toast.success("200 Todo column successfully updated");
+    toast.success("Todo column successfully updated");
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -187,7 +187,7 @@ export const updateTodoDateMutation = async (
   console.log(added);
   if (added.status) {
     console.log(added.status);
-    toast.success("200 Todo column successfully updated");
+    toast.success("Todo column successfully updated");
     return columns;
   } else if (added.error) {
     console.log(added.error);

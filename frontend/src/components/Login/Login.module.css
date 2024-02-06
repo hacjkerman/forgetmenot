@@ -82,32 +82,34 @@
 }
 
 .submit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 220px;
-  height: 59px;
-  color: #fff;
+  height: 40px;
+  width: 100%;
+  color: rgb(226, 232, 240);
   background-color: #4c00b4;
-  border-radius: 50px;
-  font-size: 19px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 700;
-  cursor: pointer;
   margin: 0;
 }
 
-.submit_gray {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 220px;
-  height: 59px;
-  border-radius: 50px;
-  font-size: 19px;
-  font-weight: 700;
+.submit:hover {
   cursor: pointer;
-  background-color: #eaeaea;
-  color: #676767;
+  background-color: #3e0390;
+}
+
+.google_login {
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  background-color: rgb(147 51 234);
+  color: rgb(226, 232, 240);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.google_login:hover {
+  cursor: pointer;
+  background-color: #8e3dff;
 }
 
 .register {
@@ -132,5 +134,13 @@
 @media only screen and (max-width: 600px) {
   .container {
     width: 60%;
+  }
+
+  .submit {
+    font-size: 15px;
+  }
+
+  .google_login {
+    font-size: 15px;
   }
 }

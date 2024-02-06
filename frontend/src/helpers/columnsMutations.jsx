@@ -40,7 +40,7 @@ export const delColMutation = async (user, column, columns, token) => {
   if (added.status) {
     console.log(columns);
     console.log(added.status);
-    toast.success(added.status + " Successfully removed column: " + column);
+    toast.success("Successfully removed column: " + column);
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -81,7 +81,7 @@ export const updateColMutation = async (
   if (added.status) {
     console.log(columns);
     console.log(added.status);
-    toast.success("200 " + added.status);
+    toast.success(added.status);
     return columns;
   } else if (added.error) {
     console.log(added.error);
@@ -120,7 +120,7 @@ export const updateColOrderMutation = async (
   if (added.status) {
     console.log(columns);
     console.log(added.status);
-    toast.success("200 " + added.status);
+    toast.success(added.status);
     return columns;
   } else if (added.error) {
     console.log(added.error);
