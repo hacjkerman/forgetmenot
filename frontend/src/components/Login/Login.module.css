@@ -136,16 +136,16 @@
   .container {
     width: 85%;
   }
+
+  .submit_container {
+    margin: 20px 15px 20px 15px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .container {
     width: 75%;
     padding-bottom: 20px;
-  }
-
-  .google_container {
-    width: 100px;
   }
 
   .header {
@@ -163,8 +163,9 @@
     flex-direction: column;
   }
 
-  .googleLogin {
-    width: 100px;
+  .google_login {
+    font-size: 13.5px;
+    width: 100%;
   }
 
   .input {
@@ -173,7 +174,6 @@
     width: 90%;
     height: 50px;
     background: #eaeaea;
-    border-radius: 0;
     margin-bottom: 10px;
   }
 
@@ -191,9 +191,8 @@
   }
 
   .submit {
-    width: 100px;
-    height: 39px;
-    font-size: 12px;
+    width: 100%;
+    font-size: 13.5px;
   }
 
   .password_button {
@@ -203,13 +202,5 @@
   .submit_container {
     gap: 5px;
     margin: 5px auto;
-  }
-
-  .submit {
-    font-size: 15px;
-  }
-
-  .google_login {
-    font-size: 15px;
   }
 }

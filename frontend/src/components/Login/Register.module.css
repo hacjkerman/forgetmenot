@@ -154,24 +154,16 @@
     font-size: 12px;
   }
 
+  .submit_container {
+    gap: 5px;
+  }
+
   .submit_gray {
-    width: 100px;
     height: 39px;
     font-size: 12px;
-    margin-left: 10px;
   }
   .submit {
-    width: 100px;
     height: 39px;
     font-size: 12px;
-    margin-right: 10px;
-  }
-  .submit {
-    width: 43%;
-    font-size: 15px;
-  }
-  .submit_gray {
-    width: 43%;
-    font-size: 15px;
   }
 }
