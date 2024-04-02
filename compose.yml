@@ -3,6 +3,7 @@ version: "3"
 services:
   auth:
     build: ./authServer
+    restart: unless-stopped
     ports:
       - 4000:4000
     env_file:
@@ -13,6 +14,7 @@ services:
       - "mongodb"
   todo:
     build: ./todoServer
+    restart: unless-stopped
     ports:
       - 8080:8080
     env_file:
@@ -24,6 +26,7 @@ services:
       - "auth"
   mongodb:
     image: mongo:latest
+    restart: unless-stopped
     container_name: mongodb
     ports:
       - "27017:27017"
@@ -32,9 +35,6 @@ services:
   ngrok:
     image: ngrok/ngrok:latest
     restart: unless-stopped
-    depends_on:
-      - auth
-      - todo
     links:
       - auth
       - todo

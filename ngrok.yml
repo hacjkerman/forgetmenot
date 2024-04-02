@@ -1,12 +1,10 @@
 version: "2"
-authtoken: 2WIhX3e1wRJd4d4lhwFiaTZ6YjR_ACmz7LGx823mtgWij4iY
+authtoken: 2bnQy2e04QpB3DH7zcd2Nuwk0QC_7bHdCz6izc1SaRoiwn2i7
 region: au
 tunnels:
   authServer:
     proto: http
     addr: http://auth:4000
-    hostname: forgetmenot.ngrok.app
   todoServer:
     proto: http
     addr: http://todo:8080
-    hostname: repeatedly-alert-falcon.ngrok-free.app
