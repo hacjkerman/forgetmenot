@@ -21,6 +21,7 @@ import { logger } from "./logger/logger.js";
 import { OAuth2Client } from "google-auth-library";
 import { createGoogleUser } from "./users/createGoogleUser.js";
 import endpoints from "../prod/endpoints.js";
+import changeEnv from "../prod/vercelENV.js";
 
 const app = express();
 app.use(cors());
@@ -480,5 +481,8 @@ app.put(
 app.listen(process.env.PORT2, async () => {
   const tunnels = await endpoints();
   console.log(tunnels);
+  if (Object.keys(tunnels).length !== 0) {
+    changeEnv(tunnels[auth], tunnels[todo]);
+  }
   console.log(`Server is listening on http://localhost:${process.env.PORT2}`);
 });
