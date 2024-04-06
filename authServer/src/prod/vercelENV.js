@@ -33,5 +33,5 @@ export default async function changeEnv(authAddr, todoAddr) {
       method: "post",
     }
   ).then((res) => res.json());
-  console.log(res);
+  return res;
 }
