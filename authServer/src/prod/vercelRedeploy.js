@@ -16,6 +16,7 @@ export default async function redeploy() {
     body: JSON.stringify({
       name: "forgetmenot",
       deploymentId: prevDep.deployments[0].uid,
+      target: "production",
     }),
     headers: {
       Authorization: `Bearer ${process.env.VERCEL_ACCESS_TOKEN}`,
