@@ -18,7 +18,7 @@ export default async function changeEnv(authAddr, todoAddr) {
       method: "post",
     }
   );
-  const res = await fetch(
+  const response = await fetch(
     `https://api.vercel.com/v10/projects/${process.env.VERCEL_PROJECT}/env?upsert=true`,
     {
       body: JSON.stringify({
@@ -33,5 +33,5 @@ export default async function changeEnv(authAddr, todoAddr) {
       method: "post",
     }
   ).then((res) => res.json());
-  return res;
+  return response;
 }
