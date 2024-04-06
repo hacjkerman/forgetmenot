@@ -27,6 +27,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const retry = setInterval(() => {
+  setTimeout(async () => {
+    const tunnels = await endpoints();
+    if (Object.keys(tunnels).length !== 0) {
+      await changeEnv(tunnels.auth, tunnels.todo);
+      clearInterval(retry);
+    }
+  });
+}, "3000");
+
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENTID,
   process.env.GOOGLE_CLIENTSECRET,
@@ -479,10 +489,5 @@ app.put(
 );
 
 app.listen(process.env.PORT2, async () => {
-  const tunnels = await endpoints();
-  console.log(tunnels);
-  if (Object.keys(tunnels).length !== 0) {
-    changeEnv(tunnels[auth], tunnels[todo]);
-  }
   console.log(`Server is listening on http://localhost:${process.env.PORT2}`);
 });
