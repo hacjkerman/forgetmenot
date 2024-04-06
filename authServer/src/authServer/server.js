@@ -32,8 +32,10 @@ const retry = setInterval(() => {
   setTimeout(async () => {
     const tunnels = await endpoints();
     if (Object.keys(tunnels).length !== 0) {
-      await changeEnv(tunnels.auth, tunnels.todo);
-      await redeploy();
+      const res = await changeEnv(tunnels.auth, tunnels.todo);
+      if (res.failed.length === 0) {
+        await redeploy();
+      }
       clearInterval(retry);
     }
   });
