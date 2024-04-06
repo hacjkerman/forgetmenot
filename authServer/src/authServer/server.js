@@ -37,7 +37,7 @@ const retry = setInterval(() => {
       clearInterval(retry);
     }
   });
-}, "3000");
+}, "10000");
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENTID,
