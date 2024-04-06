@@ -11,9 +11,7 @@ export default async function endpoints() {
   }).then((res) => {
     return res.json();
   });
-  console.log(ngrok);
   const tunnels = ngrok.tunnels;
-  console.log(tunnels);
   let endpoints = {};
   for (let i = 0; i < tunnels.length; i++) {
     if (tunnels[i].forwards_to.includes("auth")) {

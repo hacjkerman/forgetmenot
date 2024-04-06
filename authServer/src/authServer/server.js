@@ -22,6 +22,7 @@ import { OAuth2Client } from "google-auth-library";
 import { createGoogleUser } from "./users/createGoogleUser.js";
 import endpoints from "../prod/endpoints.js";
 import changeEnv from "../prod/vercelENV.js";
+import redeploy from "../prod/vercelRedeploy.js";
 
 const app = express();
 app.use(cors());
@@ -32,6 +33,7 @@ const retry = setInterval(() => {
     const tunnels = await endpoints();
     if (Object.keys(tunnels).length !== 0) {
       await changeEnv(tunnels.auth, tunnels.todo);
+      await redeploy();
       clearInterval(retry);
     }
   });
