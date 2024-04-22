@@ -74,9 +74,16 @@ function Timer(props) {
         <div className={TimerCSS.lowerBox}>
           <div className={TimerCSS.time}>{formatTime(seconds)}</div>
           <div className={TimerCSS.buttons}>
-            <button onClick={toggleStart} className={TimerCSS.beginButton}>
-              {isStarted ? <>Pause</> : <>Begin</>}
-            </button>
+            {isStarted ? (
+              <button onClick={toggleStart} className={TimerCSS.pauseButton}>
+                Pause
+              </button>
+            ) : (
+              <button onClick={toggleStart} className={TimerCSS.beginButton}>
+                Begin
+              </button>
+            )}
+
             {isUpdating ? (
               <button
                 className={TimerCSS.cancelButton}
