@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import HeaderCSS from "./Header.module.css";
 import menuIcon from "./Assets/Hamburger_icon.png";
+import Menu from "../Menu/Menu";
+import { UserContext } from "../../contexts/UserContext";
 
 export default function Header(props) {
-  const menu = props.menu;
-  const setMenu = props.setMenu;
-  const isLoggedIn = props.isLoggedIn;
+  const setUser = props.setUser;
+  const [menu, setMenu] = useState(false);
+  const setIsLoggedIn = props.setIsLoggedIn;
+  const { user, isLoggedIn, cookies } = useContext(UserContext);
   const toggleMenu = () => {
     setMenu(!menu);
   };
@@ -14,15 +17,27 @@ export default function Header(props) {
       <h1>Forget me Not</h1>
       {isLoggedIn ? (
         <>
-          <img
-            src={menuIcon}
-            alt="Menu Icon"
-            className={HeaderCSS.menuIcon}
-            onClick={toggleMenu}
-          />
+          {menu ? (
+            <Menu
+              cookies={cookies}
+              setMenu={setMenu}
+              menu={menu}
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              user={user}
+              setUser={setUser}
+            />
+          ) : (
+            <img
+              src={menuIcon}
+              alt="Menu Icon"
+              className={HeaderCSS.menuIcon}
+              onClick={toggleMenu}
+            />
+          )}
         </>
       ) : (
-        ""
+        <></>
       )}
     </div>
   );

@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import updateTaskCSS from "./updateTask.module.css";
+import { TodoContext } from "../../contexts/TodoContext";
 
 function UpdateTaskDate(props) {
+  const { changeTodoDate } = useContext(TodoContext);
   const isUpdatingDate = props.isUpdatingDate;
   const setIsUpdatingDate = props.setIsUpdatingDate;
   const task = props.task;
   const column = props.column;
-  const changeTodoDate = props.changeTodoDate;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingDate(!isUpdatingDate);

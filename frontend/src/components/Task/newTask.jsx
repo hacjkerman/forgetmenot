@@ -2,7 +2,6 @@ import React from "react";
 import newTaskCSS from "./newTask.module.css";
 
 function NewTask(props) {
-  const user = props.user;
   const addTodo = props.addTodo;
   const column = props.column;
   const handleClose = (e) => {
@@ -22,7 +21,7 @@ function NewTask(props) {
       estimate = e.target[1].value;
     }
     const due = e.target[2].value;
-    await addTodo(user, column, todo, estimate, due);
+    await addTodo(column, todo, estimate, due);
     handleClose(e);
     return;
   };

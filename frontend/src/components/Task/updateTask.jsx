@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import updateTaskCSS from "./updateTask.module.css";
+import { TodoContext } from "../../contexts/TodoContext";
 
 function UpdateTask(props) {
+  const { changeTodo } = useContext(TodoContext);
   const isUpdatingTodo = props.isUpdatingTodo;
   const setIsUpdatingTodo = props.setIsUpdatingTodo;
   const task = props.task;
   const column = props.column;
-  const changeTodo = props.changeTodo;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingTodo(!isUpdatingTodo);
