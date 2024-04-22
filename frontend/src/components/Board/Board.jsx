@@ -32,6 +32,7 @@ import { getColumns } from "../../api/Columnapi.jsx";
 import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
+import { UserContext } from "../../contexts/UserContext.js";
 
 const Container = styled.div`
   display: flex;
@@ -52,32 +53,26 @@ const Button = styled.button`
   margin-top: 0.5rem;
 `;
 
-export default function Board(props) {
-  const user = props.user;
-  const token = props.token;
-
+export default function Board() {
+  const { user, token } = useContext(UserContext);
   const [isTriggered, setIsTriggered] = useState(false);
 
-  const headers = { username: user, token: token, type: "column" };
+  const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
-  const addColumn = async (user, column) => {
+  const addColumn = async (column) => {
     try {
       const newColumns = { ...columns };
       await mutate(
         storeColumn(user, column, token, newColumns),
         addColOptions(column, newColumns)
       );
-
-      // newColumns.columnOrder.push(column);
-      // const response = await storeColumn(user, column, token);
-      // mutate(newColumns, false);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const deleteColumn = async (user, column) => {
+  const deleteColumn = async (column) => {
     try {
       const newColumns = { ...columns };
       await mutate(
@@ -113,7 +108,7 @@ export default function Board(props) {
     }
   };
   // TODO API CALLS
-  const addTodo = async (user, column, todo, estimate, due) => {
+  const addTodo = async (column, todo, estimate, due) => {
     try {
       const newColumns = { ...columns };
       const newTodo = {
@@ -132,7 +127,7 @@ export default function Board(props) {
     }
   };
 
-  const deleteTodo = async (user, column, todo) => {
+  const deleteTodo = async (column, todo) => {
     try {
       const newColumns = { ...columns };
       await mutate(
@@ -247,7 +242,20 @@ export default function Board(props) {
     setIsTriggered(!isTriggered);
   };
   return (
-    <TodoContext.Provider value={{}}>
+    <TodoContext.Provider
+      value={{
+        deleteColumn,
+        changeColumn,
+        updateColOrder,
+        addTodo,
+        deleteTodo,
+        changeTodoOrder,
+        changeTodo,
+        changeTodoDone,
+        changeTodoDate,
+        changeTodoEstimate,
+      }}
+    >
       <Toaster />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
@@ -265,16 +273,7 @@ export default function Board(props) {
                       key={column}
                       column={column}
                       index={index}
-                      user={user}
                       todos={columns[column]}
-                      deleteColumn={deleteColumn}
-                      changeColumn={changeColumn}
-                      addTodo={addTodo}
-                      deleteTodo={deleteTodo}
-                      changeTodoDone={changeTodoDone}
-                      changeTodo={changeTodo}
-                      changeTodoEstimate={changeTodoEstimate}
-                      changeTodoDate={changeTodoDate}
                     />
                   );
                 })}

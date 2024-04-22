@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Task from "../Task/Task.jsx";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
 import NewTask from "../Task/newTask.jsx";
 import UpdatingColumn from "./updateColumn.jsx";
+import { UserContext } from "../../contexts/UserContext.js";
+import { TodoContext } from "../../contexts/TodoContext.js";
 const Container = styled.div`
   margin: 0.5rem;
   border: 1px solid lightgrey;
@@ -56,17 +58,14 @@ const AddTodo = styled.button`
 `;
 
 export default function Column(props) {
-  const user = props.user;
+  const { deleteColumn, addTodo } = useContext(TodoContext);
   const todos = props.todos;
-  const addTodo = props.addTodo;
-  const deleteTodo = props.deleteTodo;
   const column = props.column;
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUpdatingCol, setIsUpdatingCol] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
-    const deleteColumn = props.deleteColumn;
-    deleteColumn(user, currCol);
+    deleteColumn(currCol);
     return;
   };
 
@@ -123,8 +122,6 @@ export default function Column(props) {
                             task={task}
                             index={index}
                             column={column}
-                            deleteTodo={deleteTodo}
-                            user={user}
                             changeTodoDone={props.changeTodoDone}
                             changeTodo={props.changeTodo}
                             changeTodoEstimate={props.changeTodoEstimate}
@@ -144,7 +141,6 @@ export default function Column(props) {
                 trigger={isTriggered}
                 setTrigger={setIsTriggered}
                 addTodo={addTodo}
-                user={user}
                 todos={todos}
                 column={column}
               ></NewTask>

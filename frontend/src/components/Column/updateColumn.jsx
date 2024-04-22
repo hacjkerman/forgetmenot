@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import updateColumnCSS from "./updateColumn.module.css";
+import { TodoContext } from "../../contexts/TodoContext";
 
 function UpdateColumn(props) {
+  const { changeColumn } = useContext(TodoContext);
   const isUpdatingCol = props.isUpdatingCol;
   const setIsUpdatingCol = props.setIsUpdatingCol;
   const column = props.column;
-  const changeColumn = props.changeColumn;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingCol(!isUpdatingCol);
