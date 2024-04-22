@@ -52,6 +52,7 @@ const AddTodo = styled.button`
   box-shadow: 1px 1px 0px grey;
   z-index: 10;
   background-color: ghostwhite;
+  cursor: pointer;
 `;
 
 export default function Column(props) {
