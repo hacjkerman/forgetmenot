@@ -31,6 +31,7 @@ import {
 import { getColumns } from "../../api/Columnapi.jsx";
 import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
+import { TodoContext } from "../../contexts/TodoContext.js";
 
 const Container = styled.div`
   display: flex;
@@ -246,7 +247,7 @@ export default function Board(props) {
     setIsTriggered(!isTriggered);
   };
   return (
-    <>
+    <TodoContext.Provider value={{}}>
       <Toaster />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
@@ -294,6 +295,6 @@ export default function Board(props) {
           )}
         </Droppable>
       </DragDropContext>
-    </>
+    </TodoContext.Provider>
   );
 }
