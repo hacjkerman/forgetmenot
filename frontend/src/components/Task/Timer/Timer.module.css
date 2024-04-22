@@ -1,0 +1,125 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  cursor: default;
+}
+
+.timerBox {
+  position: relative;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: auto;
+}
+
+.lowerBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  border-radius: 4px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: none;
+}
+
+.closeBtn:hover {
+  background: lightgrey;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px;
+  box-sizing: border-box;
+}
+
+.headerText {
+  padding-left: 1.6em;
+  margin: 0;
+}
+
+.time {
+  font-size: 20px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+.beginButton {
+  min-width: 20%;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: rgb(3, 165, 3);
+  color: white;
+  border: 1px solid gray;
+}
+
+.inputBox {
+  display: flex;
+  width: 95%;
+  padding: 8px;
+}
+
+.input {
+  height: 20px;
+}
+
+.addButton {
+  height: 25px;
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.cancelButton {
+  min-width: 20%;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #616161;
+  color: #efebeb;
+  border: 1px solid gray;
+}
+
+.extendButton {
+  min-width: 20%;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #9900ff;
+  color: #fefefe;
+  border: 1px solid gray;
+}

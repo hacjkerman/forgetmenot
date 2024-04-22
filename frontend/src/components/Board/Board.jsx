@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Column from "../Column/Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import NewColumn from "../Column/newColumn.jsx";
@@ -126,7 +126,6 @@ export default function Board(props) {
         storeTodo(user, column, todo, estimate, due, token, newColumns),
         addTodoOptions(newTodo, column, newColumns)
       );
-      console.log(columns);
     } catch (err) {
       console.log(err);
     }
@@ -139,7 +138,6 @@ export default function Board(props) {
         removeTodo(user, column, todo, newColumns, token),
         delTodoOptions(column, todo, newColumns)
       );
-      console.log(columns);
     } catch (err) {
       console.log(err);
     }

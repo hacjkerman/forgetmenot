@@ -17,7 +17,10 @@ function NewTask(props) {
       handleClose(e);
       return;
     }
-    const estimate = e.target[1].value;
+    let estimate = undefined;
+    if (e.target[1].value.length !== 0) {
+      estimate = e.target[1].value;
+    }
     const due = e.target[2].value;
     await addTodo(user, column, todo, estimate, due);
     handleClose(e);
