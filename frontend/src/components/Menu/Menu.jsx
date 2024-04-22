@@ -45,25 +45,17 @@ function Menu(props) {
     <div className={MenuCSS.main}>
       <div className={MenuCSS.links}>
         <h2>Menu</h2>
-
-        {isLoggedIn ? (
-          <>
-            <button onClick={handleBoard}>
-              <h2>Board</h2>
-            </button>
-            <button onClick={handleProfile}>
-              <h2>Profile</h2>
-            </button>
-            <button onClick={handleLogout}>
-              <h2>Logout</h2>
-            </button>
-          </>
-        ) : (
-          <>
-            <h2>Nothing here at the moment.</h2>
-            <h2>Please log in</h2>
-          </>
-        )}
+        <>
+          <button onClick={handleBoard}>
+            <h2>Board</h2>
+          </button>
+          <button onClick={handleProfile}>
+            <h2>Profile</h2>
+          </button>
+          <button onClick={handleLogout}>
+            <h2>Logout</h2>
+          </button>
+        </>
       </div>
       <img
         src={exitIcon}

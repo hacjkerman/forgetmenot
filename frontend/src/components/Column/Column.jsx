@@ -27,6 +27,8 @@ const Title = styled.h3`
   border-bottom: solid;
   background-color: dark-grey;
   cursor: pointer;
+  overflow: hidden;
+  max-width: 80%;
   @media (max-width: 600px) {
     font-size: 16px;
   }
@@ -124,6 +126,7 @@ export default function Column(props) {
                             user={user}
                             changeTodoDone={props.changeTodoDone}
                             changeTodo={props.changeTodo}
+                            changeTodoEstimate={props.changeTodoEstimate}
                             changeTodoDate={props.changeTodoDate}
                           />
                         );

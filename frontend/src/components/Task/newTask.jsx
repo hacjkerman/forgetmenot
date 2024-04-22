@@ -17,8 +17,9 @@ function NewTask(props) {
       handleClose(e);
       return;
     }
-    const due = e.target[1].value;
-    await addTodo(user, column, todo, due);
+    const estimate = e.target[1].value;
+    const due = e.target[2].value;
+    await addTodo(user, column, todo, estimate, due);
     handleClose(e);
     return;
   };
@@ -39,8 +40,12 @@ function NewTask(props) {
               <input type="text" placeholder="Go for a run" required></input>
             </label>
             <label className={newTaskCSS.colInput}>
+              <h3>Estimate</h3>
+              <input type="number" placeholder="60 (minutes)"></input>
+            </label>
+            <label className={newTaskCSS.colInput}>
               <h3>Due</h3>
-              <input type="date" placeholder="2023" required></input>
+              <input type="date" placeholder="2023"></input>
             </label>
           </div>
           <div className={newTaskCSS.lowerFormButtons}>

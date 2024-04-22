@@ -15,11 +15,19 @@ export const getTodos = async (username) => {
   return response.data;
 };
 
-export const storeTodo = async (username, column, todo, dueDate, token) => {
+export const storeTodo = async (
+  username,
+  column,
+  todo,
+  estimate,
+  dueDate,
+  token
+) => {
   const response = await todosApi.post(todosUrlEndpoint, {
     username,
     column,
     todo,
+    estimate,
     dueDate,
     token,
   });
@@ -46,6 +54,24 @@ export const updateTodoDone = async (username, column, todo, token) => {
     token,
   });
   return response.data;
+};
+
+export const updateTodoEstimate = async (
+  username,
+  column,
+  todoId,
+  newEstimate,
+  token
+) => {
+  const response = await todosApi.put(todosUrlEndpoint + "/Estimate", {
+    username,
+    column,
+    todoId,
+    newEstimate,
+    token,
+  });
+  console.log(response);
+  return response;
 };
 
 export const updateTodoOrder = async (

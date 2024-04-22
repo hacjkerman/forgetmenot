@@ -9,17 +9,13 @@ import { toast } from "react-hot-toast";
 export const addColMutation = async (user, newColumn, token, columns) => {
   const added = await storeColumn(user, newColumn, token);
   if (added.status) {
-    console.log(columns);
-    console.log(added.status);
     toast.success(added.status + " Successfully added column: " + newColumn);
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
@@ -38,17 +34,13 @@ export const addColOptions = (newColumn, columns) => {
 export const delColMutation = async (user, column, columns, token) => {
   const added = await removeColumn(user, column, token);
   if (added.status) {
-    console.log(columns);
-    console.log(added.status);
     toast.success("Successfully removed column: " + column);
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
@@ -57,10 +49,8 @@ export const delColOptions = (column, columns) => {
   const filteredArray = columns.columnOrder.filter(
     (columnName) => columnName !== column
   );
-  console.log(filteredArray);
   columns.columnOrder = filteredArray;
   delete columns[column];
-  console.log(columns);
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -77,10 +67,7 @@ export const updateColMutation = async (
   token
 ) => {
   const added = await updateColumn(user, column, newColumn, token);
-  console.log(added);
   if (added.status) {
-    console.log(columns);
-    console.log(added.status);
     toast.success(added.status);
     return columns;
   } else if (added.error) {
@@ -118,8 +105,6 @@ export const updateColOrderMutation = async (
 ) => {
   const added = await updateColumnOrder(user, srcIndex, destIndex, token);
   if (added.status) {
-    console.log(columns);
-    console.log(added.status);
     toast.success(added.status);
     return columns;
   } else if (added.error) {

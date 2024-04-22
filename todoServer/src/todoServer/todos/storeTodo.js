@@ -1,7 +1,7 @@
 import { dbConnect } from "../../database/db.js";
 import findColumn from "../columns/findColumn.js";
 
-export async function storeTodo(username, column, todo, dueDate) {
+export async function storeTodo(username, column, todo, estimate, dueDate) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
 
@@ -18,6 +18,7 @@ export async function storeTodo(username, column, todo, dueDate) {
   const newTodo = {
     id: isFound.todoIndex.toString(),
     todo,
+    estimate,
     due: dueDate,
     done: false,
   };

@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className={AppCSS.main}>
-      <Header setMenu={setMenu} menu={menu} />
+      <Header setMenu={setMenu} menu={menu} isLoggedIn={isLoggedIn} />
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
         <BrowserRouter>
           <Routes>

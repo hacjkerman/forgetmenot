@@ -38,7 +38,7 @@ export default function RegisterForm() {
       notify(response.error);
       return;
     } else {
-      console.log("register success");
+      notify("register success");
       navigate("/login");
     }
   };
@@ -109,14 +109,14 @@ export default function RegisterForm() {
             />
           </div>
           <div className={RegisterCSS.submit_container}>
-            <button className={RegisterCSS.submit} onClick={handleLogin}>
-              Login
-            </button>
             <input
               type="submit"
               value="Sign Up"
-              className={RegisterCSS.submit_gray}
+              className={RegisterCSS.submit}
             />
+            <button className={RegisterCSS.submit_gray} onClick={handleLogin}>
+              Login
+            </button>
           </div>
         </div>
       </form>

@@ -71,16 +71,33 @@
   padding-right: 3px;
 }
 
-#dueDate {
+#dueDate,
+#estimate {
+  display: flex;
+  align-items: center;
   margin-top: 0;
   padding: 5px;
 }
 
+.updateEstimate {
+  min-width: 1em;
+  height: 1.5em;
+  padding: 2px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
 .updateDate {
+  width: 5.5em;
+  height: 1.5em;
+  padding: 2px;
   cursor: pointer;
 }
 
-.updateDate:hover {
+.updateDate:hover,
+.updateEstimate:hover {
+  background-color: aliceblue;
   text-decoration: underline;
 }
 

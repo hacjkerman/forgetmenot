@@ -4,6 +4,7 @@ import {
   removeTodo,
   updateTodoOrder,
   updateTodoDate,
+  updateTodoEstimate,
 } from "../api/Todosapi.jsx";
 import { toast } from "react-hot-toast";
 
@@ -11,30 +12,26 @@ export const addTodoMutation = async (
   user,
   column,
   newTodo,
+  estimate,
   due,
   token,
   columns
 ) => {
-  const added = await storeTodo(user, column, newTodo, due, token);
+  const added = await storeTodo(user, column, newTodo, estimate, due, token);
   if (added.status) {
-    console.log(added.status);
     toast.success("Successfully added todo: " + newTodo);
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
 
 export const addTodoOptions = (newTodo, column, columns) => {
-  console.log(columns[column]);
   columns[column].push(newTodo);
-  console.log(columns);
   columns.todoIndex++;
   return {
     optimisticData: columns,
@@ -50,25 +47,20 @@ export const delTodoMutation = async (user, column, todo, columns, token) => {
   }
   const added = await removeTodo(user, column, todo.id, token);
   if (added.status) {
-    console.log(added.status);
     toast.success("Successfully removed todo: " + todo.todo);
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
 
 export const delTodoOptions = (column, todo, columns) => {
-  console.log(columns[column]);
   const filteredArray = columns[column].filter((items) => items.id !== todo.id);
   columns[column] = filteredArray;
-  console.log(columns);
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -86,18 +78,14 @@ export const updateTodoMutation = async (
   token
 ) => {
   const added = await updateTodo(user, column, todo, newTodo, token);
-  console.log(added);
   if (added.status) {
-    console.log(added.status);
     toast.success(added.status);
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
@@ -106,6 +94,50 @@ export const updateTodoOptions = (column, todo, newTodo, columns) => {
   const currCol = columns[column];
   const item = currCol.find((item) => item.id === todo);
   item.todo = newTodo;
+  return {
+    optimisticData: columns,
+    rollbackOnError: true,
+    populateCache: true,
+    revalidate: false,
+  };
+};
+
+export const updateTodoEstimateMutation = async (
+  user,
+  column,
+  todo,
+  newEstimate,
+  columns,
+  token
+) => {
+  const added = await updateTodoEstimate(
+    user,
+    column,
+    todo,
+    newEstimate,
+    token
+  );
+  if (added.status) {
+    toast.success(added.status);
+    return columns;
+  } else if (added.error) {
+    toast.error("400 " + added.error);
+    return false;
+  } else {
+    toast.error("400 Unknown failure");
+    return false;
+  }
+};
+
+export const updateTodoEstimateOptions = (
+  column,
+  todo,
+  newEstimate,
+  columns
+) => {
+  const currCol = columns[column];
+  const item = currCol.find((item) => item.id === todo);
+  item.estimate = newEstimate;
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -132,16 +164,13 @@ export const updateTodoOrderMutation = async (
     token
   );
   if (added.status) {
-    console.log(added.status);
     toast.success("Todo column successfully updated");
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
@@ -184,30 +213,28 @@ export const updateTodoDateMutation = async (
   token
 ) => {
   const added = await updateTodoDate(user, column, todo, newDate, token);
-  console.log(added);
   if (added.status) {
-    console.log(added.status);
     toast.success("Todo column successfully updated");
     return columns;
   } else if (added.error) {
-    console.log(added.error);
     toast.error("400 " + added.error);
     return false;
   } else {
     toast.error("400 Unknown failure");
-    console.log("failed");
     return false;
   }
 };
 
 export const updateTodoDateOptions = (column, todo, newDate, columns) => {
   const currCol = columns[column];
+  console.log(currCol);
   const item = currCol.find((item) => item.id === todo);
   item.date = newDate;
+  console.log(currCol);
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };

@@ -24,7 +24,7 @@ function UpdateTask(props) {
       <div className={updateTaskCSS.popupInner}>
         <div className={updateTaskCSS.popupHeader}>
           <h3 className={updateTaskCSS.headerText}>
-            Update Date for {task.todo}
+            Update Task for {task.todo}
           </h3>
           <button className={updateTaskCSS.closeBtn} onClick={handleClose}>
             x

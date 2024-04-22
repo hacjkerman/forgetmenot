@@ -23,6 +23,8 @@ import {
   updateTodoOptions,
   updateTodoOrderMutation as updateTodoOrder,
   updateTodoOrderOptions,
+  updateTodoEstimateMutation as updateTodoEstimate,
+  updateTodoEstimateOptions,
   updateTodoDateMutation as updateTodoDate,
   updateTodoDateOptions,
 } from "../../helpers/todosMutations.jsx";
@@ -58,7 +60,6 @@ export default function Board(props) {
   const headers = { username: user, token: token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
-  console.log(columns);
   const addColumn = async (user, column) => {
     try {
       const newColumns = { ...columns };
@@ -111,17 +112,18 @@ export default function Board(props) {
     }
   };
   // TODO API CALLS
-  const addTodo = async (user, column, todo, due) => {
+  const addTodo = async (user, column, todo, estimate, due) => {
     try {
       const newColumns = { ...columns };
       const newTodo = {
         id: columns.todoIndex.toString(),
         todo,
+        estimate,
         due,
         done: false,
       };
       await mutate(
-        storeTodo(user, column, todo, due, token, newColumns),
+        storeTodo(user, column, todo, estimate, due, token, newColumns),
         addTodoOptions(newTodo, column, newColumns)
       );
       console.log(columns);
@@ -195,14 +197,24 @@ export default function Board(props) {
     }
   };
 
+  const changeTodoEstimate = async (column, todo, newEstimate) => {
+    try {
+      const newColumns = { ...columns };
+      await mutate(
+        updateTodoEstimate(user, column, todo, newEstimate, newColumns, token),
+        updateTodoEstimateOptions(column, todo, newEstimate, newColumns)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const changeTodoDate = async (column, todo, newDate) => {
     try {
       const newColumns = { ...columns };
       await mutate(
         updateTodoDate(user, column, todo, newDate, newColumns, token),
-        updateTodoDateOptions(column, todo, newDate, token)
+        updateTodoDateOptions(column, todo, newDate, newColumns)
       );
-      await updateTodoDate(user, column, todo, newDate, token);
     } catch (err) {
       console.log(err);
     }
@@ -262,6 +274,7 @@ export default function Board(props) {
                       deleteTodo={deleteTodo}
                       changeTodoDone={changeTodoDone}
                       changeTodo={changeTodo}
+                      changeTodoEstimate={changeTodoEstimate}
                       changeTodoDate={changeTodoDate}
                     />
                   );

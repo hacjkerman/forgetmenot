@@ -38,7 +38,7 @@ function UpdateTaskDate(props) {
             </label>
             <label className={updateTaskCSS.colInput}>
               <h3>Due Date</h3>
-              <input type="date" placeholder="2023" required></input>
+              <input type="date" placeholder="2023"></input>
             </label>
           </div>
           <div className={updateTaskCSS.lowerFormButtons}>

@@ -15,6 +15,7 @@ import cors from "cors";
 import { validateColumn } from "./columns/validateColumn.js";
 import { getColumnOrder } from "./columns/getColumnOrder.js";
 import { updateColOrder } from "./columns/updateColOrder.js";
+import { updateTodoEstimate } from "./todos/updateTodoEstimate.js";
 import { updateTodoDone } from "./todos/updateTodoDone.js";
 import { logger } from "./logger/logger.js";
 
@@ -189,7 +190,8 @@ app.post(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todo, dueDate, token } = req.body;
+      const { username, column, todo, estimate, dueDate, token } = req.body;
+      console.log(token);
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -198,7 +200,13 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const storeResult = await storeTodo(username, column, todo, dueDate);
+      const storeResult = await storeTodo(
+        username,
+        column,
+        todo,
+        estimate,
+        dueDate
+      );
       return res.json(storeResult);
     },
     ["username", "column", "todo", "dueDate", "token"]
@@ -347,6 +355,41 @@ app.put(
       return res.json(updatedTodo);
     },
     ["username", "todo", "column", "token"]
+  )
+);
+
+app.put(
+  "/todo/Estimate",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, todoId, newEstimate, token } = req.body;
+      console.log(newEstimate);
+      const validUser = await verifyUser(username, token);
+      if (validUser.error) {
+        logger.log({
+          level: "error",
+          message: "Invalid authorisation",
+        });
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const foundTodos = await getAllTodos(username, column);
+      if (!foundTodos) {
+        logger.log({
+          level: "error",
+          message: "No todos found",
+        });
+        return res.json({ error: "No Todos Found" });
+      }
+      const updatedTodo = await updateTodoEstimate(
+        username,
+        column,
+        foundTodos,
+        todoId,
+        newEstimate
+      );
+      return res.json(updatedTodo);
+    },
+    ["username", "column", "todoId", "newEstimate", "token"]
   )
 );
 

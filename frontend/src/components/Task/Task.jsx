@@ -4,12 +4,13 @@ import styled from "styled-components";
 import TaskCSS from "./Task.module.css";
 import UpdateTaskDate from "./updateTaskDate";
 import UpdateTask from "./updateTask";
+import UpdateTaskEstimate from "./updateTaskEstimate";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 12px;
   margin-bottom: 8px;
-  background-color: ${(props) => (props.isDragging ? "lightgreen" : "white")};
+  background-color: white;
   @media (max-width: 600px) {
     font-size: 15px;
     border-radius: 6px;
@@ -24,9 +25,11 @@ export default function Task(props) {
   const todo = props.task;
   const changeTodoDone = props.changeTodoDone;
   const changeTodo = props.changeTodo;
+  const changeTodoEstimate = props.changeTodoEstimate;
   const changeTodoDate = props.changeTodoDate;
   const [isDone, setIsDone] = useState(todo.done);
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
+  const [isUpdatingEstimate, setIsUpdatingEstimate] = useState(false);
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
   const removeTask = (e) => {
     e.preventDefault();
@@ -39,6 +42,11 @@ export default function Task(props) {
   };
   const changeUpdateDate = () => {
     setIsUpdatingDate(!isUpdatingDate);
+  };
+  const changeUpdateEstimate = () => {
+    console.log("hello");
+    setIsUpdatingEstimate(!isUpdatingEstimate);
+    console.log(isUpdatingEstimate);
   };
 
   const changeUpdateTodo = () => {
@@ -83,8 +91,27 @@ export default function Task(props) {
             name="doneBox"
           ></input>
           <div className={TaskCSS.lowerBox}>
+            <div id={TaskCSS.estimate}>
+              Estimate:
+              {isUpdatingEstimate ? (
+                <UpdateTaskEstimate
+                  isUpdatingEstimate={isUpdatingEstimate}
+                  setIsUpdatingEstimate={setIsUpdatingEstimate}
+                  task={props.task}
+                  column={props.column}
+                  changeTodoEstimate={changeTodoEstimate}
+                ></UpdateTaskEstimate>
+              ) : (
+                <div
+                  className={TaskCSS.updateEstimate}
+                  onClick={changeUpdateEstimate}
+                >
+                  {props.task.estimate}m
+                </div>
+              )}
+            </div>
             <div id={TaskCSS.dueDate}>
-              Due Date:{" "}
+              Due Date:
               {isUpdatingDate ? (
                 <UpdateTaskDate
                   isUpdatingDate={isUpdatingDate}
@@ -94,9 +121,9 @@ export default function Task(props) {
                   changeTodoDate={changeTodoDate}
                 ></UpdateTaskDate>
               ) : (
-                <span className={TaskCSS.updateDate} onClick={changeUpdateDate}>
+                <div className={TaskCSS.updateDate} onClick={changeUpdateDate}>
                   {props.task.due}
-                </span>
+                </div>
               )}
             </div>
           </div>
