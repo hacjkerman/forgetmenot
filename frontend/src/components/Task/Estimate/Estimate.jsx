@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import TaskCSS from "../Task.module.css";
 import UpdateTaskEstimate from "../updateTaskEstimate";
 import Timer from "../Timer/Timer";
+import { TodoContext } from "../../../contexts/TodoContext";
 
 function Estimate(props) {
+  const { changeTodoEstimate } = useContext(TodoContext);
   const [isUpdatingEstimate, setIsUpdatingEstimate] = useState(false);
   const [isDoingTask, setIsDoingTask] = useState(false);
   const todo = props.task;
@@ -22,7 +24,7 @@ function Estimate(props) {
           setIsUpdatingEstimate={setIsUpdatingEstimate}
           task={props.task}
           column={props.column}
-          changeTodoEstimate={props.changeTodoEstimate}
+          changeTodoEstimate={changeTodoEstimate}
         ></UpdateTaskEstimate>
       ) : (
         <div className={TaskCSS.estimateBox}>

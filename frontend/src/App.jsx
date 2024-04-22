@@ -38,7 +38,9 @@ function App() {
   }, [token]);
 
   return (
-    <UserContext.Provider value={{ user, isLoggedIn, cookies, token }}>
+    <UserContext.Provider
+      value={{ user, isLoggedIn, cookies, token: newToken }}
+    >
       <div className={AppCSS.main}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
           <BrowserRouter>
@@ -77,12 +79,7 @@ function App() {
                 element={
                   newToken ? (
                     <div className={AppCSS.container}>
-                      <Board
-                        user={user}
-                        token={newToken}
-                        setUser={setUser}
-                        setIsLoggedIn={setIsLoggedIn}
-                      />
+                      <Board />
                     </div>
                   ) : (
                     <Navigate to="/login" />

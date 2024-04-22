@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import TaskCSS from "./Task.module.css";
 import UpdateTaskDate from "./updateTaskDate";
 import UpdateTask from "./updateTask";
 import Estimate from "./Estimate/Estimate";
+import { TodoContext } from "../../contexts/TodoContext";
 
 const Container = styled.div`
   border: 1px solid lightgrey;
@@ -19,19 +20,15 @@ const Container = styled.div`
 `;
 
 export default function Task(props) {
-  const deleteTodo = props.deleteTodo;
-  const user = props.user;
+  const { deleteTodo, changeTodoDone } = useContext(TodoContext);
   const column = props.column;
   const todo = props.task;
-  const changeTodoDone = props.changeTodoDone;
-  const changeTodo = props.changeTodo;
-  const changeTodoDate = props.changeTodoDate;
   const [isDone, setIsDone] = useState(todo.done);
   const [isUpdatingDate, setIsUpdatingDate] = useState(false);
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
   const removeTask = (e) => {
     e.preventDefault();
-    deleteTodo(user, column, todo);
+    deleteTodo(column, todo);
     return;
   };
   const changeCompletion = () => {
@@ -65,7 +62,6 @@ export default function Task(props) {
                 setIsUpdatingTodo={setIsUpdatingTodo}
                 task={props.task}
                 column={props.column}
-                changeTodo={changeTodo}
               ></UpdateTask>
             ) : (
               <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
@@ -85,11 +81,7 @@ export default function Task(props) {
           ></input>
           <div className={TaskCSS.lowerBox}>
             <div className={TaskCSS.estimateBox}>
-              <Estimate
-                column={props.column}
-                task={props.task}
-                changeTodoEstimate={props.changeTodoEstimate}
-              />
+              <Estimate column={props.column} task={props.task} />
               <div></div>
             </div>
 
@@ -101,7 +93,6 @@ export default function Task(props) {
                   setIsUpdatingDate={setIsUpdatingDate}
                   task={props.task}
                   column={props.column}
-                  changeTodoDate={changeTodoDate}
                 ></UpdateTaskDate>
               ) : (
                 <div className={TaskCSS.updateDate} onClick={changeUpdateDate}>
