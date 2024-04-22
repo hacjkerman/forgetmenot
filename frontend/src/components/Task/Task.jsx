@@ -44,9 +44,7 @@ export default function Task(props) {
     setIsUpdatingDate(!isUpdatingDate);
   };
   const changeUpdateEstimate = () => {
-    console.log("hello");
     setIsUpdatingEstimate(!isUpdatingEstimate);
-    console.log(isUpdatingEstimate);
   };
 
   const changeUpdateTodo = () => {
@@ -106,7 +104,7 @@ export default function Task(props) {
                   className={TaskCSS.updateEstimate}
                   onClick={changeUpdateEstimate}
                 >
-                  {props.task.estimate}m
+                  {todo.estimate !== undefined ? <>{todo.estimate}m</> : <></>}
                 </div>
               )}
             </div>
