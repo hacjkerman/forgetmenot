@@ -21,8 +21,7 @@ function NewColumn(props) {
       return { error: "Duplicate Column" };
     } else {
       const addColumn = props.addColumn;
-      const user = props.user;
-      await addColumn(user, column);
+      await addColumn(column);
       handleClose(e);
     }
   };

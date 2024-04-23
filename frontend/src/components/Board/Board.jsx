@@ -62,6 +62,7 @@ export default function Board() {
   // COLUMN API CALLS
   const addColumn = async (column) => {
     try {
+      console.log(user, column);
       const newColumns = { ...columns };
       await mutate(
         storeColumn(user, column, token, newColumns),
@@ -284,7 +285,6 @@ export default function Board() {
                   trigger={isTriggered}
                   setTrigger={setIsTriggered}
                   addColumn={addColumn}
-                  user={user}
                   columnOrder={columns.columnOrder}
                 ></NewColumn>
               ) : (
