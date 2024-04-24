@@ -7,6 +7,7 @@ import NewTask from "../Task/newTask.jsx";
 import UpdatingColumn from "./updateColumn.jsx";
 import { UserContext } from "../../contexts/UserContext.js";
 import { TodoContext } from "../../contexts/TodoContext.js";
+import NewColumn from "./newColumn.jsx";
 const Container = styled.div`
   margin: 0.5rem;
   border: 1px solid lightgrey;
@@ -63,8 +64,10 @@ export default function Column(props) {
   const column = props.column;
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUpdatingCol, setIsUpdatingCol] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
+    console.log(currCol);
     deleteColumn(currCol);
     return;
   };
@@ -77,6 +80,11 @@ export default function Column(props) {
     e.preventDefault();
     setIsTriggered(!isTriggered);
   };
+
+  const addNew = (e) => {
+    e.preventDefault();
+    setIsAdding(!isAdding);
+  };
   return (
     <Draggable
       draggableId={column}
@@ -86,6 +94,18 @@ export default function Column(props) {
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
           <div className={ColumnCSS.columnHeader} {...provided.dragHandleProps}>
+            {isAdding ? (
+              <NewColumn
+                isAddingEnd={isAdding}
+                setIsAddingEnd={setIsAdding}
+                columnOrder={props.columnOrder}
+                currCol={props.index}
+              ></NewColumn>
+            ) : (
+              <div className={ColumnCSS.leftButton} onClick={addNew}>
+                +
+              </div>
+            )}
             {isUpdatingCol ? (
               <UpdatingColumn
                 isUpdatingCol={isUpdatingCol}
@@ -122,10 +142,6 @@ export default function Column(props) {
                             task={task}
                             index={index}
                             column={column}
-                            changeTodoDone={props.changeTodoDone}
-                            changeTodo={props.changeTodo}
-                            changeTodoEstimate={props.changeTodoEstimate}
-                            changeTodoDate={props.changeTodoDate}
                           />
                         );
                       })}

@@ -11,6 +11,7 @@ export async function removeColumn(user, columnName) {
     return { error: "User not found" };
   }
 
+  console.log(foundUser);
   const foundCol = findColumn(foundUser, columnName);
   if (!foundCol) {
     return { error: "Column not found" };

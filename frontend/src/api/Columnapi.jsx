@@ -27,10 +27,11 @@ export const getColumns = async (params) => {
   return response.data;
 };
 
-export const storeColumn = (user, column, token) => {
+export const storeColumn = (user, column, currCol, token) => {
   const response = todosApi.post(todosUrlEndpoint, {
     username: user,
     column,
+    currCol,
     token,
   });
   return response;
@@ -59,6 +60,7 @@ export const updateColumnOrder = async (
   return response.data;
 };
 export const removeColumn = (username, column, token) => {
+  console.log(username, column);
   const response = todosApi.delete(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",
