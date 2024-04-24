@@ -1,0 +1,10 @@
+.columnBox {
+  position: relative;
+}
+
+.leftButton {
+  position: absolute;
+  top: 50%;
+  right: 98.75%;
+  background-color: white;
+}

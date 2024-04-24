@@ -55,18 +55,18 @@ const Button = styled.button`
 
 export default function Board() {
   const { user, token } = useContext(UserContext);
-  const [isTriggered, setIsTriggered] = useState(false);
+  const [isAddingEnd, setIsAddingEnd] = useState(false);
 
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
-  const addColumn = async (column) => {
+  const addColumn = async (column, currCol) => {
     try {
-      console.log(user, column);
+      console.log(currCol);
       const newColumns = { ...columns };
       await mutate(
-        storeColumn(user, column, token, newColumns),
-        addColOptions(column, newColumns)
+        storeColumn(user, column, currCol, token, newColumns),
+        addColOptions(column, currCol, newColumns)
       );
     } catch (err) {
       console.log(err);
@@ -240,11 +240,13 @@ export default function Board() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    setIsTriggered(!isTriggered);
+    setIsAddingEnd(!isAddingEnd);
   };
+
   return (
     <TodoContext.Provider
       value={{
+        addColumn,
         deleteColumn,
         changeColumn,
         updateColOrder,
@@ -275,17 +277,18 @@ export default function Board() {
                       column={column}
                       index={index}
                       todos={columns[column]}
+                      columnOrder={columns.columnOrder}
                     />
                   );
                 })}
               {provided.placeholder}
 
-              {isTriggered ? (
+              {isAddingEnd ? (
                 <NewColumn
-                  trigger={isTriggered}
-                  setTrigger={setIsTriggered}
-                  addColumn={addColumn}
+                  isAddingEnd={isAddingEnd}
+                  setIsAddingEnd={setIsAddingEnd}
                   columnOrder={columns.columnOrder}
+                  currCol={columns.columnOrder.length}
                 ></NewColumn>
               ) : (
                 <Button onClick={handleClick}>+</Button>

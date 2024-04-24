@@ -105,7 +105,7 @@ app.post(
   "/column",
   inputValidator(
     async (req, res) => {
-      const { username, column, token } = req.body;
+      const { username, column, currCol, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -114,10 +114,10 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const storeResult = await storeColumn(username, column);
+      const storeResult = await storeColumn(username, column, currCol);
       return res.json(storeResult);
     },
-    ["username", "column", "token"]
+    ["username", "column", "currCol", "token"]
   )
 );
 
@@ -170,6 +170,7 @@ app.delete(
   inputValidator(
     async (req, res) => {
       const { username, column, token } = req.body;
+      console.log(column);
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -180,6 +181,7 @@ app.delete(
       }
 
       const removeResult = await removeColumn(username, column);
+      console.log(removeResult);
       return res.json(removeResult);
     },
     ["username", "column", "token"]
