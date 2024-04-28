@@ -12,6 +12,7 @@ const Container = styled.div`
   border-radius: 12px;
   margin-bottom: 8px;
   background-color: white;
+  z-index: 100;
   @media (max-width: 600px) {
     font-size: 15px;
     border-radius: 6px;

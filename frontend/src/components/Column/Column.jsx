@@ -5,7 +5,6 @@ import ColumnCSS from "./Column.module.css";
 import styled from "styled-components";
 import NewTask from "../Task/newTask.jsx";
 import UpdatingColumn from "./updateColumn.jsx";
-import { UserContext } from "../../contexts/UserContext.js";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import NewColumn from "./newColumn.jsx";
 const Container = styled.div`
@@ -31,7 +30,7 @@ const Title = styled.h3`
   background-color: dark-grey;
   cursor: pointer;
   overflow: hidden;
-  max-width: 80%;
+  max-width: 68%;
   @media (max-width: 600px) {
     font-size: 16px;
   }
@@ -102,9 +101,9 @@ export default function Column(props) {
                 currCol={props.index}
               ></NewColumn>
             ) : (
-              <div className={ColumnCSS.leftButton} onClick={addNew}>
+              <button className={ColumnCSS.leftButton} onClick={addNew}>
                 +
-              </div>
+              </button>
             )}
             {isUpdatingCol ? (
               <UpdatingColumn

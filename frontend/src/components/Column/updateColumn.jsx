@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import updateColumnCSS from "./updateColumn.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
+import toast from "react-hot-toast";
 
 function UpdateColumn(props) {
   const { changeColumn } = useContext(TodoContext);
@@ -15,6 +16,10 @@ function UpdateColumn(props) {
   const handleUpdateCol = (e) => {
     e.preventDefault();
     const newColumn = e.target[0].value;
+    if (newColumn.length > 20) {
+      toast.error("Column name is longer than 20 characters!");
+      return;
+    }
     changeColumn(column, newColumn);
     handleClose(e);
   };

@@ -60,6 +60,7 @@
   height: 25px;
   width: 25px;
   background-color: lightgrey;
+  z-index: 100;
 }
 
 .doneBox:hover {
