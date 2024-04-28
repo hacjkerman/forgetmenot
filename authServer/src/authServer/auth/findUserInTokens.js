@@ -8,5 +8,5 @@ export async function findUserInTokens(user) {
   if (!userFound) {
     return false;
   }
-  return userFound.token;
+  return { accessToken: userFound.token, expires: userFound.expires };
 }

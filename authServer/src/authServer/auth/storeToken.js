@@ -1,14 +1,19 @@
 import { dbConnect } from "../../database/db.js";
 import "dotenv/config";
 
-export async function storeActiveToken(username, email, token) {
+export async function storeActiveToken(username, email, token, expires) {
   const db = await dbConnect();
   const collection = db.collection("activeTokens");
-  await collection.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
+  const curr = Date.now();
+  await collection.createIndex(
+    { createdAt: curr },
+    { expires: expires - curr }
+  );
   await collection.insertOne({
-    username: username,
-    email: email,
-    token: token,
+    username,
+    email,
+    token,
+    expires,
     createdAt: new Date(),
   });
   return;
