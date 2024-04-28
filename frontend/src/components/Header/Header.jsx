@@ -1,14 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import HeaderCSS from "./Header.module.css";
 import menuIcon from "./Assets/Hamburger_icon.png";
 import Menu from "../Menu/Menu";
-import { UserContext } from "../../contexts/UserContext";
-
 export default function Header(props) {
   const setUser = props.setUser;
   const [menu, setMenu] = useState(false);
   const setIsLoggedIn = props.setIsLoggedIn;
-  const { user, isLoggedIn, cookies } = useContext(UserContext);
+  const isLoggedIn = props.isLoggedIn;
   const toggleMenu = () => {
     setMenu(!menu);
   };
@@ -19,12 +17,9 @@ export default function Header(props) {
         <>
           {menu ? (
             <Menu
-              cookies={cookies}
               setMenu={setMenu}
               menu={menu}
-              isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
-              user={user}
               setUser={setUser}
             />
           ) : (
