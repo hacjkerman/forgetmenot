@@ -15,10 +15,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const cookies = new Cookies();
   let token = cookies.get("jwt_auth");
-  let newToken;
-  if (token !== undefined) {
-    newToken = token.accessToken;
-  }
+
   useEffect(() => {
     setInterval(() => {
       let token = cookies.get("jwt_auth");
@@ -28,7 +25,7 @@ function App() {
       }
     }, 1000);
     if (token !== undefined) {
-      const decoded = jwtDecode(newToken);
+      const decoded = jwtDecode(token);
       const data = decoded.data;
       setUser(data.user);
       setIsLoggedIn(true);
@@ -38,13 +35,15 @@ function App() {
   }, [token]);
 
   return (
-    <UserContext.Provider
-      value={{ user, isLoggedIn, cookies, token: newToken }}
-    >
+    <UserContext.Provider value={{ user, isLoggedIn, cookies, token }}>
       <div className={AppCSS.main}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
           <BrowserRouter>
-            <Header setIsLoggedIn={setIsLoggedIn} setUser={setUser} />
+            <Header
+              setIsLoggedIn={setIsLoggedIn}
+              setUser={setUser}
+              isLoggedIn={isLoggedIn}
+            />
             <Routes>
               <Route exact path="/" element={<Navigate to="/login" />}></Route>
 
@@ -77,7 +76,7 @@ function App() {
               <Route
                 path="/board"
                 element={
-                  newToken ? (
+                  token ? (
                     <div className={AppCSS.container}>
                       <Board />
                     </div>
