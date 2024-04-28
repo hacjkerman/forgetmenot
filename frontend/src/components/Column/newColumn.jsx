@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import newColumnCSS from "./newColumn.module.css";
+import { TodoContext } from "../../contexts/TodoContext";
+import toast from "react-hot-toast";
 
 function NewColumn(props) {
+  const { addColumn } = useContext(TodoContext);
   const handleClose = (e) => {
     e.preventDefault();
-    props.setTrigger(!props.trigger);
+    props.setIsAddingEnd(!props.isAddingEnd);
   };
   const handleDuplicate = (e) => {
     // ADD POPUP
@@ -15,17 +18,21 @@ function NewColumn(props) {
 
     const column = e.target[0].value;
     const columnOrder = props.columnOrder;
+    const currCol = props.currCol;
+    if (column.length > 20) {
+      toast.error("Column name is longer than 20 characters!");
+      return;
+    }
     if (columnOrder.find((columnName) => columnName === column)) {
       handleDuplicate(e);
       handleClose(e);
       return { error: "Duplicate Column" };
     } else {
-      const addColumn = props.addColumn;
-      await addColumn(column);
+      await addColumn(column, currCol);
       handleClose(e);
     }
   };
-  return props.trigger ? (
+  return props.isAddingEnd ? (
     <div className={newColumnCSS.popup}>
       <div className={newColumnCSS.popupInner}>
         <div className={newColumnCSS.popupHeader}>

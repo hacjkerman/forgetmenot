@@ -191,12 +191,25 @@ app.post(
           level: "info",
           message: "user already logged in",
         });
-        res.json({ accessToken: userExists, username: newName });
+        res.json({
+          accessToken: userExists.accessToken,
+          username: newName,
+          expires: userExists.expires,
+        });
         return;
       }
-      const accessToken = await generateAccessToken(newName, email);
-      await storeActiveToken(newName, email, accessToken);
-      res.json({ accessToken, username: newName });
+      const response = await generateAccessToken(newName, email);
+      await storeActiveToken(
+        newName,
+        email,
+        response.accessToken,
+        response.expires
+      );
+      res.json({
+        accessToken: response.accessToken,
+        username: newName,
+        expires: response.expires,
+      });
     },
     ["code"]
   )
@@ -231,16 +244,21 @@ app.post(
           level: "info",
           message: "user already logged in",
         });
-        res.json({ accessToken: userExists });
+        res.json(userExists);
         return;
       }
-      const accessToken = await generateAccessToken(username, isFound.email);
-      await storeActiveToken(username, isFound.email, accessToken);
+      const response = await generateAccessToken(username, isFound.email);
+      await storeActiveToken(
+        username,
+        isFound.email,
+        response.accessToken,
+        response.expires
+      );
       logger.log({
         level: "info",
         message: "generated ant stored active token",
       });
-      return res.json({ accessToken });
+      return res.json(response);
     },
     ["username", "password"]
   )

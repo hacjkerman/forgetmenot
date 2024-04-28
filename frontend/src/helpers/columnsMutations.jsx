@@ -6,8 +6,14 @@ import {
 } from "../api/Columnapi.jsx";
 import { toast } from "react-hot-toast";
 
-export const addColMutation = async (user, newColumn, token, columns) => {
-  const added = await storeColumn(user, newColumn, token);
+export const addColMutation = async (
+  user,
+  newColumn,
+  currCol,
+  token,
+  columns
+) => {
+  const added = await storeColumn(user, newColumn, currCol, token);
   if (added.status) {
     toast.success(added.status + " Successfully added column: " + newColumn);
     return columns;
@@ -20,28 +26,27 @@ export const addColMutation = async (user, newColumn, token, columns) => {
   }
 };
 
-export const addColOptions = (newColumn, columns) => {
-  columns.columnOrder.push(newColumn);
+export const addColOptions = (newColumn, currCol, columns) => {
+  columns.columnOrder.splice(currCol, 0, newColumn);
   columns[newColumn] = [];
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
 export const delColMutation = async (user, column, columns, token) => {
+  console.log(user, column);
   const added = await removeColumn(user, column, token);
-  if (added.status) {
-    toast.success("Successfully removed column: " + column);
-    return columns;
-  } else if (added.error) {
+  console.log(added);
+  if (added.data.error) {
     toast.error("400 " + added.error);
     return false;
   } else {
-    toast.error("400 Unknown failure");
-    return false;
+    toast.success("Successfully removed column: " + column);
+    return columns;
   }
 };
 
@@ -55,7 +60,7 @@ export const delColOptions = (column, columns) => {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 

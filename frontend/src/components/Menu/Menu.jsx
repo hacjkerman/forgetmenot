@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import MenuCSS from "./Menu.module.css";
 import exitIcon from "./Assets/exit_icon.png";
 import { logout } from "../../api/Loginapi";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext";
 
 function Menu(props) {
-  const cookies = props.cookies;
   const menu = props.menu;
   const setMenu = props.setMenu;
-  const isLoggedIn = props.isLoggedIn;
   const setIsLoggedIn = props.setIsLoggedIn;
-  const user = props.user;
   const setUser = props.setUser;
+  const { user, isLoggedIn, cookies } = useContext(UserContext);
+
   const navigate = useNavigate();
   const toggleMenu = () => {
     setMenu(!menu);
@@ -19,7 +19,7 @@ function Menu(props) {
 
   const handleLogout = async () => {
     const token = cookies.get("jwt_auth");
-    const logoutRes = await logout(user, token.accessToken);
+    const logoutRes = await logout(user, token);
     if (logoutRes.error) {
       console.log(logoutRes.error);
       return;
