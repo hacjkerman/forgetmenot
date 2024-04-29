@@ -23,6 +23,7 @@ import { createGoogleUser } from "./users/createGoogleUser.js";
 import endpoints from "../prod/endpoints.js";
 import changeEnv from "../prod/vercelENV.js";
 import redeploy from "../prod/vercelRedeploy.js";
+import { updateName } from "./users/updateName.js";
 
 const app = express();
 app.use(cors());
@@ -256,7 +257,7 @@ app.post(
       );
       logger.log({
         level: "info",
-        message: "generated ant stored active token",
+        message: "generated and stored active token",
       });
       return res.json(response);
     },
@@ -375,6 +376,46 @@ app.delete(
       res.json(returnVal);
     },
     ["username", "password", "token"]
+  )
+);
+
+app.put(
+  "/username",
+  inputValidator(
+    async (req, res) => {
+      const { username, newUsername, token } = req.body;
+      const isValidUser = await verifyUser(username, token);
+      if (isValidUser === null) {
+        logger.log({
+          level: "error",
+          message: "Invalid user or token",
+        });
+        res.json({ error: "Invalid user or token" });
+        return;
+      }
+      if (newUsername.length < 6 || newUsername.length > 100) {
+        logger.log({
+          level: "error",
+          message: "Invalid Username",
+        });
+        return res.json({
+          error: "Username has to be between 6 and 100 characters",
+        });
+      }
+      const userIsFound = await findUserInUsers(newUsername);
+      if (!userIsFound) {
+        await updateName(username, newUsername);
+        return res.json({ status: "Username successfully changed!" });
+      } else {
+        logger.log({
+          level: "error",
+          message: "Username is already taken",
+        });
+        res.json({ error: "Username is already taken" });
+        return;
+      }
+    },
+    ["username", "newUsername", "token"]
   )
 );
 
