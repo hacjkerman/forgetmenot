@@ -14,7 +14,6 @@ function ChangeEmail(props) {
     e.preventDefault();
 
     const newEmail = e.target[0].value;
-    console.log(newEmail);
     await updateEmail(user, newEmail, token);
     handleClose(e);
   };

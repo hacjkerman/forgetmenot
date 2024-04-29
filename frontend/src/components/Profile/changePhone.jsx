@@ -21,7 +21,7 @@ function ChangePhone(props) {
     <div className={changePhoneCSS.popup}>
       <div className={changePhoneCSS.popupInner}>
         <div className={changePhoneCSS.popupHeader}>
-          <h3 className={changePhoneCSS.headerText}>Change Number</h3>
+          <h3 className={changePhoneCSS.headerText}>Change Phone Number</h3>
           <button className={changePhoneCSS.closeBtn} onClick={handleClose}>
             x
           </button>
@@ -29,8 +29,8 @@ function ChangePhone(props) {
         <form className={changePhoneCSS.columnForm} onSubmit={handleSubmit}>
           <div className={changePhoneCSS.upperForm}>
             <label className={changePhoneCSS.colInput}>
-              <h3>Current Number</h3>
-              <p>{phone}</p>
+              <h3>Current Phone Number</h3>
+              <p>{phone ? phone : "No Number Added"}</p>
             </label>
             <label className={changePhoneCSS.colInput}>
               <h3>New Number</h3>

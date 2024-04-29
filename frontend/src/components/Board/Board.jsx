@@ -33,6 +33,7 @@ import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import { UserContext } from "../../contexts/UserContext.js";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -55,8 +56,11 @@ const Button = styled.button`
 
 export default function Board() {
   const { user, token } = useContext(UserContext);
+  const navigate = useNavigate();
+  if (token === undefined || user === undefined) {
+    navigate("/login");
+  }
   const [isAddingEnd, setIsAddingEnd] = useState(false);
-
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
