@@ -7,6 +7,7 @@ import { googleLogin, login } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+import Colours from "../../features/colourWheel/colours.jsx";
 
 const notify = (message) => toast(message);
 
@@ -74,11 +75,9 @@ export default function LoginForm(props) {
       return;
     } else {
       console.log("response succeeded");
-      const now = new Date();
-      now.getTime();
-
-      now.setHours(now.getHours() + 1);
-      cookies.set("jwt_auth", tokens, { expires: now });
+      let expiry = new Date(0);
+      expiry.setUTCSeconds(tokens.expires);
+      cookies.set("jwt_auth", access, { expires: expiry });
       setUser(username);
       setIsLoggedIn(true);
       navigate("/board");
@@ -115,6 +114,7 @@ export default function LoginForm(props) {
           <div className={LoginCSS.text}>Login</div>
           <div className={LoginCSS.underline}></div>
         </div>
+        <Colours></Colours>
         <div className={LoginCSS.inputs}>
           <div className={LoginCSS.input}>
             <img src={email_icon} alt="" />
