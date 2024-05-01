@@ -38,9 +38,7 @@ export const addColOptions = (newColumn, currCol, columns) => {
 };
 
 export const delColMutation = async (user, column, columns, token) => {
-  console.log(user, column);
   const added = await removeColumn(user, column, token);
-  console.log(added);
   if (added.data.error) {
     toast.error("400 " + added.error);
     return false;

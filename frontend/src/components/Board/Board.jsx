@@ -66,7 +66,6 @@ export default function Board() {
   // COLUMN API CALLS
   const addColumn = async (column, currCol) => {
     try {
-      console.log(currCol);
       const newColumns = { ...columns };
       await mutate(
         storeColumn(user, column, currCol, token, newColumns),
