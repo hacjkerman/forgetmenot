@@ -7,7 +7,6 @@ import { googleLogin, login } from "../../api/Loginapi.jsx";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
-import Colours from "../../features/colourWheel/colours.jsx";
 
 const notify = (message) => toast(message);
 
@@ -114,7 +113,6 @@ export default function LoginForm(props) {
           <div className={LoginCSS.text}>Login</div>
           <div className={LoginCSS.underline}></div>
         </div>
-        <Colours></Colours>
         <div className={LoginCSS.inputs}>
           <div className={LoginCSS.input}>
             <img src={email_icon} alt="" />
