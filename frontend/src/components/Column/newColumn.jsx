@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import newColumnCSS from "./newColumn.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
 import toast from "react-hot-toast";
+import Colours from "../../features/colourSwatch/components/colourWheel/colours";
 
 function NewColumn(props) {
   const { addColumn } = useContext(TodoContext);
+  const [selectedColour, setSelectedColour] = useState("Default");
   const handleClose = (e) => {
     e.preventDefault();
     props.setIsAddingEnd(!props.isAddingEnd);
@@ -46,6 +48,13 @@ function NewColumn(props) {
             <label className={newColumnCSS.colInput}>
               <h3>Column Name</h3>
               <input type="text" placeholder="Habits" required></input>
+            </label>
+            <label className={newColumnCSS.colInput}>
+              <h3>Column Colour</h3>
+              <div className={newColumnCSS.currColour}>
+                {selectedColour ? selectedColour.replace("_", " ") : <></>}
+              </div>
+              <Colours colour={selectedColour} setColour={setSelectedColour} />
             </label>
           </div>
           <div className={newColumnCSS.lowerFormButtons}>

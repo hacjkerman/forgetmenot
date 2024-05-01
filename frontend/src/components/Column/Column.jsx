@@ -88,7 +88,7 @@ export default function Column(props) {
     <Draggable
       draggableId={column}
       index={props.index}
-      isDragDisabled={isUpdatingCol}
+      isDragDisabled={(isUpdatingCol, isAdding)}
     >
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
