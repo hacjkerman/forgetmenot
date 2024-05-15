@@ -1,13 +1,13 @@
 import { dbConnect } from "../../database/db.js";
 import findColumn from "./findColumn.js";
 
-export async function storeColumn(user, column, currCol) {
+export async function storeColumn(user, column, colour, currCol) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
   const foundUser = await userTodos.findOne({
     username: user,
   });
-  const newCol = { todos: [], colour: null };
+  const newCol = { todos: [], colour: colour };
   if (!foundUser) {
     await userTodos.insertOne({ username: user, columnOrder: [column] });
     await userTodos.updateOne(
