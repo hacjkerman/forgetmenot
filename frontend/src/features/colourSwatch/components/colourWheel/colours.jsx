@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ColoursCSS from "./Colours.module.css";
 import { HexColorPicker, HexColorInput } from "react-colorful";
-const colours = {
-  Default: "#9ba6b1",
+export const colours = {
+  Default: "#EBECF0",
   Light_Blue: "#00FFFF",
   Blue: "#0096FF",
   Dark_Blue: "#0000FF",
@@ -33,8 +33,9 @@ function Colours(props) {
   };
   const handleCustomColour = (e) => {
     e.preventDefault();
+    console.log(color);
     setIsSelectingCustom(!isSelectingCustom);
-    setColour("Custom");
+    setColour(color);
   };
   return (
     <div className={ColoursCSS.colourSelector}>
