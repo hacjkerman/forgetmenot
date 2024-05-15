@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import updateTaskCSS from "./updateTask.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
+import toast from "react-hot-toast";
 
 function UpdateTask(props) {
   const { changeTodo } = useContext(TodoContext);
@@ -16,6 +17,11 @@ function UpdateTask(props) {
   const handleUpdateTodo = (e) => {
     e.preventDefault();
     const newTodo = e.target[0].value;
+    console.log(newTodo.length);
+    if (newTodo.length > 256) {
+      toast.error("Todo has to be less than 256 characters long");
+      return;
+    }
     changeTodo(column, task.id, newTodo);
     handleClose(e);
     console.log(newTodo);
@@ -24,9 +30,7 @@ function UpdateTask(props) {
     <div className={updateTaskCSS.popup}>
       <div className={updateTaskCSS.popupInner}>
         <div className={updateTaskCSS.popupHeader}>
-          <h3 className={updateTaskCSS.headerText}>
-            Update Task for {task.todo}
-          </h3>
+          <h3 className={updateTaskCSS.headerText}>Update Task Name</h3>
           <button className={updateTaskCSS.closeBtn} onClick={handleClose}>
             x
           </button>
@@ -35,7 +39,7 @@ function UpdateTask(props) {
           <div className={updateTaskCSS.upperForm}>
             <label className={updateTaskCSS.colInput}>
               <h3>Current Todo</h3>
-              <p>{task.todo}</p>
+              <div className={updateTaskCSS.todoBox}>{task.todo}</div>
             </label>
             <label className={updateTaskCSS.colInput}>
               <h3>New Todo</h3>

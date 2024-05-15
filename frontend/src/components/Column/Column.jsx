@@ -66,7 +66,6 @@ export default function Column(props) {
   const [isAdding, setIsAdding] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
-    console.log(currCol);
     deleteColumn(currCol);
     return;
   };

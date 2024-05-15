@@ -113,3 +113,19 @@
   text-decoration: none;
   text-align: center;
 }
+
+@media only screen and (max-width: 1500px) {
+  .popupInner {
+    min-width: 30%;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .popupInner {
+    min-width: 40%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .popupInner {
+    min-width: 50%;
+  }
+}

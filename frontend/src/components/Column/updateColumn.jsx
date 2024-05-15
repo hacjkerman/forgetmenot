@@ -16,8 +16,8 @@ function UpdateColumn(props) {
   const handleUpdateCol = (e) => {
     e.preventDefault();
     const newColumn = e.target[0].value;
-    if (newColumn.length > 20) {
-      toast.error("Column name is longer than 20 characters!");
+    if (newColumn.length > 25) {
+      toast.error("Column name is longer than 25 characters!");
       return;
     }
     changeColumn(column, newColumn);
@@ -27,9 +27,7 @@ function UpdateColumn(props) {
     <div className={updateColumnCSS.popup}>
       <div className={updateColumnCSS.popupInner}>
         <div className={updateColumnCSS.popupHeader}>
-          <h3 className={updateColumnCSS.headerText}>
-            Update Name for {column} Column
-          </h3>
+          <h3 className={updateColumnCSS.headerText}>Update Column Name</h3>
           <button className={updateColumnCSS.closeBtn} onClick={handleClose}>
             x
           </button>
@@ -37,7 +35,11 @@ function UpdateColumn(props) {
         <form className={updateColumnCSS.columnForm} onSubmit={handleUpdateCol}>
           <div className={updateColumnCSS.upperForm}>
             <label className={updateColumnCSS.colInput}>
-              <h3>New Column</h3>
+              <h3>Current Column Name</h3>
+              <div>{column}</div>
+            </label>
+            <label className={updateColumnCSS.colInput}>
+              <h3>New Column Name</h3>
               <input type="input" placeholder="Weekly Todo" required></input>
             </label>
           </div>
