@@ -158,9 +158,9 @@ app.post(
       const email = user.payload.email;
       const username = user.payload.name;
       const emailIsFound = await findEmailInUsers(email);
-      let newName = username;
       if (!emailIsFound) {
         for (let i = 0; i <= 1000; i++) {
+          let newName = username;
           let isFound = await findUserInUsers(newName);
           if (isFound) {
             newName = username + i;
