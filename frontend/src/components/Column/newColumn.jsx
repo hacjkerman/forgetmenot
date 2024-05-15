@@ -21,11 +21,12 @@ function NewColumn(props) {
     const column = e.target[0].value;
     const columnOrder = props.columnOrder;
     const currCol = props.currCol;
-    if (column.length > 20) {
-      toast.error("Column name is longer than 20 characters!");
+    if (column.length > 25) {
+      toast.error("Column name is longer than 25 characters!");
       return;
     }
     if (columnOrder.find((columnName) => columnName === column)) {
+      toast.error("Duplicate Column");
       handleDuplicate(e);
       handleClose(e);
       return { error: "Duplicate Column" };

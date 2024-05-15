@@ -1,5 +1,6 @@
 import React from "react";
 import newTaskCSS from "./newTask.module.css";
+import toast from "react-hot-toast";
 
 function NewTask(props) {
   const addTodo = props.addTodo;
@@ -12,8 +13,7 @@ function NewTask(props) {
     e.preventDefault();
     const todo = e.target[0].value;
     if (todo.length > 256) {
-      console.log("Todo has to be less than 256 characters long");
-      handleClose(e);
+      toast.error("Todo has to be less than 256 characters long");
       return;
     }
     let estimate = undefined;

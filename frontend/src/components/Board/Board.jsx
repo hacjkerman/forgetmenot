@@ -64,6 +64,8 @@ export default function Board() {
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
   // COLUMN API CALLS
+  console.log(columns);
+
   const addColumn = async (column, currCol) => {
     try {
       const newColumns = { ...columns };
@@ -75,7 +77,6 @@ export default function Board() {
       console.log(err);
     }
   };
-
   const deleteColumn = async (column) => {
     try {
       const newColumns = { ...columns };
@@ -273,13 +274,19 @@ export default function Board() {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {columns &&
                 columns.columnOrder.map((column, index) => {
+                  let todos = columns[column];
+                  if (!Array.isArray(todos) && columns[column]) {
+                    todos = columns[column].todos;
+                    console.log(column);
+                  }
+
                   return (
                     <Column
                       className=""
                       key={column}
                       column={column}
                       index={index}
-                      todos={columns[column]}
+                      todos={todos}
                       columnOrder={columns.columnOrder}
                     />
                   );
