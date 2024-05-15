@@ -61,6 +61,7 @@ export default function Column(props) {
   const { deleteColumn, addTodo } = useContext(TodoContext);
   const todos = props.todos;
   const column = props.column;
+  const colour = props.colour;
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUpdatingCol, setIsUpdatingCol] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -87,11 +88,16 @@ export default function Column(props) {
     <Draggable
       draggableId={column}
       index={props.index}
-      isDragDisabled={(isUpdatingCol, isAdding)}
+      isDragDisabled={isUpdatingCol || isAdding}
+      style={{ backgroundColor: colour }}
     >
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
-          <div className={ColumnCSS.columnHeader} {...provided.dragHandleProps}>
+          <div
+            className={ColumnCSS.columnHeader}
+            {...provided.dragHandleProps}
+            style={{ backgroundColor: colour }}
+          >
             {isAdding ? (
               <NewColumn
                 isAddingEnd={isAdding}

@@ -34,6 +34,7 @@ import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import { UserContext } from "../../contexts/UserContext.js";
 import { useNavigate } from "react-router-dom";
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -63,15 +64,15 @@ export default function Board() {
   const [isAddingEnd, setIsAddingEnd] = useState(false);
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
-  // COLUMN API CALLS
   console.log(columns);
+  // COLUMN API CALLS
 
-  const addColumn = async (column, currCol) => {
+  const addColumn = async (column, colour, currCol) => {
     try {
       const newColumns = { ...columns };
       await mutate(
-        storeColumn(user, column, currCol, token, newColumns),
-        addColOptions(column, currCol, newColumns)
+        storeColumn(user, column, colour, currCol, token, newColumns),
+        addColOptions(column, colour, currCol, newColumns)
       );
     } catch (err) {
       console.log(err);
@@ -277,14 +278,20 @@ export default function Board() {
                   let todos = columns[column];
                   if (!Array.isArray(todos) && columns[column]) {
                     todos = columns[column].todos;
-                    console.log(column);
                   }
-
+                  const currCol = columns[column];
+                  let colColour = "#EBECF0";
+                  if (currCol !== undefined && currCol.colour !== undefined) {
+                    colColour = colours[currCol.colour]
+                      ? colours[currCol.colour]
+                      : currCol.colour;
+                  }
                   return (
                     <Column
                       className=""
                       key={column}
                       column={column}
+                      colour={colColour}
                       index={index}
                       todos={todos}
                       columnOrder={columns.columnOrder}
