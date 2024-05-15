@@ -27,10 +27,11 @@ export const getColumns = async (params) => {
   return response.data;
 };
 
-export const storeColumn = (user, column, currCol, token) => {
+export const storeColumn = (user, column, colour, currCol, token) => {
   const response = todosApi.post(todosUrlEndpoint, {
     username: user,
     column,
+    colour,
     currCol,
     token,
   });
