@@ -7,11 +7,12 @@ export async function storeColumn(user, column, currCol) {
   const foundUser = await userTodos.findOne({
     username: user,
   });
+  const newCol = { todos: [], colour: null };
   if (!foundUser) {
     await userTodos.insertOne({ username: user, columnOrder: [column] });
     await userTodos.updateOne(
       { username: user },
-      { $set: { [column]: [], todoIndex: 0 } }
+      { $set: { [column]: newCol, todoIndex: 0 } }
     );
     return { status: "New user" };
   }
@@ -22,10 +23,11 @@ export async function storeColumn(user, column, currCol) {
   }
   const newColOrder = foundUser.columnOrder;
   newColOrder.splice(currCol, 0, column);
-  console.log(newColOrder);
   await userTodos.updateOne(
     { username: user },
-    { $set: { [column]: [], columnOrder: newColOrder } }
+    {
+      $set: { [column]: newCol, columnOrder: newColOrder },
+    }
   );
 
   return { status: "Storage successful" };
