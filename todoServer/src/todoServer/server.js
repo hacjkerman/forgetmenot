@@ -130,7 +130,7 @@ app.post(
   "/column",
   inputValidator(
     async (req, res) => {
-      const { username, column, currCol, token } = req.body;
+      const { username, column, colour, currCol, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -140,10 +140,10 @@ app.post(
         return res.json({ error: "Invalid authorisation" });
       }
       console.log(column);
-      const storeResult = await storeColumn(username, column, currCol);
+      const storeResult = await storeColumn(username, column, colour, currCol);
       return res.json(storeResult);
     },
-    ["username", "column", "currCol", "token"]
+    ["username", "column", "colour", "currCol", "token"]
   )
 );
 
