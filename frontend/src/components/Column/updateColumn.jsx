@@ -16,14 +16,14 @@ function UpdateColumn(props) {
   const handleUpdateCol = (e) => {
     e.preventDefault();
     const newColumn = e.target[0].value;
-    if (newColumn.length > 25) {
-      toast.error("Column name is longer than 25 characters!");
+    if (newColumn.length > 20) {
+      toast.error("Column name is longer than 20 characters!");
       return;
     }
     changeColumn(column, newColumn);
     handleClose(e);
   };
-  return (
+  return props.isUpdatingCol ? (
     <div className={updateColumnCSS.popup}>
       <div className={updateColumnCSS.popupInner}>
         <div className={updateColumnCSS.popupHeader}>
@@ -63,6 +63,8 @@ function UpdateColumn(props) {
         {props.children}
       </div>
     </div>
+  ) : (
+    ""
   );
 }
 
