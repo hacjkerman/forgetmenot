@@ -18,6 +18,7 @@ import { updateColOrder } from "./columns/updateColOrder.js";
 import { updateTodoEstimate } from "./todos/updateTodoEstimate.js";
 import { updateTodoDone } from "./todos/updateTodoDone.js";
 import { logger } from "./logger/logger.js";
+import { updateColumnColour } from "./columns/updateColumnColour.js";
 
 const app = express();
 app.use(cors());
@@ -101,6 +102,30 @@ app.put(
   )
 );
 
+app.put(
+  "/columnColour",
+  inputValidator(
+    async (req, res) => {
+      const { username, column, newColour, token } = req.body;
+      const validUser = await verifyUser(username, token);
+      if (validUser.error) {
+        logger.log({
+          level: "error",
+          message: "Invalid authorisation",
+        });
+        return res.json({ error: "Invalid authorisation" });
+      }
+      const updateResult = await updateColumnColour(
+        username,
+        column,
+        newColour
+      );
+      return res.json(updateResult);
+    },
+    ["username", "column", "newColour", "token"]
+  )
+);
+
 app.post(
   "/column",
   inputValidator(
@@ -114,6 +139,7 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
+      console.log(column);
       const storeResult = await storeColumn(username, column, currCol);
       return res.json(storeResult);
     },
