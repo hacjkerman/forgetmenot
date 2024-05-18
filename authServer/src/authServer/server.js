@@ -24,6 +24,7 @@ import endpoints from "../prod/endpoints.js";
 import changeEnv from "../prod/vercelENV.js";
 import redeploy from "../prod/vercelRedeploy.js";
 import { updateName } from "./users/updateName.js";
+import { inputValidator, getInputsValidator } from "./inputVals.js";
 
 const app = express();
 app.use(cors());
@@ -54,35 +55,6 @@ const client = new OAuth2Client(
 //   message: tunnels,
 // });
 
-function inputValidator(fn, inputs) {
-  return function (req, res) {
-    for (let i = 0; i < inputs.length; i++) {
-      if (req.body[inputs[i]] === undefined) {
-        logger.log({
-          level: "error",
-          message: "Missing required fields " + inputs[i],
-        });
-        return res.json({ error: "Missing required fields " + inputs[i] });
-      }
-    }
-
-    return fn(req, res);
-  };
-}
-function getInputsValidator(fn, inputs) {
-  return function (req, res) {
-    for (let i = 0; i < inputs.length; i++) {
-      if (req.query[inputs[i]] === undefined) {
-        logger.log({
-          level: "error",
-          message: "Missing required fields " + inputs[i],
-        });
-        return res.json({ error: "Missing required fields " + inputs[i] });
-      }
-    }
-    return fn(req, res);
-  };
-}
 app.delete(
   "/logout",
   inputValidator(

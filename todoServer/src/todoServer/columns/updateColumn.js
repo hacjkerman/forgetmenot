@@ -1,6 +1,6 @@
 import { dbConnect } from "../../database/db.js";
 
-export async function updateColumn(user, oldColumn, newColumn) {
+export async function updateColumn(user, oldColumn, colour, newColumn) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
   const foundUser = await userTodos.findOne({ username: user });
@@ -16,13 +16,16 @@ export async function updateColumn(user, oldColumn, newColumn) {
   if (duplicate.length > 0) {
     return { error: "Duplicate storage" };
   }
-
   const currCol = foundUser[oldColumn];
+  let colColour = currCol.colour;
+  if (colour !== colColour) {
+    colColour = colour;
+  }
   const columnIndex = columnData.findIndex((column) => column === oldColumn);
   columnData[columnIndex] = newColumn;
   const columnObj = {
     todos: currCol.todos ? currCol.todos : currCol,
-    colour: currCol.colour,
+    colour: colColour,
   };
   await userTodos.updateMany({ username: user }, [
     { $set: { columnOrder: columnData } },

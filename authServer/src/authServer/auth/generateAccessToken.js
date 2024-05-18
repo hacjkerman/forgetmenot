@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const { sign } = jwt;
 
 export default async function generateAccessToken(user, email) {
-  const time = Math.floor(Date.now() / 1000) + 60 * 59;
+  const time = Math.floor(Date.now() / 1000) + 60 * 58;
   return {
     expires: time,
     accessToken: sign(

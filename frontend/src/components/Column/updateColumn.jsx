@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import updateColumnCSS from "./updateColumn.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
 import toast from "react-hot-toast";
-
+import Colours from "../../features/colourSwatch/components/colourWheel/colours";
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
+function getKeyByValue(object, value) {
+  return Object.keys(object).find((key) => object[key] === value);
+}
 function UpdateColumn(props) {
   const { changeColumn } = useContext(TodoContext);
   const isUpdatingCol = props.isUpdatingCol;
+  const [selectedColour, setSelectedColour] = useState("Default");
   const setIsUpdatingCol = props.setIsUpdatingCol;
   const column = props.column;
   const handleClose = (e) => {
@@ -13,17 +18,30 @@ function UpdateColumn(props) {
     setIsUpdatingCol(!isUpdatingCol);
   };
 
-  const handleUpdateCol = (e) => {
+  const handleUpdateCol = async (e) => {
     e.preventDefault();
-    const newColumn = e.target[0].value;
+    let newColumn = e.target[0].value;
+    if (newColumn === "") {
+      newColumn = column;
+    }
     if (newColumn.length > 20) {
       toast.error("Column name is longer than 20 characters!");
       return;
     }
-    changeColumn(column, newColumn);
+    await changeColumn(column, selectedColour, newColumn);
     handleClose(e);
   };
-  return props.isUpdatingCol ? (
+  const currColour = getKeyByValue(colours, props.colour);
+  console.log(selectedColour);
+  useEffect(() => {
+    if (!currColour) {
+      setSelectedColour(props.colour);
+    } else {
+      setSelectedColour(currColour);
+    }
+  }, []);
+  console.log(selectedColour);
+  return (
     <div className={updateColumnCSS.popup}>
       <div className={updateColumnCSS.popupInner}>
         <div className={updateColumnCSS.popupHeader}>
@@ -40,7 +58,14 @@ function UpdateColumn(props) {
             </label>
             <label className={updateColumnCSS.colInput}>
               <h3>New Column Name</h3>
-              <input type="input" placeholder="Weekly Todo" required></input>
+              <input type="input" placeholder="Weekly Todo"></input>
+            </label>
+            <label className={updateColumnCSS.colInput}>
+              <h3>Column Colour</h3>
+              <div className={updateColumnCSS.currColour}>
+                {selectedColour ? selectedColour.replace("_", " ") : <></>}
+              </div>
+              <Colours colour={selectedColour} setColour={setSelectedColour} />
             </label>
           </div>
           <div className={updateColumnCSS.lowerFormButtons}>
@@ -63,8 +88,6 @@ function UpdateColumn(props) {
         {props.children}
       </div>
     </div>
-  ) : (
-    ""
   );
 }
 

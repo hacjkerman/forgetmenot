@@ -90,12 +90,12 @@ export default function Board() {
     }
   };
 
-  const changeColumn = async (column, newColumn) => {
+  const changeColumn = async (column, colour, newColumn) => {
     try {
       const newColumns = { ...columns };
       await mutate(
-        updateColumn(user, column, newColumn, newColumns, token),
-        updateColOptions(column, newColumn, newColumns)
+        updateColumn(user, column, colour, newColumn, newColumns, token),
+        updateColOptions(column, colour, newColumn, newColumns)
       );
     } catch (err) {
       console.log(err);

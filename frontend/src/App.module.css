@@ -1,5 +1,6 @@
 .main {
   flex-direction: column;
+  height: 100vw;
 }
 
 .container {

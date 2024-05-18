@@ -37,10 +37,17 @@ export const storeColumn = (user, column, colour, currCol, token) => {
   });
   return response;
 };
-export const updateColumn = async (username, oldColumn, newColumn, token) => {
+export const updateColumn = async (
+  username,
+  oldColumn,
+  colour,
+  newColumn,
+  token
+) => {
   const response = await todosApi.put(todosUrlEndpoint, {
     username,
     oldColumn,
+    colour,
     newColumn,
     token,
   });

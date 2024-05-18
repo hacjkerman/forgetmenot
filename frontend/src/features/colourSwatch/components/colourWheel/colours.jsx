@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ColoursCSS from "./Colours.module.css";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 export const colours = {
@@ -17,10 +17,9 @@ export const colours = {
 };
 function Colours(props) {
   const selectedColour = props.colour;
+  console.log(selectedColour);
   const setColour = props.setColour;
-  const [color, setColor] = useState("#aabbcc");
   const [isSelectingCustom, setIsSelectingCustom] = useState(false);
-
   const allColours = Object.entries(colours);
   const selectColour = (e) => {
     e.preventDefault();
@@ -33,10 +32,17 @@ function Colours(props) {
   };
   const handleCustomColour = (e) => {
     e.preventDefault();
-    console.log(color);
     setIsSelectingCustom(!isSelectingCustom);
-    setColour(color);
+    setColour("#aabbcc");
   };
+  useEffect(() => {
+    if (
+      !Object.values(colours).includes(selectedColour) &&
+      !Object.keys(colours).includes(selectedColour)
+    ) {
+      setIsSelectingCustom(true);
+    }
+  }, [selectedColour]);
   return (
     <div className={ColoursCSS.colourSelector}>
       <div className={ColoursCSS.colourBox}>
@@ -44,7 +50,10 @@ function Colours(props) {
           const colourName = colour[0];
           const colourHex = colour[1];
           let render;
-          if (colours[selectedColour] === colourHex) {
+          if (
+            colours[selectedColour] === colourHex ||
+            selectedColour === colourName
+          ) {
             render = (
               <hr
                 className={ColoursCSS.selectedSwatch}
@@ -72,11 +81,11 @@ function Colours(props) {
       <div className={ColoursCSS.customBox}>
         {isSelectingCustom ? (
           <div className={ColoursCSS.customColour}>
-            <HexColorPicker color={color} onChange={setColor} />
+            <HexColorPicker color={selectedColour} onChange={setColour} />
             <HexColorInput
               className={ColoursCSS.colourfulInput}
-              color={color}
-              onChange={setColor}
+              color={selectedColour}
+              onChange={setColour}
             />
           </div>
         ) : (
