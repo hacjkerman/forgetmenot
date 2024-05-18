@@ -9,11 +9,12 @@ import { toast } from "react-hot-toast";
 export const addColMutation = async (
   user,
   newColumn,
+  colour,
   currCol,
   token,
   columns
 ) => {
-  const added = await storeColumn(user, newColumn, currCol, token);
+  const added = await storeColumn(user, newColumn, colour, currCol, token);
   if (added.status) {
     toast.success(added.status + " Successfully added column: " + newColumn);
     return columns;
@@ -26,7 +27,7 @@ export const addColMutation = async (
   }
 };
 
-export const addColOptions = (newColumn, currCol, columns) => {
+export const addColOptions = (newColumn, currCol, colour, columns) => {
   columns.columnOrder.splice(currCol, 0, newColumn);
   columns[newColumn] = [];
   return {
@@ -65,11 +66,12 @@ export const delColOptions = (column, columns) => {
 export const updateColMutation = async (
   user,
   column,
+  colour,
   newColumn,
   columns,
   token
 ) => {
-  const added = await updateColumn(user, column, newColumn, token);
+  const added = await updateColumn(user, column, colour, newColumn, token);
   if (added.status) {
     toast.success(added.status);
     return columns;
@@ -84,18 +86,27 @@ export const updateColMutation = async (
   }
 };
 
-export const updateColOptions = (column, newColumn, columns) => {
+export const updateColOptions = (column, colour, newColumn, columns) => {
   const currCol = columns[column];
-  columns[newColumn] = currCol;
-  let colOrder = columns.columnOrder;
-  const index = colOrder.findIndex((item) => item === column);
-  colOrder.splice(index, 1);
-  colOrder.splice(index, 0, newColumn);
+  // UPDATES COLUMN TO NEW FORMAT
+  if (currCol.todos !== undefined) {
+    const updatedCol = { todos: currCol.todos, colour: colour };
+    columns[column] = updatedCol;
+    // columns[column].todos = "hello";
+  } else {
+    columns[newColumn] = { todos: currCol, colour: colour };
+  }
+  if (column !== newColumn) {
+    let colOrder = columns.columnOrder;
+    const index = colOrder.findIndex((item) => item === column);
+    colOrder.splice(index, 1);
+    colOrder.splice(index, 0, newColumn);
+  }
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 

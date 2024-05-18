@@ -18,7 +18,7 @@ export async function updateColumnColour(user, column, newColour) {
   };
   await userTodos.updateOne(
     { username: user },
-    { $set: { [foundUser[column]]: newColumn } }
+    { $set: { [column]: newColumn } }
   );
 
   return { status: "Update successful" };

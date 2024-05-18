@@ -33,6 +33,7 @@ const Title = styled.h3`
   max-width: 68%;
   @media (max-width: 600px) {
     font-size: 16px;
+    line-height: 12px;
   }
 `;
 const TaskList = styled.div`
@@ -115,6 +116,7 @@ export default function Column(props) {
                 isUpdatingCol={isUpdatingCol}
                 setIsUpdatingCol={setIsUpdatingCol}
                 column={props.column}
+                colour={props.colour}
                 changeColumn={props.changeColumn}
               ></UpdatingColumn>
             ) : (
@@ -129,31 +131,29 @@ export default function Column(props) {
             </button>
           </div>
           <div className={ColumnCSS.taskbox}>
-            <div>
-              <Droppable droppableId={column} type="task">
-                {(provided, snapshot) => (
-                  <TaskList
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    $isDraggingOver={snapshot.isDraggingOver}
-                  >
-                    {todos &&
-                      todos.length > 0 &&
-                      todos.map((task, index) => {
-                        return (
-                          <Task
-                            key={task.id}
-                            task={task}
-                            index={index}
-                            column={column}
-                          />
-                        );
-                      })}
-                    {provided.placeholder}
-                  </TaskList>
-                )}
-              </Droppable>
-            </div>
+            <Droppable droppableId={column} type="task">
+              {(provided, snapshot) => (
+                <TaskList
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  $isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {todos &&
+                    todos.length > 0 &&
+                    todos.map((task, index) => {
+                      return (
+                        <Task
+                          key={task.id}
+                          task={task}
+                          index={index}
+                          column={column}
+                        />
+                      );
+                    })}
+                  {provided.placeholder}
+                </TaskList>
+              )}
+            </Droppable>
           </div>
           <div>
             {isTriggered ? (

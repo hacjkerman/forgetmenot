@@ -81,6 +81,10 @@
   height: 24px;
 }
 
+.currColour {
+  margin-bottom: 10px;
+}
+
 .lowerFormButtons {
   display: flex;
   justify-content: flex-end;
