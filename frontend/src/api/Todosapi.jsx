@@ -21,6 +21,7 @@ export const storeTodo = async (
   todo,
   estimate,
   dueDate,
+  colour,
   token
 ) => {
   const response = await todosApi.post(todosUrlEndpoint, {
@@ -29,6 +30,7 @@ export const storeTodo = async (
     todo,
     estimate,
     dueDate,
+    colour,
     token,
   });
   return response.data;

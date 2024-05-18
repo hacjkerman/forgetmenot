@@ -13,6 +13,7 @@ export async function updateTodoColumn(
   const foundUser = await userTodos.findOne({
     username: user,
   });
+  // ERROR CHECKING
   if (!foundUser) {
     return { error: "User does not exist" };
   }
@@ -25,30 +26,39 @@ export async function updateTodoColumn(
   if (!newColFound) {
     return { error: "New Column does not exist" };
   }
-
+  // SAME COLUMN
   if (oldColFound === newColFound) {
-    const currCol = foundUser[oldColFound];
+    const colObj = { ...foundUser[oldColFound] };
+    const currCol = foundUser[oldColFound].todos;
     const temp = currCol[srcIndex];
     currCol.splice(srcIndex, 1);
     currCol.splice(destIndex, 0, temp);
+    colObj.todos = currCol;
     await userTodos.updateOne(
       { username: user },
-      { $set: { [oldColumn]: currCol } }
+      { $set: { [oldColumn]: colObj } }
     );
     return;
   }
-  const oldTodos = foundUser[oldColumn];
+  // FIND SOLUTION TO UPDATE WITHOUT RESETTING ENTIRE OBJECT
+  // SLOW METHOD
+  const oldColObj = { ...foundUser[oldColFound] };
+  const oldTodos = foundUser[oldColumn].todos;
   const temp = oldTodos[srcIndex];
   oldTodos.splice(srcIndex, 1);
-  const newTodos = foundUser[newColumn];
+  oldColObj.todos = oldTodos;
+  const newColObj = { ...foundUser[newColFound] };
+  const newTodos = foundUser[newColumn].todos;
   newTodos.splice(destIndex, 0, temp);
+  newColObj.todos = newTodos;
+  // DB CALLS
   await userTodos.updateOne(
     { username: user },
-    { $set: { [oldColumn]: oldTodos } }
+    { $set: { [oldColumn]: oldColObj } }
   );
   await userTodos.updateOne(
     { username: user },
-    { $set: { [newColumn]: newTodos } }
+    { $set: { [newColumn]: newColObj } }
   );
   // SUCCESS
   return { status: "Todo column successfully updated" };

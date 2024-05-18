@@ -29,7 +29,8 @@ export const addColMutation = async (
 
 export const addColOptions = (newColumn, currCol, colour, columns) => {
   columns.columnOrder.splice(currCol, 0, newColumn);
-  columns[newColumn] = [];
+  columns[newColumn] = { todos: [], colour: colour };
+  console.log(columns);
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -89,13 +90,10 @@ export const updateColMutation = async (
 export const updateColOptions = (column, colour, newColumn, columns) => {
   const currCol = columns[column];
   // UPDATES COLUMN TO NEW FORMAT
-  if (currCol.todos !== undefined) {
-    const updatedCol = { todos: currCol.todos, colour: colour };
-    columns[column] = updatedCol;
-    // columns[column].todos = "hello";
-  } else {
-    columns[newColumn] = { todos: currCol, colour: colour };
-  }
+  columns[newColumn] = {
+    todos: currCol.todos ? currCol.todos : currCol,
+    colour: colour,
+  };
   if (column !== newColumn) {
     let colOrder = columns.columnOrder;
     const index = colOrder.findIndex((item) => item === column);

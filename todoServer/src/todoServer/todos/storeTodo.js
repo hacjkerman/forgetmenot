@@ -1,10 +1,23 @@
 import { dbConnect } from "../../database/db.js";
 import findColumn from "../columns/findColumn.js";
 
-export async function storeTodo(username, column, todo, estimate, dueDate) {
+export async function storeTodo(
+  username,
+  column,
+  todo,
+  estimate,
+  dueDate,
+  colour
+) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-
+  let due;
+  if (dueDate === 0) {
+    due = undefined;
+  }
+  if (estimate === 0) {
+    estimate = undefined;
+  }
   const isFound = await userTodos.findOne({
     username: username,
   });
@@ -19,7 +32,8 @@ export async function storeTodo(username, column, todo, estimate, dueDate) {
     id: isFound.todoIndex.toString(),
     todo,
     estimate,
-    due: dueDate,
+    due,
+    colour,
     done: false,
   };
   const foundCol = findColumn(isFound, column);
@@ -27,9 +41,17 @@ export async function storeTodo(username, column, todo, estimate, dueDate) {
     // COLUMN DOES NOT EXIST
     return { error: "Column does not exist" };
   }
+  // UPDATING COMPLETELY BAD SOLUTION SHOULD FIX IN FUTURE
+  const todos = isFound[foundCol].todos;
+  todos.push(newTodo);
+  const newObj = {
+    todos: todos,
+    colour: isFound[foundCol].colour,
+  };
+  // FIGURE OUT HOW TO UPDATE A NESTED ARRAY IN AN OBJECT
   await userTodos.updateOne(
     { username: username },
-    { $push: { [column]: newTodo }, $inc: { todoIndex: 1 } }
+    { $set: { [column]: newObj }, $inc: { todoIndex: 1 } }
   );
   return { status: "Storage successful" };
 }

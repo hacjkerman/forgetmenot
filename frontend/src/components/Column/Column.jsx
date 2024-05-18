@@ -147,6 +147,7 @@ export default function Column(props) {
                           task={task}
                           index={index}
                           column={column}
+                          colour={props.colour}
                         />
                       );
                     })}
@@ -163,9 +164,14 @@ export default function Column(props) {
                 addTodo={addTodo}
                 todos={todos}
                 column={column}
+                colour={props.colour}
               ></NewTask>
             ) : (
-              <AddTodo onClick={handleClick} value={column}>
+              <AddTodo
+                onClick={handleClick}
+                value={column}
+                style={{ backgroundColor: colour }}
+              >
                 Add Todo
               </AddTodo>
             )}

@@ -14,10 +14,19 @@ export const addTodoMutation = async (
   newTodo,
   estimate,
   due,
+  colour,
   token,
   columns
 ) => {
-  const added = await storeTodo(user, column, newTodo, estimate, due, token);
+  const added = await storeTodo(
+    user,
+    column,
+    newTodo,
+    estimate,
+    due,
+    colour,
+    token
+  );
   if (added.status) {
     toast.success("Successfully added todo: " + newTodo);
     return columns;
@@ -31,7 +40,7 @@ export const addTodoMutation = async (
 };
 
 export const addTodoOptions = (newTodo, column, columns) => {
-  columns[column].push(newTodo);
+  columns[column].todos.push(newTodo);
   columns.todoIndex++;
   return {
     optimisticData: columns,
@@ -91,7 +100,7 @@ export const updateTodoMutation = async (
 };
 
 export const updateTodoOptions = (column, todo, newTodo, columns) => {
-  const currCol = columns[column];
+  const currCol = columns[column].todos;
   const item = currCol.find((item) => item.id === todo);
   item.todo = newTodo;
   return {
@@ -182,20 +191,20 @@ export const updateTodoOrderOptions = (
   newColumn,
   columns
 ) => {
-  const srcItem = columns[oldColumn];
+  const srcItem = columns[oldColumn].todos;
   if (oldColumn === newColumn) {
     const temp = srcItem[srcIndex];
     srcItem.splice(srcIndex, 1);
     srcItem.splice(destIndex, 0, temp);
-    columns[oldColumn] = srcItem;
+    columns[oldColumn].todos = srcItem;
     return;
   }
-  const destItem = columns[newColumn];
+  const destItem = columns[newColumn].todos;
   const temp = srcItem[srcIndex];
   srcItem.splice(srcIndex, 1);
   destItem.splice(destIndex, 0, temp);
-  columns[newColumn] = destItem;
-  columns[oldColumn] = srcItem;
+  columns[newColumn].todos = destItem;
+  columns[oldColumn].todos = srcItem;
   return {
     optimisticData: columns,
     rollbackOnError: true,

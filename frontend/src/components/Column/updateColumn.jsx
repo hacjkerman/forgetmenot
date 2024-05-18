@@ -3,10 +3,11 @@ import updateColumnCSS from "./updateColumn.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
 import toast from "react-hot-toast";
 import Colours from "../../features/colourSwatch/components/colourWheel/colours";
-import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
-function getKeyByValue(object, value) {
-  return Object.keys(object).find((key) => object[key] === value);
-}
+import {
+  colours,
+  getKeyByValue,
+} from "../../features/colourSwatch/components/colourWheel/colours";
+
 function UpdateColumn(props) {
   const { changeColumn } = useContext(TodoContext);
   const isUpdatingCol = props.isUpdatingCol;
@@ -32,7 +33,6 @@ function UpdateColumn(props) {
     handleClose(e);
   };
   const currColour = getKeyByValue(colours, props.colour);
-  console.log(selectedColour);
   useEffect(() => {
     if (!currColour) {
       setSelectedColour(props.colour);
@@ -40,10 +40,16 @@ function UpdateColumn(props) {
       setSelectedColour(currColour);
     }
   }, []);
-  console.log(selectedColour);
   return (
     <div className={updateColumnCSS.popup}>
-      <div className={updateColumnCSS.popupInner}>
+      <div
+        className={updateColumnCSS.popupInner}
+        style={{
+          borderWidth: "0.3rem",
+          borderStyle: "solid",
+          borderColor: props.colour,
+        }}
+      >
         <div className={updateColumnCSS.popupHeader}>
           <h3 className={updateColumnCSS.headerText}>Update Column Name</h3>
           <button className={updateColumnCSS.closeBtn} onClick={handleClose}>
