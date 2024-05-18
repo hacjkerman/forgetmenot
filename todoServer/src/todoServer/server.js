@@ -18,7 +18,6 @@ import { updateColOrder } from "./columns/updateColOrder.js";
 import { updateTodoEstimate } from "./todos/updateTodoEstimate.js";
 import { updateTodoDone } from "./todos/updateTodoDone.js";
 import { logger } from "./logger/logger.js";
-import { updateColumnColour } from "./columns/updateColumnColour.js";
 import { inputValidator, getInputsValidator } from "./inputVals.js";
 
 const app = express();
@@ -66,44 +65,16 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      let updateResult;
-      if (oldColumn === newColumn) {
-        updateResult = await updateColumnColour(username, oldColumn, colour);
-      } else {
-        updateResult = await updateColumn(
-          username,
-          oldColumn,
-          colour,
-          newColumn
-        );
-      }
-      return res.json(updateResult);
-    },
-    ["username", "oldColumn", "colour", "newColumn", "token"]
-  )
-);
 
-app.put(
-  "/columnColour",
-  inputValidator(
-    async (req, res) => {
-      const { username, column, newColour, token } = req.body;
-      const validUser = await verifyUser(username, token);
-      if (validUser.error) {
-        logger.log({
-          level: "error",
-          message: "Invalid authorisation",
-        });
-        return res.json({ error: "Invalid authorisation" });
-      }
-      const updateResult = await updateColumnColour(
+      const updateResult = await updateColumn(
         username,
-        column,
-        newColour
+        oldColumn,
+        colour,
+        newColumn
       );
       return res.json(updateResult);
     },
-    ["username", "column", "newColour", "token"]
+    ["username", "oldColumn", "colour", "newColumn", "token"]
   )
 );
 
@@ -197,7 +168,8 @@ app.post(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todo, estimate, dueDate, token } = req.body;
+      const { username, column, todo, estimate, dueDate, colour, token } =
+        req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -206,16 +178,18 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
+      console.log(column, todo, estimate, dueDate, colour);
       const storeResult = await storeTodo(
         username,
         column,
         todo,
         estimate,
-        dueDate
+        dueDate,
+        colour
       );
       return res.json(storeResult);
     },
-    ["username", "column", "todo", "dueDate", "token"]
+    ["username", "column", "todo", "dueDate", "colour", "token"]
   )
 );
 

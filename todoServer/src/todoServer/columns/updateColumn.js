@@ -1,4 +1,5 @@
 import { dbConnect } from "../../database/db.js";
+import { updateColumnColour } from "./updateColumnColour.js";
 
 export async function updateColumn(user, oldColumn, colour, newColumn) {
   const db = await dbConnect();
@@ -12,21 +13,28 @@ export async function updateColumn(user, oldColumn, colour, newColumn) {
   if (foundCol.length === 0) {
     return { error: "Column does not exist" };
   }
-  const duplicate = columnData.filter((column) => column === newColumn);
-  if (duplicate.length > 0) {
-    return { error: "Duplicate storage" };
+  if (oldColumn === newColumn) {
+    const response = await updateColumnColour(
+      foundUser,
+      user,
+      oldColumn,
+      colour
+    );
+    return response;
+  } else {
+    const duplicate = columnData.filter((column) => column === newColumn);
+    if (duplicate.length > 0) {
+      return { error: "Duplicate storage" };
+    }
   }
   const currCol = foundUser[oldColumn];
-  let colColour = currCol.colour;
-  if (colour !== colColour) {
-    colColour = colour;
-  }
+  let columnObj = {
+    todos: currCol.todos ? currCol.todos : currCol,
+    colour: colour,
+  };
   const columnIndex = columnData.findIndex((column) => column === oldColumn);
   columnData[columnIndex] = newColumn;
-  const columnObj = {
-    todos: currCol.todos ? currCol.todos : currCol,
-    colour: colColour,
-  };
+
   await userTodos.updateMany({ username: user }, [
     { $set: { columnOrder: columnData } },
     { $set: { [newColumn]: columnObj } },

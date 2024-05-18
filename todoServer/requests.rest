@@ -125,8 +125,9 @@ DELETE http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies35",
-  "column": "Habits"
+  "username": "tester",
+  "column": "wq",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTYwMTgzNDgsImRhdGEiOnsidXNlciI6ImhlbHZldGUifSwiaWF0IjoxNzE2MDE0ODY4fQ.H1xu-YjcFw51QAwCpvtNOGiQ-cL6kCf8iZrjJ1TUPyU"
 }
 ###
 

@@ -1,19 +1,11 @@
 import { dbConnect } from "../../database/db.js";
 
-export async function updateColumnColour(user, column, newColour) {
+export async function updateColumnColour(foundUser, user, column, newColour) {
   const db = await dbConnect();
   const userTodos = db.collection("userTodos");
-  const foundUser = await userTodos.findOne({ username: user });
-  if (!foundUser) {
-    return { error: "User not found" };
-  }
-  const columnData = foundUser.columnOrder;
-  const foundCol = columnData.filter((col) => col === column);
-  if (foundCol.length === 0) {
-    return { error: "Column does not exist" };
-  }
+  const currCol = foundUser[column];
   const newColumn = {
-    todos: foundUser[column],
+    todos: currCol.todos ? currCol.todos : currCol,
     colour: newColour,
   };
   await userTodos.updateOne(

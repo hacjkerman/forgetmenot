@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ColoursCSS from "./Colours.module.css";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 export const colours = {
-  Default: "#EBECF0",
+  Default: "#ced0da",
   Light_Blue: "#00FFFF",
   Blue: "#0096FF",
   Dark_Blue: "#0000FF",
@@ -15,9 +15,11 @@ export const colours = {
   Light_Green: "#AAFF00",
   Green: "#00FF00",
 };
+export function getKeyByValue(object, value) {
+  return Object.keys(object).find((key) => object[key] === value);
+}
 function Colours(props) {
   const selectedColour = props.colour;
-  console.log(selectedColour);
   const setColour = props.setColour;
   const [isSelectingCustom, setIsSelectingCustom] = useState(false);
   const allColours = Object.entries(colours);
@@ -43,6 +45,7 @@ function Colours(props) {
       setIsSelectingCustom(true);
     }
   }, [selectedColour]);
+
   return (
     <div className={ColoursCSS.colourSelector}>
       <div className={ColoursCSS.colourBox}>

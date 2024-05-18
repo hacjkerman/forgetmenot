@@ -70,9 +70,10 @@ export default function Board() {
   const addColumn = async (column, colour, currCol) => {
     try {
       const newColumns = { ...columns };
+      console.log(column, colour, currCol);
       await mutate(
         storeColumn(user, column, colour, currCol, token, newColumns),
-        addColOptions(column, colour, currCol, newColumns)
+        addColOptions(column, currCol, colour, newColumns)
       );
     } catch (err) {
       console.log(err);
@@ -114,7 +115,7 @@ export default function Board() {
     }
   };
   // TODO API CALLS
-  const addTodo = async (column, todo, estimate, due) => {
+  const addTodo = async (column, todo, estimate, due, colour) => {
     try {
       const newColumns = { ...columns };
       const newTodo = {
@@ -122,10 +123,11 @@ export default function Board() {
         todo,
         estimate,
         due,
+        colour,
         done: false,
       };
       await mutate(
-        storeTodo(user, column, todo, estimate, due, token, newColumns),
+        storeTodo(user, column, todo, estimate, due, colour, token, newColumns),
         addTodoOptions(newTodo, column, newColumns)
       );
     } catch (err) {
