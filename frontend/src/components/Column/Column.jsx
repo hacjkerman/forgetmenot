@@ -33,6 +33,7 @@ const Title = styled.h3`
   max-width: 68%;
   @media (max-width: 600px) {
     font-size: 16px;
+    line-height: 12px;
   }
 `;
 const TaskList = styled.div`
@@ -61,12 +62,12 @@ export default function Column(props) {
   const { deleteColumn, addTodo } = useContext(TodoContext);
   const todos = props.todos;
   const column = props.column;
+  const colour = props.colour;
   const [isTriggered, setIsTriggered] = useState(false);
   const [isUpdatingCol, setIsUpdatingCol] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const handleDeleteColumn = (e) => {
     const currCol = e.target.value;
-    console.log(currCol);
     deleteColumn(currCol);
     return;
   };
@@ -88,11 +89,16 @@ export default function Column(props) {
     <Draggable
       draggableId={column}
       index={props.index}
-      isDragDisabled={isUpdatingCol}
+      isDragDisabled={isUpdatingCol || isAdding}
+      style={{ backgroundColor: colour }}
     >
       {(provided) => (
         <Container {...provided.draggableProps} ref={provided.innerRef}>
-          <div className={ColumnCSS.columnHeader} {...provided.dragHandleProps}>
+          <div
+            className={ColumnCSS.columnHeader}
+            {...provided.dragHandleProps}
+            style={{ backgroundColor: colour }}
+          >
             {isAdding ? (
               <NewColumn
                 isAddingEnd={isAdding}
@@ -110,6 +116,7 @@ export default function Column(props) {
                 isUpdatingCol={isUpdatingCol}
                 setIsUpdatingCol={setIsUpdatingCol}
                 column={props.column}
+                colour={props.colour}
                 changeColumn={props.changeColumn}
               ></UpdatingColumn>
             ) : (
@@ -124,31 +131,30 @@ export default function Column(props) {
             </button>
           </div>
           <div className={ColumnCSS.taskbox}>
-            <div>
-              <Droppable droppableId={column} type="task">
-                {(provided, snapshot) => (
-                  <TaskList
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    $isDraggingOver={snapshot.isDraggingOver}
-                  >
-                    {todos &&
-                      todos.length > 0 &&
-                      todos.map((task, index) => {
-                        return (
-                          <Task
-                            key={task.id}
-                            task={task}
-                            index={index}
-                            column={column}
-                          />
-                        );
-                      })}
-                    {provided.placeholder}
-                  </TaskList>
-                )}
-              </Droppable>
-            </div>
+            <Droppable droppableId={column} type="task">
+              {(provided, snapshot) => (
+                <TaskList
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  $isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {todos &&
+                    todos.length > 0 &&
+                    todos.map((task, index) => {
+                      return (
+                        <Task
+                          key={task.id}
+                          task={task}
+                          index={index}
+                          column={column}
+                          colour={props.colour}
+                        />
+                      );
+                    })}
+                  {provided.placeholder}
+                </TaskList>
+              )}
+            </Droppable>
           </div>
           <div>
             {isTriggered ? (
@@ -158,9 +164,18 @@ export default function Column(props) {
                 addTodo={addTodo}
                 todos={todos}
                 column={column}
+                colour={props.colour}
               ></NewTask>
             ) : (
-              <AddTodo onClick={handleClick} value={column}>
+              <AddTodo
+                onClick={handleClick}
+                value={column}
+                style={{
+                  borderColor: colour,
+                  borderStyle: "solid",
+                  borderWidth: "0.2rem",
+                }}
+              >
                 Add Todo
               </AddTodo>
             )}

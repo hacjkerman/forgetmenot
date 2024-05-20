@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import updateTaskCSS from "./updateTask.module.css";
 import { TodoContext } from "../../contexts/TodoContext";
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
 
 function UpdateTaskDate(props) {
   const { changeTodoDate } = useContext(TodoContext);
@@ -22,7 +23,16 @@ function UpdateTaskDate(props) {
   };
   return (
     <div className={updateTaskCSS.popup}>
-      <div className={updateTaskCSS.popupInner}>
+      <div
+        className={updateTaskCSS.popupInner}
+        style={{
+          border: "0.20rem solid",
+          borderColor: colours[task.colour]
+            ? colours[task.colour]
+            : task.colour,
+          borderRadius: 10,
+        }}
+      >
         <div className={updateTaskCSS.popupHeader}>
           <h3 className={updateTaskCSS.headerText}>
             Update Date for {task.todo}

@@ -95,6 +95,16 @@ Content-Type: application/json
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDAyMDQ2NDksImRhdGEiOnsidXNlciI6ImhlbHZldGUiLCJlbWFpbCI6ImFuZHJld3dhbmcxMzRAZ21haWwuY29tIn0sImlhdCI6MTcwMDIwMTA0OX0.g5j-LEm9_tB9CsqiVfHgOecwdGckS5CJlrLhF5JE33A"
 }
 ###
+PUT http://localhost:8080/columnColour
+Content-Type: application/json 
+
+{
+  "username": "tester",
+  "column": "Todo",
+  "newColour": "g",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTU3NTI0ODYsImRhdGEiOnsidXNlciI6InRlc3RlciJ9LCJpYXQiOjE3MTU3NDg4ODZ9.WPl66xRt224woZDKMqIDI82tjFb8f-Qwo2wyNFR2ASo"
+}
+###
 POST http://localhost:8080/column
 Content-Type: application/json 
 
@@ -115,8 +125,9 @@ DELETE http://localhost:8080/column
 Content-Type: application/json 
 
 {
-  "username": "dies35",
-  "column": "Habits"
+  "username": "tester",
+  "column": "wq",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTYwMTgzNDgsImRhdGEiOnsidXNlciI6ImhlbHZldGUifSwiaWF0IjoxNzE2MDE0ODY4fQ.H1xu-YjcFw51QAwCpvtNOGiQ-cL6kCf8iZrjJ1TUPyU"
 }
 ###
 

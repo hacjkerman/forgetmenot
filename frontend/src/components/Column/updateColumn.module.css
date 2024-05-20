@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 10;
 }
 
 .popupInner {
@@ -79,6 +79,10 @@
 
 .colInput input {
   height: 24px;
+}
+
+.currColour {
+  margin-bottom: 10px;
 }
 
 .lowerFormButtons {

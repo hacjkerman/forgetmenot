@@ -1,12 +1,18 @@
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: rgb(235, 236, 240);
-  width: 25vw;
-  border: 1px solid lightgrey;
+  background-color: rgb(24, 24, 24);
+  color: rgb(236, 233, 233);
+  width: 60vw;
+  height: 85vh;
   border-radius: 2px;
+  padding-top: 4px;
+}
+
+.user {
+  font-size: 25px;
+  font-weight: 800;
 }
 
 .basic {
@@ -19,24 +25,34 @@
 .profileContainer {
   border-radius: 4px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   font-size: 15px;
-  flex: 1 1 0;
+  background-color: white;
+  color: black;
+  padding: 4px;
+  margin-bottom: 2em;
+  padding-right: 8px;
 }
 
-.profileContainer div {
-  margin: 4px;
+.innerProfileContainer {
+  display: flex;
+  align-items: center;
+  margin: 0;
 }
 
-.profile {
-  border-radius: 2%;
-  height: 100px;
+.profilePic {
+  height: 75px;
+  color: white;
+  cursor: pointer;
 }
 
 .changeContainers {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2em;
 }
 
 .changeContainer {
@@ -44,9 +60,39 @@
   flex-direction: column;
   border: 1px solid lightgrey;
   background-color: white;
-  width: 100%;
-  height: 10vh;
+  color: rgb(18, 17, 17);
+  min-width: 16em;
+  min-height: 4em;
   border-radius: 5px;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
+  padding: 0.5em;
+}
+
+.changeButton {
+  background-color: aliceblue;
+  font-size: 15px;
+  font-weight: 600;
+  height: 2em;
+  margin: 4px;
+  border: none;
+}
+
+@media only screen and (max-width: 700px) {
+  .container {
+    height: 65vh;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .container {
+    min-height: 68vh;
+  }
+  .changeContainer {
+    min-width: 12em;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .changeContainer {
+    min-width: 10em;
+  }
 }

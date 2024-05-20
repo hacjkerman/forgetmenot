@@ -66,7 +66,9 @@
 .colInput {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  width: 100%;
 }
 
 .colInput h3 {
@@ -77,7 +79,9 @@
   height: 24px;
   margin-bottom: 0.5rem;
 }
-
+.currColour {
+  margin-bottom: 10px;
+}
 .lowerFormButtons {
   display: flex;
   justify-content: flex-end;
@@ -112,4 +116,20 @@
   appearance: none;
   text-decoration: none;
   text-align: center;
+}
+
+@media only screen and (max-width: 1500px) {
+  .popupInner {
+    min-width: 30%;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .popupInner {
+    min-width: 40%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .popupInner {
+    min-width: 50%;
+  }
 }

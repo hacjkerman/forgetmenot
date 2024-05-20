@@ -6,7 +6,7 @@ import UpdateTaskDate from "./updateTaskDate";
 import UpdateTask from "./updateTask";
 import Estimate from "./Estimate/Estimate";
 import { TodoContext } from "../../contexts/TodoContext";
-
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
 const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 12px;
@@ -43,6 +43,7 @@ export default function Task(props) {
   const changeUpdateTodo = () => {
     setIsUpdatingTodo(!isUpdatingTodo);
   };
+  console.log(todo);
   return (
     <Draggable
       draggableId={props.task.id}
@@ -56,50 +57,66 @@ export default function Task(props) {
           ref={provided.innerRef}
           $isDragging={snapshot.isDragging}
         >
-          <div className={TaskCSS.upperBox}>
-            {isUpdatingTodo ? (
-              <UpdateTask
-                isUpdatingTodo={isUpdatingTodo}
-                setIsUpdatingTodo={setIsUpdatingTodo}
-                task={props.task}
-                column={props.column}
-              ></UpdateTask>
-            ) : (
-              <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
-                {props.task.todo}
-              </div>
-            )}
-            <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
-              -
-            </button>
-          </div>
-          <input
-            type="checkbox"
-            checked={isDone}
-            onChange={changeCompletion}
-            className={TaskCSS.doneBox}
-            name="doneBox"
-          ></input>
-          <div className={TaskCSS.lowerBox}>
-            <div className={TaskCSS.estimateBox}>
-              <Estimate column={props.column} task={props.task} />
-              <div></div>
-            </div>
-
-            <div id={TaskCSS.dueDate}>
-              Due Date:
-              {isUpdatingDate ? (
-                <UpdateTaskDate
-                  isUpdatingDate={isUpdatingDate}
-                  setIsUpdatingDate={setIsUpdatingDate}
+          <div
+            style={{
+              border: "0.20rem solid",
+              borderColor: colours[todo.colour]
+                ? colours[todo.colour]
+                : todo.colour,
+              borderRadius: 10,
+            }}
+          >
+            <div className={TaskCSS.upperBox}>
+              {isUpdatingTodo ? (
+                <UpdateTask
+                  isUpdatingTodo={isUpdatingTodo}
+                  setIsUpdatingTodo={setIsUpdatingTodo}
                   task={props.task}
                   column={props.column}
-                ></UpdateTaskDate>
+                  colour={
+                    colours[todo.colour] ? colours[todo.colour] : todo.colour
+                  }
+                ></UpdateTask>
               ) : (
-                <div className={TaskCSS.updateDate} onClick={changeUpdateDate}>
-                  {props.task.due}
+                <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
+                  {props.task.todo}
                 </div>
               )}
+              <button className={TaskCSS.removeTaskButton} onClick={removeTask}>
+                -
+              </button>
+            </div>
+            <input
+              type="checkbox"
+              checked={isDone}
+              onChange={changeCompletion}
+              className={TaskCSS.doneBox}
+              name="doneBox"
+            ></input>
+            <div className={TaskCSS.lowerBox}>
+              <div className={TaskCSS.estimateBox}>
+                <Estimate column={props.column} task={props.task} />
+                <div></div>
+              </div>
+
+              <div id={TaskCSS.dueDate}>
+                Due Date:
+                {isUpdatingDate ? (
+                  <UpdateTaskDate
+                    isUpdatingDate={isUpdatingDate}
+                    setIsUpdatingDate={setIsUpdatingDate}
+                    task={props.task}
+                    column={props.column}
+                  ></UpdateTaskDate>
+                ) : (
+                  <div
+                    className={TaskCSS.updateDate}
+                    onClick={changeUpdateDate}
+                  >
+                    {todo.due}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </Container>
