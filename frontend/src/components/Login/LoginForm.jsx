@@ -40,6 +40,7 @@ export default function LoginForm(props) {
       return;
     } else {
       console.log("response succeeded");
+      console.log(response.expires);
       let expiry = new Date(0);
       expiry.setUTCSeconds(response.expires);
       cookies.set("jwt_auth", response.accessToken, {
@@ -75,6 +76,7 @@ export default function LoginForm(props) {
     } else {
       console.log("response succeeded");
       let expiry = new Date(0);
+
       expiry.setUTCSeconds(tokens.expires);
       cookies.set("jwt_auth", access, { expires: expiry });
       setUser(username);

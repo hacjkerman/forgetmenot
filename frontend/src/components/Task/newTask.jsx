@@ -29,6 +29,9 @@ function NewTask(props) {
     let due = e.target[2].value;
     if (due === "") {
       due = 0;
+    } else if (due.split("-")[0] > 3000) {
+      toast.error("Date is past year 3000");
+      return;
     }
     await addTodo(column, todo, estimate, due, selectedColour);
     handleClose(e);
@@ -47,7 +50,7 @@ function NewTask(props) {
       <div
         className={newTaskCSS.popupInner}
         style={{
-          borderWidth: "0.3rem",
+          borderWidth: "0.2rem",
           borderStyle: "solid",
           borderColor: props.colour,
         }}

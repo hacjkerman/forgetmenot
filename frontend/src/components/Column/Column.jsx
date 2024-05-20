@@ -170,7 +170,11 @@ export default function Column(props) {
               <AddTodo
                 onClick={handleClick}
                 value={column}
-                style={{ backgroundColor: colour }}
+                style={{
+                  borderColor: colour,
+                  borderStyle: "solid",
+                  borderWidth: "0.2rem",
+                }}
               >
                 Add Todo
               </AddTodo>

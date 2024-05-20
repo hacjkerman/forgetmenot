@@ -83,10 +83,11 @@ export const updateTodoMutation = async (
   column,
   todo,
   newTodo,
+  newColour,
   columns,
   token
 ) => {
-  const added = await updateTodo(user, column, todo, newTodo, token);
+  const added = await updateTodo(user, column, todo, newTodo, newColour, token);
   if (added.status) {
     toast.success(added.status);
     return columns;
@@ -99,10 +100,11 @@ export const updateTodoMutation = async (
   }
 };
 
-export const updateTodoOptions = (column, todo, newTodo, columns) => {
+export const updateTodoOptions = (column, todo, newTodo, colour, columns) => {
   const currCol = columns[column].todos;
   const item = currCol.find((item) => item.id === todo);
   item.todo = newTodo;
+  item.colour = colour;
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -144,7 +146,7 @@ export const updateTodoEstimateOptions = (
   newEstimate,
   columns
 ) => {
-  const currCol = columns[column];
+  const currCol = columns[column].todos;
   const item = currCol.find((item) => item.id === todo);
   item.estimate = newEstimate;
   return {
@@ -235,7 +237,7 @@ export const updateTodoDateMutation = async (
 };
 
 export const updateTodoDateOptions = (column, todo, newDate, columns) => {
-  const currCol = columns[column];
+  const currCol = columns[column].todos;
   console.log(currCol);
   const item = currCol.find((item) => item.id === todo);
   item.date = newDate;
