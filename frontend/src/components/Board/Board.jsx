@@ -66,7 +66,6 @@ export default function Board() {
   const { data: columns, mutate } = useSWR([headers], getColumns);
   console.log(columns);
   // COLUMN API CALLS
-
   const addColumn = async (column, colour, currCol) => {
     try {
       const newColumns = { ...columns };
@@ -179,12 +178,12 @@ export default function Board() {
     }
   };
 
-  const changeTodo = async (column, todo, newTodo) => {
+  const changeTodo = async (column, todo, newTodo, newColour) => {
     try {
       const newColumns = { ...columns };
       await mutate(
-        updateTodo(user, column, todo, newTodo, newColumns, token),
-        updateTodoOptions(column, todo, newTodo, newColumns)
+        updateTodo(user, column, todo, newTodo, newColour, newColumns, token),
+        updateTodoOptions(column, todo, newTodo, newColour, newColumns)
       );
     } catch (err) {
       console.log(err);

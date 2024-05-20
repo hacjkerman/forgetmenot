@@ -43,6 +43,7 @@ export default function Task(props) {
   const changeUpdateTodo = () => {
     setIsUpdatingTodo(!isUpdatingTodo);
   };
+  console.log(todo);
   return (
     <Draggable
       draggableId={props.task.id}
@@ -58,7 +59,7 @@ export default function Task(props) {
         >
           <div
             style={{
-              border: "0.35rem solid",
+              border: "0.20rem solid",
               borderColor: colours[todo.colour]
                 ? colours[todo.colour]
                 : todo.colour,
@@ -72,6 +73,9 @@ export default function Task(props) {
                   setIsUpdatingTodo={setIsUpdatingTodo}
                   task={props.task}
                   column={props.column}
+                  colour={
+                    colours[todo.colour] ? colours[todo.colour] : todo.colour
+                  }
                 ></UpdateTask>
               ) : (
                 <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
@@ -109,7 +113,7 @@ export default function Task(props) {
                     className={TaskCSS.updateDate}
                     onClick={changeUpdateDate}
                   >
-                    {props.task.due}
+                    {todo.due}
                   </div>
                 )}
               </div>

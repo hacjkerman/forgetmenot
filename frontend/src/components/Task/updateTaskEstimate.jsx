@@ -1,6 +1,7 @@
 import React from "react";
 import updateTaskCSS from "./updateTask.module.css";
 import toast from "react-hot-toast";
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
 
 function UpdateTaskEstimate(props) {
   const isUpdatingEstimate = props.isUpdatingEstimate;
@@ -26,7 +27,16 @@ function UpdateTaskEstimate(props) {
   };
   return (
     <div className={updateTaskCSS.popup}>
-      <div className={updateTaskCSS.popupInner}>
+      <div
+        className={updateTaskCSS.popupInner}
+        style={{
+          border: "0.20rem solid",
+          borderColor: colours[task.colour]
+            ? colours[task.colour]
+            : task.colour,
+          borderRadius: 10,
+        }}
+      >
         <div className={updateTaskCSS.popupHeader}>
           <h3 className={updateTaskCSS.headerText}>
             Update Estimate for {task.todo}
