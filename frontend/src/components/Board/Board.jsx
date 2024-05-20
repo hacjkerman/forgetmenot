@@ -33,6 +33,8 @@ import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import { UserContext } from "../../contexts/UserContext.js";
+import { useNavigate } from "react-router-dom";
+import { colours } from "../../features/colourSwatch/components/colourWheel/colours.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -55,24 +57,27 @@ const Button = styled.button`
 
 export default function Board() {
   const { user, token } = useContext(UserContext);
+  const navigate = useNavigate();
+  if (token === undefined || user === undefined) {
+    navigate("/login");
+  }
   const [isAddingEnd, setIsAddingEnd] = useState(false);
-
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
+  console.log(columns);
   // COLUMN API CALLS
-  const addColumn = async (column, currCol) => {
+  const addColumn = async (column, colour, currCol) => {
     try {
-      console.log(currCol);
       const newColumns = { ...columns };
+      console.log(column, colour, currCol);
       await mutate(
-        storeColumn(user, column, currCol, token, newColumns),
-        addColOptions(column, currCol, newColumns)
+        storeColumn(user, column, colour, currCol, token, newColumns),
+        addColOptions(column, currCol, colour, newColumns)
       );
     } catch (err) {
       console.log(err);
     }
   };
-
   const deleteColumn = async (column) => {
     try {
       const newColumns = { ...columns };
@@ -85,12 +90,12 @@ export default function Board() {
     }
   };
 
-  const changeColumn = async (column, newColumn) => {
+  const changeColumn = async (column, colour, newColumn) => {
     try {
       const newColumns = { ...columns };
       await mutate(
-        updateColumn(user, column, newColumn, newColumns, token),
-        updateColOptions(column, newColumn, newColumns)
+        updateColumn(user, column, colour, newColumn, newColumns, token),
+        updateColOptions(column, colour, newColumn, newColumns)
       );
     } catch (err) {
       console.log(err);
@@ -109,7 +114,7 @@ export default function Board() {
     }
   };
   // TODO API CALLS
-  const addTodo = async (column, todo, estimate, due) => {
+  const addTodo = async (column, todo, estimate, due, colour) => {
     try {
       const newColumns = { ...columns };
       const newTodo = {
@@ -117,10 +122,11 @@ export default function Board() {
         todo,
         estimate,
         due,
+        colour,
         done: false,
       };
       await mutate(
-        storeTodo(user, column, todo, estimate, due, token, newColumns),
+        storeTodo(user, column, todo, estimate, due, colour, token, newColumns),
         addTodoOptions(newTodo, column, newColumns)
       );
     } catch (err) {
@@ -172,12 +178,12 @@ export default function Board() {
     }
   };
 
-  const changeTodo = async (column, todo, newTodo) => {
+  const changeTodo = async (column, todo, newTodo, newColour) => {
     try {
       const newColumns = { ...columns };
       await mutate(
-        updateTodo(user, column, todo, newTodo, newColumns, token),
-        updateTodoOptions(column, todo, newTodo, newColumns)
+        updateTodo(user, column, todo, newTodo, newColour, newColumns, token),
+        updateTodoOptions(column, todo, newTodo, newColour, newColumns)
       );
     } catch (err) {
       console.log(err);
@@ -270,13 +276,25 @@ export default function Board() {
             <Container {...provided.droppableProps} ref={provided.innerRef}>
               {columns &&
                 columns.columnOrder.map((column, index) => {
+                  let todos = columns[column];
+                  if (!Array.isArray(todos) && columns[column]) {
+                    todos = columns[column].todos;
+                  }
+                  const currCol = columns[column];
+                  let colColour = "#EBECF0";
+                  if (currCol !== undefined && currCol.colour !== undefined) {
+                    colColour = colours[currCol.colour]
+                      ? colours[currCol.colour]
+                      : currCol.colour;
+                  }
                   return (
                     <Column
                       className=""
                       key={column}
                       column={column}
+                      colour={colColour}
                       index={index}
-                      todos={columns[column]}
+                      todos={todos}
                       columnOrder={columns.columnOrder}
                     />
                   );

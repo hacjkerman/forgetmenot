@@ -27,19 +27,27 @@ export const getColumns = async (params) => {
   return response.data;
 };
 
-export const storeColumn = (user, column, currCol, token) => {
+export const storeColumn = (user, column, colour, currCol, token) => {
   const response = todosApi.post(todosUrlEndpoint, {
     username: user,
     column,
+    colour,
     currCol,
     token,
   });
   return response;
 };
-export const updateColumn = async (username, oldColumn, newColumn, token) => {
+export const updateColumn = async (
+  username,
+  oldColumn,
+  colour,
+  newColumn,
+  token
+) => {
   const response = await todosApi.put(todosUrlEndpoint, {
     username,
     oldColumn,
+    colour,
     newColumn,
     token,
   });
@@ -60,7 +68,6 @@ export const updateColumnOrder = async (
   return response.data;
 };
 export const removeColumn = (username, column, token) => {
-  console.log(username, column);
   const response = todosApi.delete(todosUrlEndpoint, {
     headers: {
       "Content-Type": "application/json",

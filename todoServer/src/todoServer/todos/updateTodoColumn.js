@@ -1,4 +1,4 @@
-import { dbConnect } from "../../database/db.js";
+import { getUserObj } from "../database/getUserObj.js";
 import findColumn from "../columns/findColumn.js";
 
 export async function updateTodoColumn(
@@ -8,47 +8,50 @@ export async function updateTodoColumn(
   destIndex,
   newColumn
 ) {
-  const db = await dbConnect();
+  const { db, foundUser, foundCol } = await getUserObj(user, newColumn);
+  if (!foundUser) return { error: "User not found" };
+  if (!foundCol) return { error: "Column does not exist" };
+  if (!db) return { error: "Database not connected" };
   const userTodos = db.collection("userTodos");
-  const foundUser = await userTodos.findOne({
-    username: user,
-  });
-  if (!foundUser) {
-    return { error: "User does not exist" };
-  }
 
   const oldColFound = findColumn(foundUser, oldColumn);
   if (!oldColFound) {
     return { error: "Old Column does not exist" };
   }
-  const newColFound = findColumn(foundUser, newColumn);
-  if (!newColFound) {
-    return { error: "New Column does not exist" };
-  }
 
-  if (oldColFound === newColFound) {
-    const currCol = foundUser[oldColFound];
+  // SAME COLUMN
+  if (oldColFound === foundCol) {
+    const colObj = { ...foundUser[oldColFound] };
+    const currCol = foundUser[oldColFound].todos;
     const temp = currCol[srcIndex];
     currCol.splice(srcIndex, 1);
     currCol.splice(destIndex, 0, temp);
+    colObj.todos = currCol;
     await userTodos.updateOne(
       { username: user },
-      { $set: { [oldColumn]: currCol } }
+      { $set: { [oldColumn]: colObj } }
     );
     return;
   }
-  const oldTodos = foundUser[oldColumn];
+  // FIND SOLUTION TO UPDATE WITHOUT RESETTING ENTIRE OBJECT
+  // SLOW METHOD
+  const oldColObj = { ...foundUser[oldColFound] };
+  const oldTodos = foundUser[oldColumn].todos;
   const temp = oldTodos[srcIndex];
   oldTodos.splice(srcIndex, 1);
-  const newTodos = foundUser[newColumn];
+  oldColObj.todos = oldTodos;
+  const newColObj = { ...foundUser[foundCol] };
+  const newTodos = foundUser[newColumn].todos;
   newTodos.splice(destIndex, 0, temp);
+  newColObj.todos = newTodos;
+  // DB CALLS
   await userTodos.updateOne(
     { username: user },
-    { $set: { [oldColumn]: oldTodos } }
+    { $set: { [oldColumn]: oldColObj } }
   );
   await userTodos.updateOne(
     { username: user },
-    { $set: { [newColumn]: newTodos } }
+    { $set: { [foundCol]: newColObj } }
   );
   // SUCCESS
   return { status: "Todo column successfully updated" };

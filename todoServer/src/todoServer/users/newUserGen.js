@@ -54,19 +54,19 @@ const Todo = [
   {
     id: "3",
     todo: "Be Batman",
-    due: "2024-01-01",
+    due: null,
     done: false,
   },
   {
     id: "1",
     todo: "Wash the dishes",
-    due: "2023-11-24",
+    due: null,
     done: false,
   },
   {
     id: "4",
     todo: "Save the World",
-    due: "2032-12-31",
+    due: null,
     done: false,
   },
   {

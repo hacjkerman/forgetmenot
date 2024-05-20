@@ -9,11 +9,12 @@ import { toast } from "react-hot-toast";
 export const addColMutation = async (
   user,
   newColumn,
+  colour,
   currCol,
   token,
   columns
 ) => {
-  const added = await storeColumn(user, newColumn, currCol, token);
+  const added = await storeColumn(user, newColumn, colour, currCol, token);
   if (added.status) {
     toast.success(added.status + " Successfully added column: " + newColumn);
     return columns;
@@ -26,9 +27,10 @@ export const addColMutation = async (
   }
 };
 
-export const addColOptions = (newColumn, currCol, columns) => {
+export const addColOptions = (newColumn, currCol, colour, columns) => {
   columns.columnOrder.splice(currCol, 0, newColumn);
-  columns[newColumn] = [];
+  columns[newColumn] = { todos: [], colour: colour };
+  console.log(columns);
   return {
     optimisticData: columns,
     rollbackOnError: true,
@@ -38,9 +40,7 @@ export const addColOptions = (newColumn, currCol, columns) => {
 };
 
 export const delColMutation = async (user, column, columns, token) => {
-  console.log(user, column);
   const added = await removeColumn(user, column, token);
-  console.log(added);
   if (added.data.error) {
     toast.error("400 " + added.error);
     return false;
@@ -67,11 +67,12 @@ export const delColOptions = (column, columns) => {
 export const updateColMutation = async (
   user,
   column,
+  colour,
   newColumn,
   columns,
   token
 ) => {
-  const added = await updateColumn(user, column, newColumn, token);
+  const added = await updateColumn(user, column, colour, newColumn, token);
   if (added.status) {
     toast.success(added.status);
     return columns;
@@ -86,18 +87,24 @@ export const updateColMutation = async (
   }
 };
 
-export const updateColOptions = (column, newColumn, columns) => {
+export const updateColOptions = (column, colour, newColumn, columns) => {
   const currCol = columns[column];
-  columns[newColumn] = currCol;
-  let colOrder = columns.columnOrder;
-  const index = colOrder.findIndex((item) => item === column);
-  colOrder.splice(index, 1);
-  colOrder.splice(index, 0, newColumn);
+  // UPDATES COLUMN TO NEW FORMAT
+  columns[newColumn] = {
+    todos: currCol.todos ? currCol.todos : currCol,
+    colour: colour,
+  };
+  if (column !== newColumn) {
+    let colOrder = columns.columnOrder;
+    const index = colOrder.findIndex((item) => item === column);
+    colOrder.splice(index, 1);
+    colOrder.splice(index, 0, newColumn);
+  }
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 

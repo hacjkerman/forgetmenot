@@ -9,7 +9,7 @@ const formatTime = (time) => {
     minutes = "0" + minutes;
   }
 
-  if (seconds <= 10) {
+  if (seconds < 10) {
     seconds = "0" + seconds;
   }
   return minutes + ":" + seconds;

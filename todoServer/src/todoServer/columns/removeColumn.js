@@ -10,21 +10,24 @@ export async function removeColumn(user, columnName) {
   if (!foundUser) {
     return { error: "User not found" };
   }
-
-  console.log(foundUser);
+  const colOrder = foundUser.columnOrder;
+  const filteredColumns = colOrder.filter((column) => column !== columnName);
   const foundCol = findColumn(foundUser, columnName);
   if (!foundCol) {
+    if (colOrder.includes(columnName)) {
+      await userTodos.updateOne(
+        { username: user },
+        { $set: { columnOrder: filteredColumns } }
+      );
+      return { status: "Removed Column from Order" };
+    }
     return { error: "Column not found" };
   }
   await userTodos.updateOne(
     { username: user },
     { $unset: { [columnName]: 1 } }
   );
-  const colOrder = foundUser.columnOrder;
-  const filteredColumns = colOrder.filter((column) => column !== columnName);
-  if (filteredColumns.length === colOrder.length) {
-    return { error: "Column unsuccessfully removed" };
-  }
+
   await userTodos.updateOne(
     { username: user },
     { $set: { columnOrder: filteredColumns } }

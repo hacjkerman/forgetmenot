@@ -18,41 +18,12 @@ import { updateColOrder } from "./columns/updateColOrder.js";
 import { updateTodoEstimate } from "./todos/updateTodoEstimate.js";
 import { updateTodoDone } from "./todos/updateTodoDone.js";
 import { logger } from "./logger/logger.js";
+import { inputValidator, getInputsValidator } from "./inputVals.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-function inputValidator(fn, inputs) {
-  return function (req, res) {
-    for (let i = 0; i < inputs.length; i++) {
-      if (req.body[inputs[i]] === undefined) {
-        logger.log({
-          level: "error",
-          message: "Missing required fields" + inputs[i],
-        });
-        return res.json({
-          error: "Missing required fields: " + inputs[i],
-        });
-      }
-    }
-    return fn(req, res);
-  };
-}
-function getInputsValidator(fn, inputs) {
-  return function (req, res) {
-    for (let i = 0; i < inputs.length; i++) {
-      if (req.query[inputs[i]] === undefined) {
-        logger.log({
-          level: "error",
-          message: "Missing required fields" + inputs[i],
-        });
-        return res.json({ error: "Missing required fields" + inputs[i] });
-      }
-    }
-    return fn(req, res);
-  };
-}
 // Column Request Operations
 app.put(
   "/column/Order",
@@ -85,7 +56,7 @@ app.put(
   "/column",
   inputValidator(
     async (req, res) => {
-      const { username, oldColumn, newColumn, token } = req.body;
+      const { username, oldColumn, colour, newColumn, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -94,10 +65,16 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const updateResult = await updateColumn(username, oldColumn, newColumn);
+
+      const updateResult = await updateColumn(
+        username,
+        oldColumn,
+        colour,
+        newColumn
+      );
       return res.json(updateResult);
     },
-    ["username", "oldColumn", "newColumn", "token"]
+    ["username", "oldColumn", "colour", "newColumn", "token"]
   )
 );
 
@@ -105,7 +82,7 @@ app.post(
   "/column",
   inputValidator(
     async (req, res) => {
-      const { username, column, currCol, token } = req.body;
+      const { username, column, colour, currCol, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -114,10 +91,10 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const storeResult = await storeColumn(username, column, currCol);
+      const storeResult = await storeColumn(username, column, colour, currCol);
       return res.json(storeResult);
     },
-    ["username", "column", "currCol", "token"]
+    ["username", "column", "colour", "currCol", "token"]
   )
 );
 
@@ -170,7 +147,6 @@ app.delete(
   inputValidator(
     async (req, res) => {
       const { username, column, token } = req.body;
-      console.log(column);
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -192,8 +168,8 @@ app.post(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todo, estimate, dueDate, token } = req.body;
-      console.log(token);
+      const { username, column, todo, estimate, dueDate, colour, token } =
+        req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -202,16 +178,18 @@ app.post(
         });
         return res.json({ error: "Invalid authorisation" });
       }
+      console.log(column, todo, estimate, dueDate, colour);
       const storeResult = await storeTodo(
         username,
         column,
         todo,
         estimate,
-        dueDate
+        dueDate,
+        colour
       );
       return res.json(storeResult);
     },
-    ["username", "column", "todo", "dueDate", "token"]
+    ["username", "column", "todo", "dueDate", "colour", "token"]
   )
 );
 
@@ -247,7 +225,7 @@ app.put(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todo, newTodo, token } = req.body;
+      const { username, column, todo, newTodo, newColour, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -257,22 +235,22 @@ app.put(
         console.log("Invalid authorisation");
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        console.log("No Todos Found");
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   console.log("No Todos Found");
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       console.log("update todo");
       const updatedTodo = await updateTodo(
         username,
         column,
-        foundTodos,
         todo,
-        newTodo
+        newTodo,
+        newColour
       );
       if (updatedTodo === null) {
         logger.log({
@@ -283,7 +261,7 @@ app.put(
       }
       return res.json(updatedTodo);
     },
-    ["username", "column", "todo", "newTodo", "token"]
+    ["username", "column", "todo", "newTodo", "newColour", "token"]
   )
 );
 
@@ -337,16 +315,11 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (foundTodos.error) {
-        return foundTodos;
-      }
-      const updatedTodo = await updateTodoDone(
-        username,
-        column,
-        foundTodos,
-        todo
-      );
+      // const foundTodos = await getAllTodos(username, column);
+      // if (foundTodos.error) {
+      //   return foundTodos;
+      // }
+      const updatedTodo = await updateTodoDone(username, column, todo);
       if (updatedTodo === null) {
         logger.log({
           level: "error",
@@ -365,7 +338,6 @@ app.put(
   inputValidator(
     async (req, res) => {
       const { username, column, todoId, newEstimate, token } = req.body;
-      console.log(newEstimate);
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -374,18 +346,17 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       const updatedTodo = await updateTodoEstimate(
         username,
         column,
-        foundTodos,
         todoId,
         newEstimate
       );
@@ -408,18 +379,17 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       const updatedTodo = await updateTodoDate(
         username,
         column,
-        foundTodos,
         todoId,
         newDate
       );
@@ -443,21 +413,15 @@ app.delete(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
-      const removeResult = await removeTodo(
-        username,
-        column,
-        foundTodos,
-        todoId
-      );
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
+      const removeResult = await removeTodo(username, column, todoId);
       return res.json(removeResult);
     },
     ["username", "column", "todoId", "token"]
