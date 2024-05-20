@@ -1,56 +1,42 @@
-import { dbConnect } from "../../database/db.js";
-import findColumn from "../columns/findColumn.js";
-
-export async function storeTodo(
-  username,
-  column,
-  todo,
-  estimate,
-  dueDate,
-  colour
-) {
-  const db = await dbConnect();
+import { getUserObj } from "../database/getUserObj.js";
+export async function storeTodo(user, column, todo, estimate, dueDate, colour) {
+  const { db, foundUser, foundCol } = await getUserObj(user, column);
+  if (!foundUser) return { error: "User not found" };
+  if (!foundCol) return { error: "Column does not exist" };
+  if (!db) return { error: "Database not connected" };
   const userTodos = db.collection("userTodos");
-  let due;
+  let due = dueDate;
   if (dueDate === 0) {
     due = undefined;
   }
+  let estim = estimate;
   if (estimate === 0) {
-    estimate = undefined;
-  }
-  const isFound = await userTodos.findOne({
-    username: username,
-  });
-  if (!isFound) {
-    // USER DOES NOT EXIST
-    return { error: "User does not exist" };
+    estim = undefined;
   }
   if (todo.length > 256) {
     return { error: "Todo has to be less than 256 characters long" };
   }
   const newTodo = {
-    id: isFound.todoIndex.toString(),
+    id: foundUser.todoIndex.toString(),
     todo,
-    estimate,
+    estimate: estim,
     due,
     colour,
     done: false,
   };
-  const foundCol = findColumn(isFound, column);
-  if (!foundCol) {
-    // COLUMN DOES NOT EXIST
-    return { error: "Column does not exist" };
-  }
+
   // UPDATING COMPLETELY BAD SOLUTION SHOULD FIX IN FUTURE
-  const todos = isFound[foundCol].todos;
+  const todos = foundUser[foundCol].todos
+    ? foundUser[foundCol].todos
+    : foundUser[foundCol];
   todos.push(newTodo);
   const newObj = {
     todos: todos,
-    colour: isFound[foundCol].colour,
+    colour: foundUser[foundCol].colour,
   };
   // FIGURE OUT HOW TO UPDATE A NESTED ARRAY IN AN OBJECT
   await userTodos.updateOne(
-    { username: username },
+    { username: user },
     { $set: { [column]: newObj }, $inc: { todoIndex: 1 } }
   );
   return { status: "Storage successful" };
