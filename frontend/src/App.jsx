@@ -16,7 +16,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const cookies = new Cookies();
   let token = cookies.get("jwt_auth");
-
   useEffect(() => {
     setInterval(() => {
       let token = cookies.get("jwt_auth");
