@@ -225,7 +225,7 @@ app.put(
   "/todo",
   inputValidator(
     async (req, res) => {
-      const { username, column, todo, newTodo, token } = req.body;
+      const { username, column, todo, newTodo, newColour, token } = req.body;
       const validUser = await verifyUser(username, token);
       if (validUser.error) {
         logger.log({
@@ -235,22 +235,22 @@ app.put(
         console.log("Invalid authorisation");
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        console.log("No Todos Found");
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   console.log("No Todos Found");
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       console.log("update todo");
       const updatedTodo = await updateTodo(
         username,
         column,
-        foundTodos,
         todo,
-        newTodo
+        newTodo,
+        newColour
       );
       if (updatedTodo === null) {
         logger.log({
@@ -261,7 +261,7 @@ app.put(
       }
       return res.json(updatedTodo);
     },
-    ["username", "column", "todo", "newTodo", "token"]
+    ["username", "column", "todo", "newTodo", "newColour", "token"]
   )
 );
 
@@ -315,16 +315,11 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (foundTodos.error) {
-        return foundTodos;
-      }
-      const updatedTodo = await updateTodoDone(
-        username,
-        column,
-        foundTodos,
-        todo
-      );
+      // const foundTodos = await getAllTodos(username, column);
+      // if (foundTodos.error) {
+      //   return foundTodos;
+      // }
+      const updatedTodo = await updateTodoDone(username, column, todo);
       if (updatedTodo === null) {
         logger.log({
           level: "error",
@@ -351,18 +346,17 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       const updatedTodo = await updateTodoEstimate(
         username,
         column,
-        foundTodos,
         todoId,
         newEstimate
       );
@@ -385,18 +379,17 @@ app.put(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
       const updatedTodo = await updateTodoDate(
         username,
         column,
-        foundTodos,
         todoId,
         newDate
       );
@@ -420,21 +413,15 @@ app.delete(
         });
         return res.json({ error: "Invalid authorisation" });
       }
-
-      const foundTodos = await getAllTodos(username, column);
-      if (!foundTodos) {
-        logger.log({
-          level: "error",
-          message: "No todos found",
-        });
-        return res.json({ error: "No Todos Found" });
-      }
-      const removeResult = await removeTodo(
-        username,
-        column,
-        foundTodos,
-        todoId
-      );
+      // const foundTodos = await getAllTodos(username, column);
+      // if (!foundTodos) {
+      //   logger.log({
+      //     level: "error",
+      //     message: "No todos found",
+      //   });
+      //   return res.json({ error: "No Todos Found" });
+      // }
+      const removeResult = await removeTodo(username, column, todoId);
       return res.json(removeResult);
     },
     ["username", "column", "todoId", "token"]
