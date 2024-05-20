@@ -7,7 +7,7 @@ export async function storeActiveToken(username, email, token, expires) {
   const curr = Date.now();
   await collection.createIndex(
     { createdAt: curr },
-    { expires: expires - curr }
+    { expireAfterSeconds: 3598 }
   );
   await collection.insertOne({
     username,
