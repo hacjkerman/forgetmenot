@@ -43,7 +43,6 @@ export default function Task(props) {
   const changeUpdateTodo = () => {
     setIsUpdatingTodo(!isUpdatingTodo);
   };
-  console.log(todo);
   return (
     <Draggable
       draggableId={props.task.id}
