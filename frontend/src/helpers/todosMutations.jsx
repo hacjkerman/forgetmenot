@@ -51,7 +51,7 @@ export const addTodoOptions = (newTodo, column, columns) => {
 };
 
 export const delTodoMutation = async (user, column, todo, columns, token) => {
-  if (!columns[column].find((items) => items.id === todo.id)) {
+  if (!columns[column].todos.find((items) => items.id === todo.id)) {
     return false;
   }
   const added = await removeTodo(user, column, todo.id, token);
@@ -68,13 +68,15 @@ export const delTodoMutation = async (user, column, todo, columns, token) => {
 };
 
 export const delTodoOptions = (column, todo, columns) => {
-  const filteredArray = columns[column].filter((items) => items.id !== todo.id);
-  columns[column] = filteredArray;
+  const filteredArray = columns[column].todos.filter(
+    (items) => items.id !== todo.id
+  );
+  columns[column].todo = filteredArray;
   return {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: true,
+    revalidate: false,
   };
 };
 
@@ -109,7 +111,7 @@ export const updateTodoOptions = (column, todo, newTodo, colour, columns) => {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
@@ -153,7 +155,7 @@ export const updateTodoEstimateOptions = (
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
@@ -211,7 +213,7 @@ export const updateTodoOrderOptions = (
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
