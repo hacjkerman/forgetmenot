@@ -3,7 +3,7 @@ export function inputValidator(fn, inputs) {
   return function (req, res) {
     for (let i = 0; i < inputs.length; i++) {
       const input = req.body[inputs[i]];
-      if (input === undefined || input === "") {
+      if (input === undefined || input === "" || inputs === null) {
         logger.log({
           level: "error",
           message: "Missing required fields " + inputs[i],
@@ -20,7 +20,7 @@ export function getInputsValidator(fn, inputs) {
   return function (req, res) {
     for (let i = 0; i < inputs.length; i++) {
       const input = req.query[inputs[i]];
-      if (input === undefined || input === "") {
+      if (input === undefined || input === "" || inputs === null) {
         logger.log({
           level: "error",
           message: "Missing required fields" + inputs[i],
