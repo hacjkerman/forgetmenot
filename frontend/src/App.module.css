@@ -15,4 +15,8 @@
   .container {
     padding: 0;
   }
+
+  .main {
+    height: 75vw;
+  }
 }
