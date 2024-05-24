@@ -122,8 +122,17 @@
 @media only screen and (max-width: 800px) {
   .popupInner {
     min-width: 50%;
+    font-size: 12px;
   }
   .colInput input {
     width: 100px;
+  }
+
+  .popupInner {
+    min-width: 50%;
+  }
+
+  .colInput h3 {
+    margin: 0rem;
   }
 }

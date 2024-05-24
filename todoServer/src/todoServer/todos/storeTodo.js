@@ -32,7 +32,7 @@ export async function storeTodo(user, column, todo, estimate, dueDate, colour) {
   todos.push(newTodo);
   const newObj = {
     todos: todos,
-    colour: foundUser[foundCol].colour,
+    colour: foundUser[foundCol].colour ? foundUser[foundCol].colour : "Default",
   };
   // FIGURE OUT HOW TO UPDATE A NESTED ARRAY IN AN OBJECT
   await userTodos.updateOne(

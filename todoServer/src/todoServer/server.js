@@ -19,11 +19,12 @@ import { updateTodoEstimate } from "./todos/updateTodoEstimate.js";
 import { updateTodoDone } from "./todos/updateTodoDone.js";
 import { logger } from "./logger/logger.js";
 import { inputValidator, getInputsValidator } from "./inputVals.js";
+import { fixer } from "./fixer/fixer.js";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
+fixer();
 // Column Request Operations
 app.put(
   "/column/Order",
