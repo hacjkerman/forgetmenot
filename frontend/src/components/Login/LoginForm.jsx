@@ -40,13 +40,13 @@ export default function LoginForm(props) {
       return;
     } else {
       console.log("response succeeded");
-      console.log(response.expires);
       let expiry = new Date(0);
       expiry.setUTCSeconds(response.expires);
+      console.log(expiry);
       cookies.set("jwt_auth", response.accessToken, {
         expires: expiry,
       });
-      setUser(data.username);
+      setUser(response.username);
       setIsLoggedIn(true);
       navigate("/board");
     }
