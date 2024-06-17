@@ -25,6 +25,7 @@ import changeEnv from "../prod/vercelENV.js";
 import redeploy from "../prod/vercelRedeploy.js";
 import { updateName } from "./users/updateName.js";
 import { inputValidator, getInputsValidator } from "./inputVals.js";
+import generateRefreshToken from "./auth/generateRefreshToken.js";
 
 const app = express();
 app.use(cors());
@@ -165,12 +166,11 @@ app.post(
           level: "info",
           message: "user already logged in",
         });
-        res.json({
+        return res.json({
           accessToken: userExists.accessToken,
           username: newName,
           expires: userExists.expires,
         });
-        return;
       }
       const response = await generateAccessToken(newName, email);
       await storeActiveToken(
@@ -218,10 +218,14 @@ app.post(
           level: "info",
           message: "user already logged in",
         });
-        res.json(userExists);
-        return;
+        return res.json({
+          accessToken: userExists.accessToken,
+          username,
+          expires: userExists.expires,
+        });
       }
       const response = await generateAccessToken(username, isFound.email);
+      const refresh = await generateRefreshToken(username, isFound.email);
       await storeActiveToken(
         username,
         isFound.email,

@@ -5,10 +5,11 @@ export async function storeActiveToken(username, email, token, expires) {
   const db = await dbConnect();
   const collection = db.collection("activeTokens");
   const curr = Date.now();
-  await collection.createIndex(
-    { createdAt: curr },
-    { expireAfterSeconds: 3598 }
-  );
+  const indexes = await collection.indexes();
+  if (indexes.length >= 63) {
+    await collection.dropIndexes();
+  }
+  await collection.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3595 });
   await collection.insertOne({
     username,
     email,
