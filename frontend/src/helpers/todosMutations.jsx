@@ -76,7 +76,7 @@ export const delTodoOptions = (column, todo, columns) => {
     optimisticData: columns,
     rollbackOnError: true,
     populateCache: true,
-    revalidate: false,
+    revalidate: true,
   };
 };
 
