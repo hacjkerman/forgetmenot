@@ -45,7 +45,7 @@ function App() {
               isLoggedIn={isLoggedIn}
             />
             <Routes>
-              <Route exact path="/" element={<Navigate to="/login" />}></Route>
+              <Route exact path="/" element={<Navigate to="/board" />}></Route>
               <Route
                 exact
                 path="/profile"
@@ -65,28 +65,20 @@ function App() {
               <Route
                 path="/login"
                 element={
-                  token ? (
-                    <Navigate to="/board" />
-                  ) : (
-                    <LoginForm
-                      setUser={setUser}
-                      setIsLoggedIn={setIsLoggedIn}
-                      cookies={cookies}
-                    />
-                  )
+                  <LoginForm
+                    setUser={setUser}
+                    setIsLoggedIn={setIsLoggedIn}
+                    cookies={cookies}
+                  />
                 }
               />
               <Route path="/register" element={<RegisterForm />} />
               <Route
                 path="/board"
                 element={
-                  token ? (
-                    <div className={AppCSS.container}>
-                      <Board />
-                    </div>
-                  ) : (
-                    <Navigate to="/login" />
-                  )
+                  <div className={AppCSS.container}>
+                    <Board />
+                  </div>
                 }
               />
               <Route path="*" element={<div>Loading...</div>} />

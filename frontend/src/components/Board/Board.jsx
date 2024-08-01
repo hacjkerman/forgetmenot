@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Column from "../Column/Column.jsx";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import NewColumn from "../Column/newColumn.jsx";
@@ -33,7 +33,6 @@ import { updateTodoDone } from "../../api/Todosapi.jsx";
 import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import { UserContext } from "../../contexts/UserContext.js";
-import { useNavigate } from "react-router-dom";
 import { colours } from "../../features/colourSwatch/components/colourWheel/colours.jsx";
 
 const Container = styled.div`
@@ -57,14 +56,20 @@ const Button = styled.button`
 
 export default function Board() {
   const { user, token } = useContext(UserContext);
-  const navigate = useNavigate();
-  if (token === undefined || user === undefined) {
-    navigate("/login");
-  }
   const [isAddingEnd, setIsAddingEnd] = useState(false);
   const headers = { username: user, token, type: "column" };
+  console.log(headers);
   const { data: columns, mutate } = useSWR([headers], getColumns);
-  console.log(columns);
+  let allColumns = JSON.parse(localStorage.getItem("todos"));
+  console.log(allColumns);
+  useEffect(() => {
+    if (columns) {
+      if (columns.error) {
+        return;
+      }
+      localStorage.setItem("todos", JSON.stringify(columns));
+    }
+  }, [columns]);
   // COLUMN API CALLS
   const addColumn = async (column, colour, currCol) => {
     try {
@@ -274,13 +279,13 @@ export default function Board() {
         >
           {(provided) => (
             <Container {...provided.droppableProps} ref={provided.innerRef}>
-              {columns &&
-                columns.columnOrder.map((column, index) => {
-                  let todos = columns[column];
-                  if (!Array.isArray(todos) && columns[column]) {
-                    todos = columns[column].todos;
+              {allColumns &&
+                allColumns.columnOrder.map((column, index) => {
+                  let todos = allColumns[column];
+                  if (!Array.isArray(todos) && allColumns[column]) {
+                    todos = allColumns[column].todos;
                   }
-                  const currCol = columns[column];
+                  const currCol = allColumns[column];
                   let colColour = "#EBECF0";
                   if (currCol !== undefined && currCol.colour !== undefined) {
                     colColour = colours[currCol.colour]
@@ -295,7 +300,7 @@ export default function Board() {
                       colour={colColour}
                       index={index}
                       todos={todos}
-                      columnOrder={columns.columnOrder}
+                      columnOrder={allColumns.columnOrder}
                     />
                   );
                 })}

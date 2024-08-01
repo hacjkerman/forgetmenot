@@ -30,7 +30,6 @@ function Menu(props) {
     if (cookies.get("jwt_auth") !== undefined) {
       cookies.remove("jwt_auth");
     }
-    navigate("/login");
   };
 
   const handleBoard = () => {
@@ -41,20 +40,37 @@ function Menu(props) {
     navigate("/profile");
   };
 
+  const handleLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <div className={MenuCSS.main}>
       <div className={MenuCSS.links}>
         <h2>Menu</h2>
         <>
-          <button onClick={handleBoard}>
-            <h2>Board</h2>
-          </button>
-          <button onClick={handleProfile}>
-            <h2>Profile</h2>
-          </button>
-          <button onClick={handleLogout}>
-            <h2>Logout</h2>
-          </button>
+          {isLoggedIn ? (
+            <>
+              <button onClick={handleBoard}>
+                <h2>Board</h2>
+              </button>
+              <button onClick={handleProfile}>
+                <h2>Profile</h2>
+              </button>
+              <button onClick={handleLogout}>
+                <h2>Logout</h2>
+              </button>
+            </>
+          ) : (
+            <>
+              <button onClick={handleBoard}>
+                <h2>Board</h2>
+              </button>
+              <button onClick={handleLogin}>
+                <h2>Login</h2>
+              </button>
+            </>
+          )}
         </>
       </div>
       <img
