@@ -10,12 +10,24 @@ import RegisterForm from "./components/Login/RegisterForm";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserContext } from "./contexts/UserContext.js";
 import Profile from "./components/Profile/Profile.jsx";
+import data from "./data/data.json";
+import { validConnection } from "./helpers/offlineMethods/columnMethods.jsx";
 
 function App() {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
   const cookies = new Cookies();
   let token = cookies.get("jwt_auth");
+  useEffect(() => {
+    async function checkConnection() {
+      const res = await validConnection();
+      setIsOnline(res);
+      console.log(res);
+    }
+    checkConnection();
+  }, []);
+
   useEffect(() => {
     setInterval(() => {
       let token = cookies.get("jwt_auth");
@@ -26,6 +38,7 @@ function App() {
     }, 1000);
     if (token !== undefined) {
       const decoded = jwtDecode(token);
+      console.log(decoded);
       const data = decoded.data;
       setUser(data.user);
       setIsLoggedIn(true);
