@@ -48,7 +48,9 @@ function App() {
   }, [token]);
 
   return (
-    <UserContext.Provider value={{ user, isLoggedIn, cookies, token }}>
+    <UserContext.Provider
+      value={{ user, isLoggedIn, cookies, token, isOnline }}
+    >
       <div className={AppCSS.main}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
           <BrowserRouter>
