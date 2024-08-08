@@ -71,6 +71,10 @@
   width: 100%;
 }
 
+.dailyBox {
+  width: 30px;
+}
+
 .colInput h3 {
   margin: 0.5rem;
 }
