@@ -46,7 +46,11 @@ import {
   offUpdateColOrder,
   validConnection,
 } from "../../helpers/offlineMethods/columnMethods.jsx";
-import { offlineTodoMethods } from "../../helpers/offlineMethods/todoMethods.jsx";
+import {
+  offAddTodo,
+  offlineTodoMethods,
+} from "../../helpers/offlineMethods/todoMethods.jsx";
+import { timeCheck } from "../DailyListener/DailyListener.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -93,6 +97,18 @@ export default function Board() {
       localStorage.setItem("todos", JSON.stringify(columns));
     }
   }, [columns]);
+
+  useEffect(() => {
+    const loop = () => {
+      const time = new Date();
+      const timeBeforeMidnight = 23 - time.getHours();
+      const minutesBeforeMidnight = 60 - time.getMinutes();
+      const delay =
+        timeBeforeMidnight * 3600000 + minutesBeforeMidnight * 60000;
+    };
+    setInterval(timeCheck(), "1000");
+    loop();
+  }, []);
 
   useEffect(() => {
     console.log(isOnline);
@@ -181,7 +197,22 @@ export default function Board() {
     //   }
   };
   // TODO API CALLS
-  const addTodo = async (column, todo, estimate, due, colour) => {
+  const addTodo = async (column, todo, estimate, due, daily, colour) => {
+    try {
+      const newTodo = {
+        id: allColumns.todoIndex.toString(),
+        todo,
+        estimate,
+        due,
+        daily,
+        colour,
+        done: false,
+      };
+      await offAddTodo(newTodo, column, allColumns);
+      fetch();
+    } catch (err) {
+      console.log(err);
+    }
     //   try {
     //     const newColumns = { ...columns };
     //     const newTodo = {

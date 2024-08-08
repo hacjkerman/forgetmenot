@@ -27,13 +27,13 @@ function NewTask(props) {
       estimate = e.target[1].value;
     }
     let due = e.target[2].value;
-    if (due === "") {
-      due = 0;
-    } else if (due.split("-")[0] > 3000) {
+    if (due.split("-")[0] > 3000) {
       toast.error("Date is past year 3000");
       return;
     }
-    await addTodo(column, todo, estimate, due, selectedColour);
+    const daily = e.target[3].checked;
+    console.log(daily);
+    await addTodo(column, todo, estimate, due, daily, selectedColour);
     handleClose(e);
     return;
   };
@@ -74,6 +74,10 @@ function NewTask(props) {
             <label className={newTaskCSS.colInput}>
               <h3>Due</h3>
               <input type="date" placeholder="2023"></input>
+            </label>
+            <label className={newTaskCSS.colInput}>
+              <h3>Daily Reset</h3>
+              <input type="checkbox" className={newTaskCSS.dailyBox}></input>
             </label>
             <label className={newTaskCSS.colInput}>
               <h3>Column Colour</h3>

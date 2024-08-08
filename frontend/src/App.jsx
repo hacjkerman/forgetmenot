@@ -10,7 +10,6 @@ import RegisterForm from "./components/Login/RegisterForm";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserContext } from "./contexts/UserContext.js";
 import Profile from "./components/Profile/Profile.jsx";
-import data from "./data/data.json";
 import { validConnection } from "./helpers/offlineMethods/columnMethods.jsx";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
     async function checkConnection() {
       const res = await validConnection();
       setIsOnline(res);
-      console.log(res);
     }
     checkConnection();
   }, []);
