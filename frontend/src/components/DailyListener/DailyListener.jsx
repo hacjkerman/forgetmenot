@@ -1,13 +1,13 @@
+import { offUpdateTodoDone } from "../../helpers/offlineMethods/todoMethods";
 export const addListener = (todo) => {
-  let array;
-  if (!JSON.parse(localStorage.getItem("dailyListeners"))) {
+  let array = JSON.parse(localStorage.getItem("dailyListeners"));
+  if (!array) {
     array = [todo];
-    return;
   } else {
-    array = JSON.parse(localStorage.setItem("dailyListeners"));
     array.push(todo);
   }
-  localStorage.setItem("dailyListeners", JSON.parse(array));
+  console.log(array);
+  localStorage.setItem("dailyListeners", JSON.stringify(array));
 };
 
 export const deleteListener = (todoId) => {
@@ -16,22 +16,28 @@ export const deleteListener = (todoId) => {
     return;
   }
   const filteredArray = array.filter((item) => item.id !== todoId);
-  localStorage.setItem("dailyListeners", JSON.parse(filteredArray));
+  localStorage.setItem("dailyListeners", JSON.stringify(filteredArray));
 };
 
-const notifyListeners = () => {
+export const notifyListeners = (columns) => {
   const array = JSON.parse(localStorage.getItem("dailyListeners"));
   if (!array) {
     return;
   }
-  array.map((item) => (item.done = false));
-  console.log(array);
+  for (const item of array) {
+    columns[item.column].todos.map((todo) => {
+      if (todo.id === item.id) {
+        todo.done = false;
+      }
+      return columns;
+    });
+  }
+  localStorage.setItem("todos", JSON.stringify(columns));
 };
 
-export const timeCheck = () => {
-  const time = new Date();
-  console.log(time);
-  if (time.getHours() === 23 && time.getMinutes() >= 58) {
-    notifyListeners();
-  }
-};
+// export const timeCheck = () => {
+//   const time = new Date();
+//   if (time.getHours() === 23 && time.getMinutes() >= 58) {
+//     notifyListeners();
+//   }
+// };

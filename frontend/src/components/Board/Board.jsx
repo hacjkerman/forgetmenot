@@ -48,9 +48,11 @@ import {
 } from "../../helpers/offlineMethods/columnMethods.jsx";
 import {
   offAddTodo,
+  offDelTodo,
   offlineTodoMethods,
+  offUpdateTodoDone,
 } from "../../helpers/offlineMethods/todoMethods.jsx";
-import { timeCheck } from "../DailyListener/DailyListener.jsx";
+import { notifyListeners } from "../DailyListener/DailyListener.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -99,19 +101,28 @@ export default function Board() {
   }, [columns]);
 
   useEffect(() => {
-    const loop = () => {
-      const time = new Date();
-      const timeBeforeMidnight = 23 - time.getHours();
-      const minutesBeforeMidnight = 60 - time.getMinutes();
-      const delay =
-        timeBeforeMidnight * 3600000 + minutesBeforeMidnight * 60000;
-    };
-    setInterval(timeCheck(), "1000");
-    loop();
+    const utc = Math.floor(new Date().getTime() / 1000);
+    console.log(utc);
+    if (!localStorage.getItem("storedTime")) {
+      localStorage.setItem("storedTime", utc);
+      return;
+    }
+    const time = new Date();
+    const timeBeforeMidnight = 23 - time.getHours();
+    const minutesBeforeMidnight = 60 - time.getMinutes();
+    const delay = timeBeforeMidnight * 3600000 + minutesBeforeMidnight * 60000;
+
+    const storedTime = JSON.parse(localStorage.getItem("storedTime"));
+    console.log(utc - storedTime);
+    if (utc - storedTime >= 10) {
+      console.log("hi");
+      notifyListeners(JSON.parse(localStorage.getItem("todos")));
+      localStorage.setItem("storedTime", utc);
+    }
+    setInterval(notifyListeners, delay);
   }, []);
 
   useEffect(() => {
-    console.log(isOnline);
     if (isOnline) {
       setColumnMethods(onlineCol);
       setTodoMethods(onlineTodo);
@@ -233,15 +244,17 @@ export default function Board() {
   };
 
   const deleteTodo = async (column, todo) => {
-    //   try {
-    //     const newColumns = { ...columns };
-    //     await mutate(
-    //       removeTodo(user, column, todo, newColumns, token),
-    //       delTodoOptions(column, todo, newColumns)
-    //     );
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      await offDelTodo(column, todo, allColumns);
+      fetch();
+      //     const newColumns = { ...columns };
+      //     await mutate(
+      //       removeTodo(user, column, todo, newColumns, token),
+      // delTodoOptions(column, todo, newColumns)
+      //     );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const changeTodoOrder = async (
@@ -289,11 +302,13 @@ export default function Board() {
   };
 
   const changeTodoDone = async (column, todo) => {
-    //   try {
-    //     await updateTodoDone(user, column, todo, token);
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      await offUpdateTodoDone(column, todo, allColumns);
+      fetch();
+      // await updateTodoDone(user, column, todo, token);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const changeTodoEstimate = async (column, todo, newEstimate) => {
