@@ -29,7 +29,7 @@ export default function Task(props) {
   const [isUpdatingTodo, setIsUpdatingTodo] = useState(false);
   const removeTask = (e) => {
     e.preventDefault();
-    deleteTodo(column, todo);
+    deleteTodo(column, todo.id);
     return;
   };
   const changeCompletion = () => {
