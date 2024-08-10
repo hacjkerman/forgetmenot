@@ -1,4 +1,5 @@
 import { todosApi } from "../../api/todoServerApi";
+import { setItemInLocal } from "./localInterface";
 export const validConnection = async () => {
   try {
     const res = await getAny();
@@ -15,22 +16,18 @@ export const getAny = async () => {
   return response;
 };
 
-export const offAddCol = async (newColumn, currCol, colour, columns) => {
-  console.log(currCol);
+export const offAddCol = (newColumn, currCol, colour, columns) => {
   columns.columnOrder.splice(currCol, 0, newColumn);
   columns[newColumn] = { todos: [], colour: colour };
-  localStorage.setItem("todos", JSON.stringify(columns));
-  console.log(JSON.parse(localStorage.getItem("todos")));
+  setItemInLocal("todos", columns);
 };
 
-export const offDelCol = async (column, columns) => {
-  console.log(column);
+export const offDelCol = (column, columns) => {
   columns.columnOrder = columns.columnOrder.filter((col) => col !== column);
   delete columns[column];
-  console.log(columns);
-  localStorage.setItem("todos", JSON.stringify(columns));
+  setItemInLocal("todos", columns);
 };
-export const offUpdateCol = async (column, colour, newColumn, columns) => {
+export const offUpdateCol = (column, colour, newColumn, columns) => {
   const currCol = columns[column];
   // UPDATES COLUMN TO NEW FORMAT
   columns[newColumn] = {
@@ -43,15 +40,15 @@ export const offUpdateCol = async (column, colour, newColumn, columns) => {
     colOrder.splice(index, 1);
     colOrder.splice(index, 0, newColumn);
   }
-  localStorage.setItem("todos", JSON.stringify(columns));
+  setItemInLocal("todos", columns);
 };
 
-export const offUpdateColOrder = async (srcIndex, destIndex, columns) => {
+export const offUpdateColOrder = (srcIndex, destIndex, columns) => {
   const newColumnOrder = Array.from(columns.columnOrder);
   const temp = newColumnOrder[srcIndex];
   newColumnOrder.splice(srcIndex, 1);
   newColumnOrder.splice(destIndex, 0, temp);
   columns.columnOrder = newColumnOrder;
-  localStorage.setItem("todos", JSON.stringify(columns));
+  setItemInLocal("todos", columns);
 };
 export class offlineColMethods {}

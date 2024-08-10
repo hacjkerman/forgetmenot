@@ -50,9 +50,16 @@ import {
   offAddTodo,
   offDelTodo,
   offlineTodoMethods,
+  offUpdateTodo,
+  offUpdateTodoDate,
   offUpdateTodoDone,
+  offUpdateTodoEstimate,
 } from "../../helpers/offlineMethods/todoMethods.jsx";
-import { notifyListeners } from "../DailyListener/DailyListener.jsx";
+import { updateListeners } from "../DailyListener/DailyListener.jsx";
+import {
+  getItemFromLocal,
+  setItemInLocal,
+} from "../../helpers/offlineMethods/localInterface.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -83,43 +90,46 @@ export default function Board() {
   const [columnMethods, setColumnMethods] = useState(offlineCol);
   const [todoMethods, setTodoMethods] = useState(offlineTodo);
   useEffect(() => {
-    if (!localStorage.getItem("todos")) {
-      localStorage.setItem("todos", JSON.stringify(data));
-    } else {
-      setAllColumns(JSON.parse(localStorage.getItem("todos")));
-    }
+    setAllColumns(getItemFromLocal("todos") ? getItemFromLocal("todos") : data);
   }, []);
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
-  useEffect(() => {
-    if (columns) {
-      if (columns.error) {
-        return;
-      }
-      localStorage.setItem("todos", JSON.stringify(columns));
-    }
-  }, [columns]);
+  // useEffect(() => {
+  //   if (columns) {
+  //     if (columns.error) {
+  //       return;
+  //     }
+
+  //     setItemInLocal("todos", columns);
+  //   }
+  // }, [columns]);
 
   useEffect(() => {
     const utc = Math.floor(new Date().getTime() / 1000);
     console.log(utc);
-    if (!localStorage.getItem("storedTime")) {
-      localStorage.setItem("storedTime", utc);
+    if (!getItemFromLocal("storedTime")) {
+      setItemInLocal("storedTime", utc);
       return;
     }
     const time = new Date();
     const timeBeforeMidnight = 23 - time.getHours();
     const minutesBeforeMidnight = 60 - time.getMinutes();
     const delay = timeBeforeMidnight * 3600000 + minutesBeforeMidnight * 60000;
-
-    const storedTime = JSON.parse(localStorage.getItem("storedTime"));
-    console.log(utc - storedTime);
-    if (utc - storedTime >= 10) {
-      console.log("hi");
-      notifyListeners(JSON.parse(localStorage.getItem("todos")));
-      localStorage.setItem("storedTime", utc);
+    console.log(delay / 1000);
+    function updateAllListeners(utc) {
+      const updated = updateListeners(getItemFromLocal("todos"));
+      setItemInLocal("todos", updated);
+      setItemInLocal("storedTime", utc);
+      fetch();
     }
-    setInterval(notifyListeners, delay);
+    const storedTime = getItemFromLocal("storedTime");
+    console.log(utc - storedTime);
+    if (utc - storedTime >= 86400) {
+      updateAllListeners(utc);
+    }
+    setInterval(function () {
+      updateAllListeners(utc);
+    }, delay);
   }, []);
 
   useEffect(() => {
@@ -132,7 +142,7 @@ export default function Board() {
     }
   }, [isOnline]);
   const fetch = () => {
-    setAllColumns(JSON.parse(localStorage.getItem("todos")));
+    setAllColumns(getItemFromLocal("todos") ? getItemFromLocal("todos") : data);
   };
   // COLUMN API CALLS
   const addColumn = async (column, colour, currCol) => {
@@ -173,8 +183,7 @@ export default function Board() {
 
   const changeColumn = async (column, colour, newColumn) => {
     try {
-      console.log(column);
-      await offUpdateCol(column, colour, newColumn, allColumns);
+      offUpdateCol(column, colour, newColumn, allColumns);
       fetch();
     } catch (err) {
       console.log(err);
@@ -192,7 +201,7 @@ export default function Board() {
 
   const updateColOrder = async (user, srcIndex, destIndex) => {
     try {
-      await offUpdateColOrder(srcIndex, destIndex, allColumns);
+      offUpdateColOrder(srcIndex, destIndex, allColumns);
       fetch();
     } catch (err) {
       console.log(err);
@@ -219,7 +228,7 @@ export default function Board() {
         colour,
         done: false,
       };
-      await offAddTodo(newTodo, column, allColumns);
+      offAddTodo(newTodo, column, allColumns);
       fetch();
     } catch (err) {
       console.log(err);
@@ -245,7 +254,7 @@ export default function Board() {
 
   const deleteTodo = async (column, todo) => {
     try {
-      await offDelTodo(column, todo, allColumns);
+      offDelTodo(column, todo, allColumns);
       fetch();
       //     const newColumns = { ...columns };
       //     await mutate(
@@ -264,46 +273,50 @@ export default function Board() {
     destIndex,
     newColumn
   ) => {
-    //   try {
-    //     const newColumns = { ...columns };
-    //     await mutate(
-    //       updateTodoOrder(
-    //         user,
-    //         oldColumn,
-    //         newColumn,
-    //         srcIndex,
-    //         destIndex,
-    //         newColumns,
-    //         token
-    //       ),
-    //       updateTodoOrderOptions(
-    //         srcIndex,
-    //         destIndex,
-    //         oldColumn,
-    //         newColumn,
-    //         newColumns
-    //       )
-    //     );
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      offUpdateColOrder(srcIndex, destIndex, oldColumn, newColumn, allColumns);
+      fetch();
+      //     const newColumns = { ...columns };
+      //     await mutate(
+      //       updateTodoOrder(
+      //         user,
+      //         oldColumn,
+      //         newColumn,
+      //         srcIndex,
+      //         destIndex,
+      //         newColumns,
+      //         token
+      //       ),
+      // updateTodoOrderOptions(
+      //         srcIndex,
+      //         destIndex,
+      //         oldColumn,
+      //         newColumn,
+      //         newColumns
+      //       )
+      // );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const changeTodo = async (column, todo, newTodo, newColour) => {
-    //   try {
-    //     const newColumns = { ...columns };
-    //     await mutate(
-    //       updateTodo(user, column, todo, newTodo, newColour, newColumns, token),
-    //       updateTodoOptions(column, todo, newTodo, newColour, newColumns)
-    //     );
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      offUpdateTodo(column, todo, newTodo, newColour, allColumns);
+      fetch();
+      //     const newColumns = { ...columns };
+      //     await mutate(
+      //       updateTodo(user, column, todo, newTodo, newColour, newColumns, token),
+      //       updateTodoOptions(column, todo, newTodo, newColour, newColumns)
+      //     );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const changeTodoDone = async (column, todo) => {
     try {
-      await offUpdateTodoDone(column, todo, allColumns);
+      offUpdateTodoDone(column, todo, allColumns);
       fetch();
       // await updateTodoDone(user, column, todo, token);
     } catch (err) {
@@ -312,26 +325,31 @@ export default function Board() {
   };
 
   const changeTodoEstimate = async (column, todo, newEstimate) => {
-    //   try {
-    //     const newColumns = { ...columns };
-    //     await mutate(
-    //       updateTodoEstimate(user, column, todo, newEstimate, newColumns, token),
-    //       updateTodoEstimateOptions(column, todo, newEstimate, newColumns)
-    //     );
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      offUpdateTodoEstimate(column, todo, newEstimate, allColumns);
+      fetch();
+      //     const newColumns = { ...columns };
+      //     await mutate(
+      //       updateTodoEstimate(user, column, todo, newEstimate, newColumns, token),
+      //       updateTodoEstimateOptions(column, todo, newEstimate, newColumns)
+      //     );
+    } catch (err) {
+      console.log(err);
+    }
   };
   const changeTodoDate = async (column, todo, newDate) => {
-    //   try {
-    //     const newColumns = { ...columns };
-    //     await mutate(
-    //       updateTodoDate(user, column, todo, newDate, newColumns, token),
-    //       updateTodoDateOptions(column, todo, newDate, newColumns)
-    //     );
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    try {
+      console.log(column, todo, newDate);
+      offUpdateTodoDate(column, todo, newDate, allColumns);
+      fetch();
+      //     const newColumns = { ...columns };
+      //     await mutate(
+      //       updateTodoDate(user, column, todo, newDate, newColumns, token),
+      //       updateTodoDateOptions(column, todo, newDate, newColumns)
+      //     );
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const onDragEnd = (result) => {
@@ -353,7 +371,7 @@ export default function Board() {
     const start = source.droppableId;
     const finish = destination.droppableId;
 
-    // changeTodoOrder(user, start, source.index, destination.index, finish);
+    changeTodoOrder(user, start, source.index, destination.index, finish);
     return;
   };
 

@@ -1,28 +1,32 @@
-import { offUpdateTodoDone } from "../../helpers/offlineMethods/todoMethods";
+import {
+  getItemFromLocal,
+  setItemInLocal,
+} from "../../helpers/offlineMethods/localInterface";
+
 export const addListener = (todo) => {
-  let array = JSON.parse(localStorage.getItem("dailyListeners"));
+  let array = getItemFromLocal("dailyListeners");
   if (!array) {
     array = [todo];
   } else {
     array.push(todo);
   }
   console.log(array);
-  localStorage.setItem("dailyListeners", JSON.stringify(array));
+  setItemInLocal("dailyListeners", array);
 };
 
 export const deleteListener = (todoId) => {
-  const array = JSON.parse(localStorage.getItem("dailyListeners"));
+  const array = JSON.parse(getItemFromLocal("dailyListeners"));
   if (!array) {
     return;
   }
   const filteredArray = array.filter((item) => item.id !== todoId);
-  localStorage.setItem("dailyListeners", JSON.stringify(filteredArray));
+  setItemInLocal("dailyListeners", filteredArray);
 };
 
-export const notifyListeners = (columns) => {
-  const array = JSON.parse(localStorage.getItem("dailyListeners"));
-  if (!array) {
-    return;
+export const updateListeners = (columns) => {
+  const array = getItemFromLocal("dailyListeners");
+  if (!array || !columns) {
+    return columns;
   }
   for (const item of array) {
     columns[item.column].todos.map((todo) => {
@@ -32,7 +36,7 @@ export const notifyListeners = (columns) => {
       return columns;
     });
   }
-  localStorage.setItem("todos", JSON.stringify(columns));
+  return columns;
 };
 
 // export const timeCheck = () => {
