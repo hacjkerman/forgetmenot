@@ -136,3 +136,9 @@
     margin: 0rem;
   }
 }
+
+@media only screen and (max-height: 800px) {
+  .popupInner {
+    min-width: 50%;
+  }
+}

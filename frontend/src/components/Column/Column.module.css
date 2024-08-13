@@ -39,6 +39,10 @@
   background-color: lightgrey;
 }
 
+.addTodoBox {
+  text-align: center;
+}
+
 @media only screen and (max-width: 600px) {
   .columnHeader {
     height: 30px;

@@ -19,6 +19,7 @@ const Container = styled.div`
   padding: 0.5rem;
   height: 100%;
   border-radius: 6px;
+  justify-content: space-between;
   @media (max-width: 600px) {
     width: 15rem;
   }
@@ -50,13 +51,15 @@ const TaskList = styled.div`
   scrollbar-width: thin;
 `;
 const AddTodo = styled.button`
-  width: 100%;
+  width: 95%;
   font-weight: 700;
   height: 5vh;
   border-radius: 2rem;
   border: 1px;
+  bottom: 10px;
+  left: 8px;
   box-shadow: 1px 1px 0px grey;
-  z-index: 10;
+  z-index: 100;
   background-color: ghostwhite;
   cursor: pointer;
 `;
@@ -159,7 +162,7 @@ export default function Column(props) {
               )}
             </Droppable>
           </div>
-          <div>
+          <div className={ColumnCSS.addTodoBox}>
             {isTriggered ? (
               <NewTask
                 trigger={isTriggered}
