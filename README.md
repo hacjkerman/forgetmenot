@@ -3,7 +3,7 @@
 ### *A Todo App for Procrastinators who like a bit of fun*
 
 ## 📄 Description
-A task tracking web application that provides email and phone notifications to remind users of crucial to-dos.
+A task tracking web application that provides email and phone notifications (soon to be developed) to remind users of crucial to-dos.
 
 
 ## ⚙️ Requirements
