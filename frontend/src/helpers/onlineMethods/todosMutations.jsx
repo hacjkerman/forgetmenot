@@ -242,10 +242,8 @@ export class TodoMethods {
 
   updateTodoDateOptions = (column, todo, newDate, columns) => {
     const currCol = columns[column].todos;
-    console.log(currCol);
     const item = currCol.find((item) => item.id === todo);
-    item.date = newDate;
-    console.log(currCol);
+    item.due = newDate;
     return {
       optimisticData: columns,
       rollbackOnError: true,

@@ -22,6 +22,9 @@ const Container = styled.div`
   @media (max-width: 600px) {
     width: 15rem;
   }
+  @media (max-height: 600px) {
+    width: 15rem;
+  }
 `;
 const Title = styled.h3`
   padding: 8px;
