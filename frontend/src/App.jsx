@@ -11,6 +11,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { UserContext } from "./contexts/UserContext.js";
 import Profile from "./components/Profile/Profile.jsx";
 import { validConnection } from "./helpers/offlineMethods/columnMethods.jsx";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,6 +50,8 @@ function App() {
     <UserContext.Provider
       value={{ user, isLoggedIn, cookies, token, isOnline }}
     >
+      <Toaster position="top-left" reverseOrder={false} />
+
       <div className={AppCSS.main}>
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENTID}>
           <BrowserRouter>

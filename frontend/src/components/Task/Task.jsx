@@ -7,6 +7,7 @@ import UpdateTask from "./updateTask";
 import Estimate from "./Estimate/Estimate";
 import { TodoContext } from "../../contexts/TodoContext";
 import { colours } from "../../features/colourSwatch/components/colourWheel/colours";
+import UpdatePopup from "./updatePopup";
 const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 12px;
@@ -41,7 +42,12 @@ export default function Task(props) {
   };
 
   const changeUpdateTodo = () => {
+    console.log("hi");
     setIsUpdatingTodo(!isUpdatingTodo);
+  };
+
+  const handleClick = () => {
+    console.log("hi");
   };
   return (
     <Draggable
@@ -63,19 +69,26 @@ export default function Task(props) {
                 ? colours[todo.colour]
                 : todo.colour,
               borderRadius: 10,
+              cursor: "pointer",
             }}
           >
             <div className={TaskCSS.upperBox}>
               {isUpdatingTodo ? (
-                <UpdateTask
-                  isUpdatingTodo={isUpdatingTodo}
-                  setIsUpdatingTodo={setIsUpdatingTodo}
-                  task={props.task}
-                  column={props.column}
-                  colour={
-                    colours[todo.colour] ? colours[todo.colour] : todo.colour
-                  }
-                ></UpdateTask>
+                <div>
+                  <div
+                    className={TaskCSS.popup}
+                    onClick={changeUpdateTodo}
+                  ></div>
+                  <UpdatePopup
+                    isUpdatingTodo={isUpdatingTodo}
+                    setIsUpdatingTodo={setIsUpdatingTodo}
+                    task={props.task}
+                    column={props.column}
+                    colour={
+                      colours[todo.colour] ? colours[todo.colour] : todo.colour
+                    }
+                  ></UpdatePopup>
+                </div>
               ) : (
                 <div className={TaskCSS.todo} onClick={changeUpdateTodo}>
                   {props.task.todo}

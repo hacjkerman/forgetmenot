@@ -33,7 +33,6 @@ import {
 } from "../../helpers/onlineMethods/todosMutations.jsx";
 import { getColumns } from "../../api/Columnapi.jsx";
 import { updateTodoDone } from "../../api/Todosapi.jsx";
-import { Toaster } from "react-hot-toast";
 import { TodoContext } from "../../contexts/TodoContext.js";
 import { UserContext } from "../../contexts/UserContext.js";
 import { colours } from "../../features/colourSwatch/components/colourWheel/colours.jsx";
@@ -396,7 +395,6 @@ export default function Board() {
         changeTodoEstimate,
       }}
     >
-      <Toaster />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"

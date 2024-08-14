@@ -1,4 +1,4 @@
-.popup {
+/* .popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,21 +8,32 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
-}
+  z-index: 100;
+  cursor: default;
+} */
 
 .popupInner {
-  position: relative;
-  min-width: 20%;
-
+  position: fixed;
+  min-width: 90%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: white;
   border-radius: 12px;
   box-shadow: rgb(48, 54, 61) 0px 0px 0px 1px, rgba(1, 4, 9, 0.85) 0px 16px 32px;
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: 80vh;
+  z-index: 1;
+  cursor: default;
 }
 
+.separator {
+  color: #000e00;
+  size: 1;
+  width: 99.5%;
+  margin: 0;
+}
 .closeBtn {
   width: 32px;
   height: 32px;
@@ -41,9 +52,7 @@
 .popupHeader {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: 8px;
-  box-shadow: rgb(48, 54, 61) 0px 1px 0px;
   box-sizing: border-box;
 }
 
@@ -52,15 +61,32 @@
   font-size: 16px;
 }
 
-.columnForm {
+.forms {
   display: flex;
-  flex-direction: column;
-  margin: 8px;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
 }
 
-.upperForm {
+.todoForm {
   display: flex;
   flex-direction: column;
+  min-width: 80%;
+}
+
+.todoFunctions {
+  display: flex;
+  flex-direction: column;
+}
+
+.commentSection {
+  display: flex;
+}
+
+.settingsForm {
+  background-color: antiquewhite;
+  border-bottom-right-radius: 12px;
+  width: 20%;
 }
 
 .colInput {
