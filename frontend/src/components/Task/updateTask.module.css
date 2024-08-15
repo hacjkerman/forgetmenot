@@ -14,7 +14,7 @@
 
 .popupInner {
   position: fixed;
-  min-width: 90%;
+  min-width: 1000px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -71,7 +71,7 @@
 .todoForm {
   display: flex;
   flex-direction: column;
-  min-width: 80%;
+  width: 75%;
 }
 
 .todoFunctions {
@@ -86,7 +86,7 @@
 .settingsForm {
   background-color: antiquewhite;
   border-bottom-right-radius: 12px;
-  width: 20%;
+  width: 25%;
 }
 
 .colInput {
@@ -143,6 +143,12 @@
   appearance: none;
   text-decoration: none;
   text-align: center;
+}
+
+@media only screen and (max-width: 1200px) {
+  .popupInner {
+    min-width: 83%;
+  }
 }
 
 @media only screen and (max-width: 800px) {

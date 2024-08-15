@@ -12,13 +12,33 @@ function UpdatePopup(props) {
   const isUpdatingTodo = props.isUpdatingTodo;
   const setIsUpdatingTodo = props.setIsUpdatingTodo;
   const [selectedColour, setSelectedColour] = useState("Default");
+  const [changingTodo, setChangingTodo] = useState(false);
+  const [changingDesc, setChangingDesc] = useState(false);
+  const [changingDate, setChangingDate] = useState(false);
+  const [addingSubtask, setAddingSubtask] = useState(false);
+  const [addingComment, setAddingComment] = useState(false);
   const task = props.task;
   const column = props.column;
   const handleClose = (e) => {
     e.preventDefault();
     setIsUpdatingTodo(!isUpdatingTodo);
   };
-
+  const editingTodo = (e) => {
+    e.preventDefault();
+    setChangingTodo(!changingTodo);
+  };
+  const editingDesc = (e) => {
+    e.preventDefault();
+    setChangingDesc(!changingDesc);
+  };
+  const editingSubtask = (e) => {
+    e.preventDefault();
+    setAddingSubtask(!addingSubtask);
+  };
+  const editingComment = (e) => {
+    e.preventDefault();
+    setAddingComment(!addingComment);
+  };
   const handleUpdateTodo = (e) => {
     e.preventDefault();
     let newTodo = e.target[0].value;
@@ -65,14 +85,34 @@ function UpdatePopup(props) {
       <form className={updateTaskCSS.forms} onSubmit={handleUpdateTodo}>
         <div className={updateTaskCSS.todoForm}>
           <div className={updateTaskCSS.todoFunctions}>
-            <div>{task.todo}</div>
-            <div>Description</div>
-            <button>+ Add sub-task</button>
+            {changingTodo ? (
+              <div onClick={editingTodo}>Edit todobox</div>
+            ) : (
+              <div onClick={editingTodo}>{task.todo}</div>
+            )}
+            {changingDesc ? (
+              <div onClick={editingDesc}>Edit description</div>
+            ) : (
+              <div onClick={editingDesc}>Description</div>
+            )}
+            {addingSubtask ? (
+              <div onClick={editingSubtask}>Add subtask box</div>
+            ) : (
+              <div onClick={editingSubtask}>
+                <button>+ Add sub-task</button>
+              </div>
+            )}
           </div>
           <div className={updateTaskCSS.commentSection}>
-            <div>PFP</div>
-            <div>Comment</div>
-            <div>Add Attachment</div>
+            {addingComment ? (
+              <div onClick={editingComment}>Add comment box</div>
+            ) : (
+              <div>
+                <div>PFP</div>
+                <button onClick={editingComment}>Comment</button>
+                <div>Add Attachment</div>
+              </div>
+            )}
           </div>
           {/* <label className={updateTaskCSS.colInput}>
               <h3>Current Todo</h3>
@@ -92,8 +132,9 @@ function UpdatePopup(props) {
         </div>
         <div className={updateTaskCSS.settingsForm}>
           <label className={updateTaskCSS.colInput}>
-            <h3>Current Todo</h3>
-            <div className={updateTaskCSS.todoBox}>{task.todo}</div>
+            <h3>Due Date</h3>
+            <input type="date" placeholder="2023"></input>
+            {/* <div className={updateTaskCSS.todoBox}>{task.todo}</div> */}
           </label>
           <label className={updateTaskCSS.colInput}>
             <h3>New Todo</h3>
