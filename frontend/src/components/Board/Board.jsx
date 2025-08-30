@@ -64,7 +64,7 @@ export default function Board() {
   const [isAddingEnd, setIsAddingEnd] = useState(false);
   const headers = { username: user, token, type: "column" };
   const { data: columns, mutate } = useSWR([headers], getColumns);
-  console.log(columns);
+  console.log(JSON.stringify(columns));
   // COLUMN API CALLS
   const addColumn = async (column, colour, currCol) => {
     try {
